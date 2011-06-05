@@ -60,6 +60,19 @@ class Users extends \lithium\data\Model {
 		});
 	}
 	
+	protected static function _findFilters() {
+		$filters = parent::_findFilters();
+		$filters['list'] = function($self, $params, $chain) {
+			$name = $self::meta('key');
+			foreach ($chain->next($self, $params, $chain) as $entity) {
+				$key = $entity->{$name};
+				$result[is_scalar($key) ? $key : (string) $key] = $entity->displayName();
+			}
+			return $result;
+		};
+		return $filters;
+	}
+
 	public static function displayName($record) {
 		if ($record->display_name) {
 			return $record->display_name;
