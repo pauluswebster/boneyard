@@ -93,6 +93,11 @@ class BookingsController extends \slicedup_scaffold\controllers\ScaffoldControll
 	}
 	
 	public function edit() {
+		if (!empty($this->request->data['action'])) {
+			if ($this->request->data['action'] == 'delete') {
+				return $this->delete();
+			}
+		}
 		$this->_render['template'] = 'form';
 		parent::edit();
 		$items = Items::find('list');

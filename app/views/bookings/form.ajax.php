@@ -13,6 +13,9 @@ $users = $record->Users();
 	<div class="edit <?php echo $singular;?>">
 		<?php
 			echo $this->form->create($record, array('url' => $this->_request->url));
+			if($record->exists()):
+				echo $this->form->hidden('id', array('id' => 'BookingId'));
+			endif;
 			echo $this->form->hidden('item_id');
 			echo $this->form->hidden('start');
 			echo $this->form->hidden('end');

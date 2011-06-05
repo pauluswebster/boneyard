@@ -55,13 +55,23 @@ var initBookingForm = function(){
 	var form = this.contentBox.getElement('form');
 	this.form = new Li3Form.Request(form, {}, this.messageBox);	
 	
-	this.addButton('Update', function(){
-		this.form.submit();
-	}.bind(this), 'green');
+	if ($('BookingId')) {
+		this.addButton('Update', function(){
+			this.form.submit();
+		}.bind(this), 'green');
+		this.addButton('Delete',function(){
+			this.form.request.options.extraData.action = 'delete';
+			this.form.submit();
+		}.bind(this), 'red');
+	} else {
+		this.addButton('Add', function(){
+			this.form.submit();
+		}.bind(this), 'green');
+	}
 	
 	this.addButton('Cancel',function(){
 		this.close();
-	}.bind(this), 'red');
+	}.bind(this));
 	
 	var p1 = new Meio.Autocomplete.Select($('BookingsPlayer1'), users, Object.merge(autoComplete, {
 		valueField: $('Users0')
