@@ -1,0 +1,10 @@
+._.gitignore
+.buildpath
+.project
+.settings
+libraries
+app/resources/tmp
+webroot/js/LightFace
+webroot/js/mootools-datepicker
+webroot/js/mootools-meio-autocomplete
+webroot/js/mootools-more
