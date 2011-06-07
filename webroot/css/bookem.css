@@ -1,3 +1,36 @@
+#header, #container {
+	padding:0 10%;
+    position: relative;
+}
+
+#header {
+	margin:20px 0;
+}
+
+#announce {
+	padding:10px 15%;
+	background:#fff961;
+}
+
+#announce .inner {
+}
+
+#userMenu {
+	float:right;
+	list-style-type:none;
+}
+
+#userMenu li {
+	disply:block;
+	float:left;
+	padding:0 10px;
+	border-right: 1px solid #E6E6E6;
+}
+
+#userMenu li:last-child {
+	border:none;
+}
+
 .itemKey{
 	text-align:center;
 	vertical-align:middle;
@@ -21,7 +54,7 @@
 }
 
 .interval:hover {
-	/*background: #F7D5DD;*/
+	background: #d7d7d7;
 }
 
 .intervalItems {
@@ -40,13 +73,66 @@
 	background:url(../img/datepicker/date-select.png) top left no-repeat;
 }
 
-.booking {
+#bookings {
+	overflow:hidden;	
+}
+
+.booking, .booking div {
+	display:block;
 	width:100%;
-	border:1px solid #F00;
-	background: #F7D5DD;
+	background: #b1b0b0;
+	color:#fff;
 	position:absolute;
-	margin-top:-1px;
-	margin-left:-1px;
+}
+
+.booking div {
+	width:100%;
+}
+
+td:last-child .booking, td:last-child .booking div {
+	right:0;
+}
+
+tr:last-child .booking, tr:last-child .booking div,
+tr:nth-last-child(2) .booking, tr:nth-last-child(2) .booking div {
+	bottom:0;
+}
+
+.booking.private, .booking.private div {
+	background: #c05c5c;
+}
+
+.booking.owner, .booking.owner div,
+.booking.attending, .booking.attending div {
+	background: #abce8f;
+}
+
+.booking .details, .booking.details:hover .summary {
+	display:none;
+}
+
+.booking:hover .details {
+	display:block;
+}
+
+.booking.edit div {
+	cursor:pointer;
+}
+
+.booking .summary {
+	z-index:90;
+	overflow:hidden;
+}
+
+.booking .details {
+	z-index:100;
+	min-width:100%;
+	width:auto;
+}
+
+.booking div p {
+	padding:5px 10px;
+	margin:0;
 }
 
 /* lightface */

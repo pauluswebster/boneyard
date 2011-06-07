@@ -1,8 +1,11 @@
+<?php
+	use lithium\core\Environment;
+?>
 <!doctype html>
-<html>
+<html lang="<?= str_replace('_', '-', Environment::get('locale')); ?>">
 <head>
-	<?php echo $this->html->charset();?>
-	<title><?php echo $settings['siteName'];?> &gt; <?php echo $this->title(); ?></title>
+	<?=$this->html->charset();?>
+	<title><?=$t($settings['siteName']);?> &gt; <?=$this->title();?></title>
 	<?php 
 		echo $this->html->style(array(
 			'lithium', 
@@ -43,9 +46,10 @@
 		));
 		echo $this->scripts();
 	?>
-	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
+	<?=$this->html->link('Icon', null, array('type' => 'icon')); ?>
 </head>
-<body class="app bookings">
+<body class="app bookings<?=$user->admin ? ' admin' :'' ?>">
+	<?=$this->view()->render(array('element' => 'layout/header'), compact('settings', 'user'));?>
 	<div id="container">
 		<?=$this->flashMessage->output();?>
 		<?=$this->content;?>
