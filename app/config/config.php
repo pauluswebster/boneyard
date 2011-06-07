@@ -7,12 +7,18 @@
  */
 
 use lithium\action\Dispatcher;
+use lithium\net\http\Router;
 use lithium\util\Inflector;
+use lithium\core\Environment;
 use slicedup_core\configuration\Registry;
 use slicedup_core\configuration\LibraryRegistry;
 use slicedup_scaffold\core\Scaffold;
 
-//Load the scaffold media paths to enale ajax templates
+Environment::is(function(){
+	return 'development';
+});
+
+//Load the scaffold media paths to enable ajax templates on all
 Scaffold::setMediaPaths();
 
 //Configure auth via slicedup_users
@@ -47,26 +53,20 @@ $config = array(
 	'listingIntervalFormat' => 'H:i',
     'bookingInterval' => 'PT1H',
     'datePickerFormat' => 'm/d/Y H:i',
-	'start' => 'PT8H',
-	'end' => 'PT21H'
-);
-Registry::set('bookings', $config);
-
-$actionMap = array(
-	'public' => array(
-		'users::login', 
-		'users::logout', 
-		'users::password_reset'
-	),
-	'user' => array(
-		'bookings::index',
-		'users::edit'
+	'start' => 'PT7H',
+	'end' => 'PT24H',
+	'permissions' => array(
+		'attendingCanEdit' => 1
 	)
 );
 
-Dispatcher::applyFilter('_callable', function($self, $params, $chain) use ($config, $actionMap) {
+Registry::set('bookings', $config);
+
+Dispatcher::applyFilter('_callable', function($self, $params, $chain) use ($config) {
 	$controller = $chain->next($self, $params, $chain);
-	
+	if(get_class($controller) == 'lithium\test\Controller') {
+		return $controller;
+	}
 	//ajax redirect filter
 	$controller->applyFilter('redirect', function($self, $params, $chain) {
         $router = '\lithium\net\http\Router';
@@ -85,26 +85,54 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) use ($conf
 	$user = $controller->_user = $currentUser::instance('users');
 	$controller->set(array(
 		'user' => $controller->_user,
-		'settings' => $controller->_settings
+		'settings' => $controller->_settings,
+		'permissions' => $controller->_settings['permissions']
 	));
 	
+	return $controller;
+});
+
+//Auth map
+$actionMap = array(
+	'public' => array(
+		'users::login',
+		'users::logout',
+		'users::password_reset'
+	),
+	'user' => array(
+		'bookings::index',
+		'bookings::add',
+		'bookings::edit',
+		'users::edit'
+	)
+//	'admin' => '*' *implied*
+);
+
+Dispatcher::applyFilter('_call', function($self, $params, $chain) use ($actionMap) {
+	$controller = $params['callable'];
+	$user = $controller->_user;
 	//access checking
 	$r = $controller->request->params;
+	if (isset($controller->scaffold)) {
+		$r['controller'] = $controller->scaffold['controller'];
+	}
 	$r['controller'] = preg_replace('/(.*\\\)?(.*)(Controller)/', '$2', $r['controller']);
 	$action = Inflector::underscore($r['controller']) . "::" . $r['action'];
+
 	if (!$user->get()) {
 		if(!in_array($action, $actionMap['public'])) {
-			return function() use ($controller) {
-				return $controller->_user->required($controller);
-			};
+			return $controller->_user->required($controller);
 		}
 	} elseif (!$user->admin) {	
-		if(!in_array($action, $actionMap['user']) && !in_array($action, $actionMap['public'])) {
-			return function() use($controller){
-				return $controller->redirect('/', array('exit' => true));	
-			};
+		$allowed = (in_array($action, $actionMap['user']) || in_array($action, $actionMap['public']));
+		if ($action == 'users::edit' && $r['id'] != $user->id()) {
+			$allowed = false;
 		}
-	}	
-	return $controller;
+		if (!$allowed) {
+			return $controller->redirect('/', array('exit' => true));
+		}
+	}
+
+	return $chain->next($self, $params, $chain);
 });
 ?>
