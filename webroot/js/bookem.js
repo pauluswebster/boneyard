@@ -18,9 +18,6 @@ var modal = {
 		this.mask.hide();
 		this.mask.destroy(500, this.mask);
 		this.destroy.delay(500, this);
-	},
-	onSuccess: function(){
-		initBookingForm.call(this);
 	}
 };
 
@@ -115,6 +112,9 @@ window.addEvent('domready',function(){
 				data: JSON.parse(value),
 				method: 'get',
 				evalScripts: true
+			},
+			onSuccess: function(){
+				initBookingForm.call(this);
 			}
 		})).open();
 	});
@@ -122,12 +122,32 @@ window.addEvent('domready',function(){
 	//booking events for editing bookings
 	$$('.booking').addEvent('click', function(e){
 		e.stop();
-		var id = this.getElement('input').get('value');
+		var input = this.getElement('input');
+		if (input) {
+			var id = input.get('value');
+			currentWindow = new LightFace.Request(Object.merge(modal, {
+				url: '/bookings/edit/' + id,
+				request: {
+					method: 'get',
+					evalScripts: true
+				},
+				onSuccess: function(){
+					initBookingForm.call(this);
+				}
+			})).open();
+		}
+	});
+
+	$('userEdit').addEvent('click', function(e){
+		e.stop();
 		currentWindow = new LightFace.Request(Object.merge(modal, {
-			url: '/bookings/edit/' + id,
+			url: this.get('href'),
 			request: {
-				method: 'get',
-				evalScripts: true
+				method: 'get'
+			},
+			onSuccess: function(){
+				var form = this.contentBox.getElement('form');
+				this.form = new Li3Form.Request(form, {}, this.messageBox);
 			}
 		})).open();
 	});
