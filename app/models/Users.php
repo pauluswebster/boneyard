@@ -74,12 +74,19 @@ class Users extends \lithium\data\Model {
 	}
 
 	public static function displayName($record) {
-		if ($record->display_name) {
-			return $record->display_name;
+		if (!$record->display_name) {
+			$record->display_name = ucfirst($record->first_name);
+			$record->display_name.= ' ' . ucfirst(substr($record->last_name, 0, 1));
 		}
-		$record->display_name = ucfirst($record->first_name);
-		$record->display_name.= ' ' . substr($record->last_name, 0, 1);
 		return $record->display_name;
+	}
+	
+	public static function fullName($record) {
+		if (!$record->full_name) {
+			$record->full_name = ucfirst($record->first_name);
+			$record->full_name.= ' ' . ucfirst($record->last_name);
+		}
+		return $record->full_name;
 	}
 }
 

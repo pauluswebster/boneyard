@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use lithium\util\Set;
 use slicedup_core\configuration\Registry;
 use app\models\BookingsUsers;
 
@@ -107,28 +108,17 @@ class Bookings extends \lithium\data\Model {
 			$params['data'] = $data;
 			return $chain->next($self, $params, $chain);
 		});
-		
-		static::applyFilter('find', function($self, $params, &$chain) use ($settings){
-			$result = $chain->next($self, $params, $chain);
-			if ($result instanceOf \lithium\data\Entity) {
-				$timezone = new \DateTimeZone($settings['timezone']);
-				array_map(function($field) use (&$result, $timezone, $settings){
-					if (!empty($result->{$field}) && is_numeric($result->{$field})) {
-						$dateTime = new \DateTime(null, $timezone);
-						$dateTime->setTimestamp($result->$field);
-						$result->{"_{$field}"} = $dateTime;
-						$result->$field = $dateTime->format($settings['datePickerFormat']);
-					}
-				}, array('start', 'end'));
-			}
-			return $result;
-		});
 	}
 	
-	public static function Users($record, $query = array()) {
+	public static function Users($record, $query = array(), $cached = true) {
+		static $users = array();
 		if (!$record->exists()) {
 			return static::connection()->invokeMethod('_instance', array('set'));
 		}
+		if ($cached && isset($users[$record->id])) {
+			return $users[$record->id];
+		}
+		unset($cached[$record->id]);
 		$relationship = static::relations('Users');
 		$model = $relationship->to;
 		$conditions = $relationship->keys;		
@@ -136,7 +126,11 @@ class Bookings extends \lithium\data\Model {
 			$field = $record->{$field};
 		});
 		$query = compact('conditions') + $query;
-		return $model::all($query);
+		$result = $model::all($query);
+		if ($result && $result->count() && $cached) {
+			$users[$record->id] = clone $result;
+		}
+		return $result;
 	}
 	
 	public static function Item($record, $query = array()) {
@@ -148,6 +142,30 @@ class Bookings extends \lithium\data\Model {
 		});
 		$query = compact('conditions') + $query;
 		return $model::first($query);
+	}
+	
+	public function isOwner($record, $user) {
+		return $record->creator_id == $user->id;
+	}
+	
+	public function isAttending($record, $user) {
+		$users = $record->Users();
+		$attending = Set::extract($users->to('array', array('indexed' => false)), '/user_id');
+		return in_array($user->id, $attending);
+	}
+	
+	public function formatDates($record) {
+		$settings = Registry::get('bookings');
+		$timezone = new \DateTimeZone($settings['timezone']);
+		array_map(function($field) use (&$record, $timezone, $settings){
+			if (!empty($record->{$field}) && is_numeric($record->{$field})) {
+				$dateTime = new \DateTime(null, $timezone);
+				$dateTime->setTimestamp($record->$field);
+				$record->{"_{$field}"} = $dateTime;
+				$record->{"__{$field}"} = $record->{$field};
+				$record->$field = $dateTime->format($settings['datePickerFormat']);
+			}
+		}, array('start', 'end'));
 	}
 }
 
