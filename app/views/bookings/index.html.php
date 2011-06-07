@@ -1,6 +1,6 @@
 <?php
 	$this->html->script('bookem', array('inline' => false));
-	$height = 60;
+	$height = 30;
 	$format =  'l jS F';
 	if($date->format('Y') != $today->format('Y')):
 		$format .= ' Y';
@@ -12,9 +12,6 @@
 	height:<?php echo $height;?>px;
 }
 </style>
-<div id="header">
-	<h1>Bookings</h1>
-</div>
 <div id="content">
 	<div id="date-selector">
 		<div id="date-select"></div>
@@ -31,7 +28,7 @@
 		?>
 	</h3>
 	<div>
-		<table>
+		<table id="bookings">
 			<tr>
 				<th></th>
 				<?php foreach($items as $item):?>
@@ -62,18 +59,52 @@
 					if(!empty($item->bookings)):
 						foreach($item->bookings as $b => $booking):
 							if ($booking->start >= $period && $booking->start < $period + $int):
-							$_hm = (($booking->end - $booking->start) / $int);
-							$_h = $_hm * $height + ($_hm - 1);
-							$_tm = ($booking->start - $period) / $int;
-							$_t = $_tm * $height;
+								$_hm = (($booking->end - $booking->start) / $int);
+								$_h = $_hm * $height + ($_hm - 1);
+								$_tm = ($booking->start - $period) / $int;
+								$_t = $_tm * $height;
+								
+								$booking->formatDates();
+								$users = $booking->Users();
+								
+								$class = '';
+								if($owner = $booking->isOwner($user)):
+									$class.= ' owner';
+								endif;
+								if($attending = $booking->isAttending($user)):
+									$class.= ' attending';
+								endif;
+								if($private = $booking->private):
+									$class.= ' private';
+								endif;
+								if($edit = ($user->admin || $owner || ($attending && $permissions['attendingCanEdit'] && !$private))):
+									$class.= ' edit';
+								endif;
+								if($details = (!$private || $user->admin || $owner || $attending)):
+									$class.= ' details';
+								endif;
+								$title = $edit ? 'Click to edit details' : '';
 					?>
-					<div class="booking" style="height:<?php echo $_h;?>px;top:<?php echo $_t;?>px;">
-						<?php echo $booking->title;?>
+					<div class="booking<?=$class;?>" style="<?="height:{$_h}px;top:{$_t}px;";?>">
 						<?php
-							echo $this->form->hidden('booking[]', array(
-								'value' => $booking->id
-							));
+							if ($edit):
+								echo $this->form->hidden('booking[]', array(
+									'value' => $booking->id
+								));
+							endif;
 						?>
+						<div class="summary" style="<?="height:{$_h}px;";?>">
+							<p><i><?php echo str_replace(' ', '&nbsp;', $booking->title);?></i></p>
+						</div>
+						<?php if($details):?>
+						<div class="details shadow" title="<?php echo $title;?>">
+							<p>
+								<b>Player&nbsp;1:</b>&nbsp;<i><?php echo str_replace(' ', '&nbsp;', $users->first()->User()->fullName())?></i><br />
+								<b>Player&nbsp;2:</b>&nbsp;<i><?php echo str_replace(' ', '&nbsp;', $users->next()->User()->fullName())?></i><br />
+								<b>Time:</b>&nbsp;<i><?php echo str_replace(' ', '&nbsp;', $booking->_start->format($settings['listingIntervalFormat']) . ' - ' . $booking->_end->format($settings['listingIntervalFormat']));?></i>
+							</p>
+						</div>
+						<?php endif;?>
 					</div>
 					<?php endif; endforeach; endif;?>
 					</div>

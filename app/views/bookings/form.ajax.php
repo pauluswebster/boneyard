@@ -8,6 +8,7 @@
 
 $this->title($t($plural));
 $users = $record->Users();
+$record->formatDates();
 ?>
 <div class="<?php echo $plural;?>">
 	<div class="edit <?php echo $singular;?>">
