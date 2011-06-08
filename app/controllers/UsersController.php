@@ -32,7 +32,7 @@ class UsersController extends \slicedup_users\controllers\UsersController {
 			$scaffold->applyFilter('redirect', function($self, $params, $chain) {
 				if($self->request->is('ajax')) {
 					$params['options']['location'] = '/';
-					return $params;	
+					return $params;
 				}
 				return $chain->next($self, $params, $chain);
 			});
