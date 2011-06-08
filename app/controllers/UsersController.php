@@ -22,11 +22,22 @@ class UsersController extends \slicedup_users\controllers\UsersController {
 	
 	public function edit(){
 		if (!$this->_user->admin && $this->request->id != $this->_user->id) {
-			FlashMessage::error('Permision Denied. <sup>[U25]</sup>');
+			FlashMessage::error('Permision Denied.');
 			return $this->redirect('/');
 		}
 		$this->_render['hasRendered'] = true;
-		Scaffold::invoke($this);
+		$params = array();
+		$scaffold = Scaffold::callable($this, $params);
+		if (!$this->_user->admin || $this->request->id == $this->_user->id) {
+			$scaffold->applyFilter('redirect', function($self, $params, $chain) {
+				if($self->request->is('ajax')) {
+					$params['options']['location'] = '/';
+					return $params;	
+				}
+				return $chain->next($self, $params, $chain);
+			});
+		}
+		$this->response = Scaffold::call($scaffold, $params);
 	}
 }
 
