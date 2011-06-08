@@ -7,11 +7,12 @@
  */
 
 use lithium\action\Dispatcher;
-use lithium\net\http\Router;
+use lithium\action\Response;
 use lithium\util\Inflector;
 use lithium\core\Environment;
 use slicedup_core\configuration\Registry;
 use slicedup_core\configuration\LibraryRegistry;
+use slicedup_core\action\FlashMessage;
 use slicedup_scaffold\core\Scaffold;
 
 Environment::is(function(){
@@ -70,18 +71,23 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) use ($conf
 	//ajax redirect filter
 	$controller->applyFilter('redirect', function($self, $params, $chain) {
         $router = '\lithium\net\http\Router';
+        $redirect = $chain->next($self, $params, $chain);
         if($self->request->is('ajax')) {
+        	if (is_array($redirect)) {
+        		$params = $redirect;
+        	}
         	$options = $params['options'];
         	$location = $options['location'] ?: $router::match($params['url'], $self->request);
-        	echo "<script>window.location = '{$location}';</script>";
-        	$self->invokeMethod('_stop');
+        	$self->response = new Response(array('body' => "<script>window.location = '{$location}';</script>"));
+        	$self->response->render();
+			$self->invokeMethod('_stop');
         }
-        return $chain->next($self, $params, $chain);
+        return $redirect;
 	});
 	
 	//set config & auth user
 	$controller->_settings = $config;
-	$currentUser = '\slicedup_users\security\CurrentUser';
+	$currentUser = 'slicedup_users\security\CurrentUser';
 	$user = $controller->_user = $currentUser::instance('users');
 	$controller->set(array(
 		'user' => $controller->_user,
@@ -121,7 +127,11 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) use ($actionMa
 
 	if (!$user->get()) {
 		if(!in_array($action, $actionMap['public'])) {
-			return $controller->_user->required($controller);
+			$required = $controller->_user->required($controller);
+			if ($required instanceOf \lithium\action\Response) {
+				FlashMessage::write('Please login.');
+				return $required;
+			}
 		}
 	} elseif (!$user->admin) {	
 		$allowed = (in_array($action, $actionMap['user']) || in_array($action, $actionMap['public']));
@@ -129,6 +139,7 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) use ($actionMa
 			$allowed = false;
 		}
 		if (!$allowed) {
+			FlashMessage::error('Permision Denied.');
 			return $controller->redirect('/', array('exit' => true));
 		}
 	}
