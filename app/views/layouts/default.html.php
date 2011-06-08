@@ -49,9 +49,9 @@
 	<?=$this->html->link('Icon', null, array('type' => 'icon')); ?>
 </head>
 <body class="app bookings<?=$user->admin ? ' admin' :'' ?>">
+	<?=$this->flashMessage->output();?>
 	<?=$this->view()->render(array('element' => 'layout/header'), compact('settings', 'user'));?>
 	<div id="container">
-		<?=$this->flashMessage->output();?>
 		<?=$this->content;?>
 	</div>
 </body>

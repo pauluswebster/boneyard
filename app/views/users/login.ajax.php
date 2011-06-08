@@ -8,11 +8,9 @@
 
 ?>
 <div id="login">
-	<h3><?php echo $settings['siteName'];?></h3>
+	<h3><?=$settings['siteName'];?></h3>
+	<?=$this->flashMessage->output();?>
 	<?php
-		if ($status == 'error'):
-			echo '<div class="test-result test-result-fail">Login failed, please check your details!</div>'; 
-		endif;
 		echo $this->form->create(null, array('action' => 'login'));
 		echo $this->form->field('username');
 		echo $this->form->field('password', array('type' => 'password'));

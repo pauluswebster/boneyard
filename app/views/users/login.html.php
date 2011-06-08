@@ -12,7 +12,7 @@ $this->title('Login');
 window.addEvent('domready', function(){
 	new LightFace({
 		width:400,
-		height:300,
+		height:330,
 		content: $('content').get('html'),
 		onOpen: function(){
 			var form = this.contentBox.getElement('form');
@@ -23,11 +23,9 @@ window.addEvent('domready', function(){
 </script>
 <div id="content" style="display:none;">
 	<div id="login">
-		<h3><?php echo $settings['siteName'];?></h3>
+		<h3><?=$settings['siteName'];?></h3>
+		<?=$this->flashMessage->output();?>
 		<?php
-			if ($status == 'error'):
-				echo '<div class="test-result test-result-fail">Login failed, please check your details!</div>'; 
-			endif;
 			echo $this->form->create(null, array('action' => 'login'));
 			echo $this->form->field('username');
 			echo $this->form->field('password', array('type' => 'password'));
