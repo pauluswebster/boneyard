@@ -8,7 +8,7 @@
 
 ?>
 <div id="login">
-	<h3><?=$settings['siteName'];?></h3>
+	<h1><?=$settings['siteName'];?></h1>
 	<?=$this->flashMessage->output();?>
 	<?php
 		echo $this->form->create(null, array('action' => 'login'));
@@ -16,8 +16,9 @@
 		echo $this->form->field('password', array('type' => 'password'));
 		echo '<div style="float:right">';
 		echo $this->form->field('remember_me', array('type' => 'checkbox'));
-		echo $this->html->link('Forgot your password?', array('action' => 'password_reset'));
-		echo '</div>';
-		echo $this->form->submit('Login', array('style' => 'clear:none;'));
+		//echo $this->html->link('Forgot your password?', array('action' => 'password_reset'));
+		echo '</div><div style="clear:right"></div>';
+		//echo $this->form->submit('Login', array('style' => 'clear:none;'));
+		echo $this->form->end();
 	?>
 </div>

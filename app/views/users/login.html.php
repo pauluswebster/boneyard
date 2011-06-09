@@ -11,19 +11,34 @@ $this->title('Login');
 <script>
 window.addEvent('domready', function(){
 	new LightFace({
-		width:400,
-		height:330,
+		width:360,
+		height:'auto',
 		content: $('content').get('html'),
 		onOpen: function(){
+			var resize = this._resize.bind(this);
+			resize();
+			var fade = this.fade.bind(this);
+			var unfade = this.unfade.bind(this);
 			var form = this.contentBox.getElement('form');
-			this.form = new Li3Form.Request(form, {}, this.messageBox);	
+			this.form = new Li3Form.Request(form, {
+				onSend: function() {
+					fade();
+				},
+				onSuccess: function(){
+					resize();
+					unfade(1);
+				}
+			}, this.messageBox);
+			this.addButton('Login', function(){
+				this.form.submit();
+			}.bind(this), 'green');
 		}
 	}).open(true);
 });
 </script>
 <div id="content" style="display:none;">
 	<div id="login">
-		<h3><?=$settings['siteName'];?></h3>
+		<h1><?=$settings['siteName'];?></h1>
 		<?=$this->flashMessage->output();?>
 		<?php
 			echo $this->form->create(null, array('action' => 'login'));
@@ -31,9 +46,10 @@ window.addEvent('domready', function(){
 			echo $this->form->field('password', array('type' => 'password'));
 			echo '<div style="float:right">';
 			echo $this->form->field('remember_me', array('type' => 'checkbox'));
-			echo $this->html->link('Forgot your password?', array('action' => 'password_reset'));
-			echo '</div>';
-			echo $this->form->submit('Login', array('style' => 'clear:none;'));
+			//echo $this->html->link('Forgot your password?', array('action' => 'password_reset'));
+			echo '</div><div style="clear:right"></div>';
+			//echo $this->form->submit('Login', array('style' => 'clear:none;'));
+			echo $this->form->end();
 		?>
 	</div>
 </div>
