@@ -82,5 +82,5 @@ require __DIR__ . '/bootstrap/g11n.php';
  */
 // require __DIR__ . '/bootstrap/console.php';
 
-require __DIR__ . '/config.php';
+require __DIR__ . '/init.php';
 ?>
