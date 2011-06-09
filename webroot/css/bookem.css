@@ -106,7 +106,6 @@ tr:nth-last-child(2) .booking, tr:nth-last-child(2) .booking div {
 	background: #c05c5c;
 }
 
-.booking.owner, .booking.owner div,
 .booking.attending, .booking.attending div {
 	background: #abce8f;
 }
@@ -175,6 +174,28 @@ div.flash-message-info {
 	border-color: #B2A511;
 }
 
+
+.lightface form {
+	box-shadow:none;
+	padding:10px 20px;
+	margin-bottom:0;
+}
+
+.lightface h2 {
+	margin-top:0;
+}
+
+.lightface input {
+	margin:0 0 3px 0;
+}
+
+.ma-valid {
+	border-color: #467F0D;
+}
+
+.ma-invalid {
+	border-color: #7F0D0D;
+}
 
 
 /* lightface */
@@ -741,7 +762,3 @@ div.flash-message-info {
 .ma-loading{
 	background-color: #fafba4;
 }
-.ma-selected{
-	background-color: #ccfda8;
-}
-
