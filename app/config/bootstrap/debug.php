@@ -10,6 +10,10 @@ function p($var){
 	echo '<pre>' . print_r($var, 1) . '</pre>';
 }
 
+function e($var) {
+	echo '<pre>' . var_export($var, 1) . '</pre>';
+}
+
 function v(){
 	$args = func_get_args();
 	ob_start();
