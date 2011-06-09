@@ -142,18 +142,14 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) use ($conf
 	//ajax redirect filter
 	$controller->applyFilter('redirect', function($self, $params, $chain) {
         $router = '\lithium\net\http\Router';
-        $redirect = $chain->next($self, $params, $chain);
         if($self->request->is('ajax')) {
-        	if (is_array($redirect)) {
-        		$params = $redirect;
-        	}
         	$options = $params['options'];
         	$location = $options['location'] ?: $router::match($params['url'], $self->request);
         	$self->response = new Response(array('body' => "<script>window.location = '{$location}';</script>"));
         	$self->response->render();
 			$self->invokeMethod('_stop');
         }
-        return $redirect;
+        return $chain->next($self, $params, $chain);
 	});
 	
 	//set config & auth user

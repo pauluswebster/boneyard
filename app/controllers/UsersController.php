@@ -28,11 +28,11 @@ class UsersController extends \slicedup_users\controllers\UsersController {
 		$this->_render['hasRendered'] = true;
 		$params = array();
 		$scaffold = Scaffold::callable($this, $params);
+
 		if (!$this->_user->admin || $this->request->id == $this->_user->id) {
-			$scaffold->applyFilter('redirect', function($self, $params, $chain) {
+			$scaffold->applyFilter('edit', function($self, $params, $chain){
 				if($self->request->is('ajax')) {
-					$params['options']['location'] = '/';
-					return $params;
+					$params['redirect'] = '/';
 				}
 				return $chain->next($self, $params, $chain);
 			});
