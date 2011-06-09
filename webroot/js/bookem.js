@@ -2,8 +2,8 @@ var currentWindow = null;
 
 //booking form modal base obj
 var modal = {
-	width:760,
-	height:400,
+	width:360,
+	height:'auto',
 	onOpen: function(){
 		this.mask = new Mask(document.body, {
 			onHide: function(){
@@ -29,16 +29,12 @@ var autoComplete = {
     },
 	selectOnTab: false,
 	onSelect: function(elements){
-		elements.field.node.removeClass('invalid');
-		elements.field.node.addClass('valid');
+		elements.field.node.removeClass('ma-invalid');
+		elements.field.node.addClass('ma-valid');
 	},
 	onDeselect: function(elements){
-		elements.field.node.removeClass('valid');
-		elements.field.node.addClass('invalid');
-	},
-	onNoItemToList: function(elements){
-		elements.field.node.removeClass('valid');
-		elements.field.node.addClass('invalid');
+		elements.field.node.removeClass('ma-valid');
+		elements.field.node.addClass('ma-invalid');
 	},
 	filter: {
 		type: 'contains',
@@ -48,9 +44,20 @@ var autoComplete = {
 
 //booking form init, must be bound to the currentWindow
 var initBookingForm = function(){
-	
+	var resize = this._resize.bind(this);
+	resize();
+	var fade = this.fade.bind(this);
+	var unfade = this.unfade.bind(this);
 	var form = this.contentBox.getElement('form');
-	this.form = new Li3Form.Request(form, {}, this.messageBox);	
+	this.form = new Li3Form.Request(form, {
+		onSend: function() {
+			fade();
+		},
+		onSuccess: function(){
+			resize();
+			unfade(1);
+		}
+	}, this.messageBox);	
 	
 	if ($('BookingId')) {
 		this.addButton('Update', function(){
@@ -106,7 +113,7 @@ window.addEvent('domready',function(){
 	//interval events for adding new bookings
 	$$('.interval').addEvent('click', function(e){
 		var value = this.getElement('input').get('value');
-		currentWindow = new LightFace.Request(Object.merge(modal, {
+		currentWindow = new LightFace.Request(Object.merge(Object.clone(modal), {
 			url: '/bookings/add',
 			request: {
 				data: JSON.parse(value),
@@ -125,7 +132,7 @@ window.addEvent('domready',function(){
 		var input = this.getElement('input');
 		if (input) {
 			var id = input.get('value');
-			currentWindow = new LightFace.Request(Object.merge(modal, {
+			currentWindow = new LightFace.Request(Object.merge(Object.clone(modal), {
 				url: '/bookings/edit/' + id,
 				request: {
 					method: 'get',
@@ -140,14 +147,32 @@ window.addEvent('domready',function(){
 
 	$('userEdit').addEvent('click', function(e){
 		e.stop();
-		currentWindow = new LightFace.Request(Object.merge(modal, {
+		currentWindow = new LightFace.Request(Object.merge(Object.clone(modal), {
 			url: this.get('href'),
 			request: {
 				method: 'get'
 			},
 			onSuccess: function(){
+				var resize = this._resize.bind(this);
+				resize();
+				var fade = this.fade.bind(this);
+				var unfade = this.unfade.bind(this);
 				var form = this.contentBox.getElement('form');
-				this.form = new Li3Form.Request(form, {}, this.messageBox);
+				this.form = new Li3Form.Request(form, {
+					onSend: function() {
+						fade();
+					},
+					onSuccess: function(){
+						resize();
+						unfade(1);
+					}
+				}, this.messageBox);
+				this.addButton('Update', function(){
+					this.form.submit();
+				}.bind(this), 'green');
+				this.addButton('Cancel',function(){
+					this.close();
+				}.bind(this));
 			}
 		})).open();
 	});
