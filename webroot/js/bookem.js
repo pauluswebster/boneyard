@@ -3,7 +3,6 @@ var currentWindow = null;
 //booking form modal base obj
 var modal = {
 	width:360,
-	height:'auto',
 	onOpen: function(){
 		this.mask = new Mask(document.body, {
 			onHide: function(){
@@ -45,7 +44,6 @@ var autoComplete = {
 //booking form init, must be bound to the currentWindow
 var initBookingForm = function(){
 	var resize = this._resize.bind(this);
-	resize();
 	var fade = this.fade.bind(this);
 	var unfade = this.unfade.bind(this);
 	var form = this.contentBox.getElement('form');
@@ -77,6 +75,8 @@ var initBookingForm = function(){
 		this.close();
 	}.bind(this));
 	
+	resize();
+
 	var p1 = new Meio.Autocomplete.Select($('BookingsPlayer1'), users, Object.merge(autoComplete, {
 		valueField: $('Users0')
 	}));
@@ -154,7 +154,6 @@ window.addEvent('domready',function(){
 			},
 			onSuccess: function(){
 				var resize = this._resize.bind(this);
-				resize();
 				var fade = this.fade.bind(this);
 				var unfade = this.unfade.bind(this);
 				var form = this.contentBox.getElement('form');
@@ -173,6 +172,7 @@ window.addEvent('domready',function(){
 				this.addButton('Cancel',function(){
 					this.close();
 				}.bind(this));
+				resize();
 			}
 		})).open();
 	});

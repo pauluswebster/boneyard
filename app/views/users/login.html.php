@@ -12,11 +12,9 @@ $this->title('Login');
 window.addEvent('domready', function(){
 	new LightFace({
 		width:360,
-		height:'auto',
 		content: $('content').get('html'),
 		onOpen: function(){
 			var resize = this._resize.bind(this);
-			resize();
 			var fade = this.fade.bind(this);
 			var unfade = this.unfade.bind(this);
 			var form = this.contentBox.getElement('form');
@@ -32,6 +30,7 @@ window.addEvent('domready', function(){
 			this.addButton('Login', function(){
 				this.form.submit();
 			}.bind(this), 'green');
+			resize();
 		}
 	}).open(true);
 });
