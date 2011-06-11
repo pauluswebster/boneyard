@@ -134,7 +134,7 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) use ($conf
 	//ajax delay
 	$controller->applyFilter('__invoke', function($self, $params, $chain) {
         if($self->request->is('ajax')) {
-        	sleep(1);
+//        	sleep(1);
         }
         return $chain->next($self, $params, $chain);
 	});
@@ -200,7 +200,7 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) use ($actionMa
 		if(!in_array($action, $actionMap['public'])) {
 			$required = $controller->_user->required($controller);
 			if ($required instanceOf \lithium\action\Response) {
-				FlashMessage::write('Please login.');
+				FlashMessage::write(array('message' => 'Please login.', 'class' => 'nofade'));
 				return $required;
 			}
 		}
