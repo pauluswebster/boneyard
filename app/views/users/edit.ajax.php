@@ -21,6 +21,7 @@
 			echo $this->form->field('username');
 			echo $this->form->field('email');
 			echo $this->form->field('new_password', array('type' => 'password', 'label' => 'Change Password'));
+			echo $this->form->submit('Update');
 			echo $this->form->end();
 		?>
 	</div>

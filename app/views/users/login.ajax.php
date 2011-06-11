@@ -18,7 +18,7 @@
 		echo $this->form->field('remember_me', array('type' => 'checkbox'));
 		//echo $this->html->link('Forgot your password?', array('action' => 'password_reset'));
 		echo '</div><div style="clear:right"></div>';
-		//echo $this->form->submit('Login', array('style' => 'clear:none;'));
+		echo $this->form->submit('Login');
 		echo $this->form->end();
 	?>
 </div>

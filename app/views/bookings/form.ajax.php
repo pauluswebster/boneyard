@@ -52,6 +52,7 @@ $record->formatDates();
 			?>
 		</div>
 		<?php
+			echo $this->form->submit('Save');
 			echo $this->form->end();
 		?>
 	</div>
