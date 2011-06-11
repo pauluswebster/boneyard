@@ -9,8 +9,18 @@
 namespace app\models;
 
 use lithium\util\String;
+use slicedup_users\security\CurrentUser;
 
 class Users extends \lithium\data\Model {
+
+	public $validates = array(
+		'first_name' => 'Please enter a first name',
+		'last_name' => 'Please enter a last name',
+		'username' => 'Please enter a username',
+		'email' => array(
+			array('notEmpty', 'message' => 'Please enter an email address'),
+			array('email', 'message' => 'Email address is not valid.')
+ 	));
 
 	protected $_meta = array(
 		'title' => 'username'
@@ -45,7 +55,12 @@ class Users extends \lithium\data\Model {
 				$record->password = String::hash($record->new_password);
 			}
 			$params['entity'] = $record;
-			return $chain->next($self, $params, $chain);
+			$save = $chain->next($self, $params, $chain);
+			if($save && $record->id == CurrentUser::id('users')) {
+				$data = $record->data();
+				CurrentUser::set('users', $data);
+			}
+			return $save;
 		});
 		
 		static::applyFilter('create', function($self, $params, &$chain) {
