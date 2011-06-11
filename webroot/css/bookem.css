@@ -14,10 +14,35 @@
 #announce {
 	padding:10px 15%;
 	background:#fff961;
+	position:relative;
 }
 
-#announce .inner {
+#announceData {
+	display:none;
+	width:100%;
+	padding:5px;
 }
+
+#announceDisplay {
+	cursor:pointer;
+}
+
+#announce .inner {}
+
+#announce .edit {
+	display:none;
+	color:#4183C4;
+	font-style:italic;
+}
+
+#announce .none {
+	display:none;
+}
+
+#announce:hover .edit {
+	display: inline;
+}
+
 
 #userMenu {
 	float:right;
@@ -185,8 +210,12 @@ div.flash-message-info {
 	margin-top:0;
 }
 
-.lightface input {
+.lightface form input {
 	margin:0 0 3px 0;
+}
+
+.lightface form input[type=submit] {
+	display:none;
 }
 
 .ma-valid {

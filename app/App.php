@@ -8,10 +8,24 @@
  
 namespace app;
 
+use slicedup_core\configuration\Source;
+
 class App extends \lithium\core\StaticObject {
 	
-	public static function announce() {
-		return 'Important Announcement! Lorem ipsum dolor sit amet, consectetuer adipiscing elit dolor sum dolor sit amet, consit am.';	
+	public static function announce($message = null) {
+		$path = LITHIUM_APP_PATH . '/resources/announce.php';
+		static $announce;
+		if (!isset($announce)) {
+			$config = Source::read($path);
+			$announce = $config ?: array('message' => '');
+		}
+		if (isset($message)) {
+			$announce = compact('message') + $announce;
+			return Source::write($path, $announce);
+		}
+		return $announce['message'];
 	}
+
 }
+
 ?>

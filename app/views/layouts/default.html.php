@@ -30,6 +30,7 @@
 			'mootools-more/Element/Element.Position',
 			'mootools-more/Element/Element.Measure',
 			'mootools-more/Element/Element.Delegation',
+			'mootools-more/Element/Element.Shortcuts',
 			'mootools-more/Utilities/IframeShim',
 			'mootools-more/Interface/Mask',
 			'mootools-more/Interface/Spinner',
@@ -42,7 +43,8 @@
 			'mootools-datepicker/Picker',
 			'mootools-datepicker/Picker.Attach',
 			'mootools-datepicker/Picker.Date',
-			'form'
+			'form',
+			'app'
 		));
 		echo $this->scripts();
 	?>
