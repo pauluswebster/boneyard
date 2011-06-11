@@ -21,6 +21,9 @@ class UsersController extends \slicedup_users\controllers\UsersController {
 	}
 	
 	public function edit(){
+		if (empty($this->request->id)) {
+			$this->request->id = $this->_user->id;
+		}
 		if (!$this->_user->admin && $this->request->id != $this->_user->id) {
 			FlashMessage::error('Permision Denied.');
 			return $this->redirect('/');
@@ -29,14 +32,16 @@ class UsersController extends \slicedup_users\controllers\UsersController {
 		$params = array();
 		$scaffold = Scaffold::callable($this, $params);
 
-		if (!$this->_user->admin || $this->request->id == $this->_user->id) {
-			$scaffold->applyFilter('edit', function($self, $params, $chain){
-				if($self->request->is('ajax')) {
+		$scaffold->applyFilter('edit', function($self, $params, $chain){
+			if($self->request->is('ajax')) {
+				if (!$self->_user->admin || $self->request->id == $self->_user->id) {
 					$params['redirect'] = '/';
 				}
-				return $chain->next($self, $params, $chain);
-			});
-		}
+				$params['singular'] = 'Account';
+			}
+			return $chain->next($self, $params, $chain);
+		});
+
 		$this->response = Scaffold::call($scaffold, $params);
 	}
 }
