@@ -43,7 +43,6 @@
 			'mootools-datepicker/Picker',
 			'mootools-datepicker/Picker.Attach',
 			'mootools-datepicker/Picker.Date',
-			'form',
 			'app'
 		));
 		echo $this->scripts();
