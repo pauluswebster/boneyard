@@ -13,7 +13,6 @@ class BookingsUsers extends \lithium\data\Model {
 	public $belongsTo = array(
 		'User' => array(
 			'to' => 'app\models\Users',
-			'keys' => array('user_id')
 		),
 		'Booking' => array(
 			'to' => 'app\models\Bookings'
@@ -22,8 +21,8 @@ class BookingsUsers extends \lithium\data\Model {
 	
 	public static function User($record, $query = array()) {
 		$relationship = static::relations('User');
-		$model = $relationship->to;
-		$conditions = array_flip($relationship->keys);		
+		$model = $relationship->to();
+		$conditions = array_flip($relationship->keys());	
 		array_walk($conditions, function(&$field) use ($record){
 			$field = $record->{$field};
 		});

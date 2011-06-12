@@ -17,14 +17,12 @@ class Bookings extends \lithium\data\Model {
 	public $hasMany = array(
 		'Users' => array(
 			'to' => 'app\models\BookingsUsers',
-			'keys' => array('booking_id')
 		)
 	);
 	
 	public $belongsTo = array(
 		'Item' => array(
 			'to' => 'app\models\Items',
-			'keys' => array('item_id')
 		)
 	);
 	
@@ -120,8 +118,8 @@ class Bookings extends \lithium\data\Model {
 		}
 		unset($cached[$record->id]);
 		$relationship = static::relations('Users');
-		$model = $relationship->to;
-		$conditions = $relationship->keys;		
+		$model = $relationship->to();
+		$conditions = array_flip($relationship->keys());
 		array_walk($conditions, function(&$field) use ($record){
 			$field = $record->{$field};
 		});
@@ -135,8 +133,8 @@ class Bookings extends \lithium\data\Model {
 	
 	public static function Item($record, $query = array()) {
 		$relationship = static::relations('Item');
-		$model = $relationship->to;
-		$conditions = array_flip($relationship->keys);	
+		$model = $relationship->to();
+		$conditions = array_flip($relationship->keys());
 		array_walk($conditions, function(&$field) use ($record){
 			$field = $record->{$field};
 		});
