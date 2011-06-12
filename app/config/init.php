@@ -12,7 +12,6 @@ use lithium\core\Libraries;
 use lithium\core\Environment;
 use lithium\util\Inflector;
 use slicedup_core\configuration\Registry;
-use slicedup_core\configuration\LibraryRegistry;
 use slicedup_core\action\FlashMessage;
 use slicedup_core\net\http\Media;
 use slicedup_scaffold\core\Scaffold;
@@ -21,28 +20,6 @@ use slicedup_scaffold\core\Scaffold;
 Environment::is(function(){
 	return 'development';
 });
-
-//Configure auth via slicedup_users
-LibraryRegistry::add('slicedup_users', 'users', array(
-	'model' => array(
-		'class' =>	'\app\models\Users'
-	),
-	'controller' => array(
-		'library' => 'app',
-		'class' => 'app\controllers\UsersController',
-		'actions' => array(
-			'login' => 'login',
-			'logout' => 'logout',
-			'register' => false,
-			'password_reset' => 'password_reset'
-		)
-	),
-	'routing' => array(
-		'base' => '',
-		'loginRedirect' => '/',
-		'logoutRedirect' => '/login'
-	)
-));
 
 //Add media type for ajax calls
 $content = array(
@@ -155,7 +132,7 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) use ($conf
 	//set config & auth user
 	$controller->_settings = $config;
 	$currentUser = 'slicedup_users\security\CurrentUser';
-	$user = $controller->_user = $currentUser::instance('users');
+	$user = $controller->_user = $currentUser::instance('default');
 	$controller->set(array(
 		'user' => $controller->_user,
 		'settings' => $controller->_settings,
@@ -206,7 +183,7 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) use ($actionMa
 		}
 	} elseif (!$user->admin) {	
 		$allowed = (in_array($action, $actionMap['user']) || in_array($action, $actionMap['public']));
-		if ($action == 'users::edit' && $r['id'] != $user->id()) {
+		if ($action == 'users::edit' && isset($r['id']) && $r['id'] != $user->id()) {
 			$allowed = false;
 		}
 		if (!$allowed) {

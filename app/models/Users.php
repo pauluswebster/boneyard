@@ -56,9 +56,9 @@ class Users extends \lithium\data\Model {
 			}
 			$params['entity'] = $record;
 			$save = $chain->next($self, $params, $chain);
-			if($save && $record->id == CurrentUser::id('users')) {
+			if($save && $record->id == CurrentUser::id('default')) {
 				$data = $record->data();
-				CurrentUser::set('users', $data);
+				CurrentUser::set('default', $data);
 			}
 			return $save;
 		});

@@ -122,4 +122,5 @@ Libraries::add('app', array('default' => true));
  */
 Libraries::add('slicedup_core');
 Libraries::add('slicedup_scaffold');
+Libraries::add('slicedup_users');
 ?>
