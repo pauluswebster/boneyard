@@ -10,6 +10,15 @@ namespace sli_util\net\http;
 
 class MediaPaths extends \lithium\net\http\Media {
 
+	public static function setDefaults($type, $default = null, $merge = false) {
+		$config = static::type($type);
+		if (empty($config['options']) || $merge) {
+			$config['options']+= static::defaults($default);
+		}
+		static::type($type, $config['content'], $config['options']);
+		return $type;
+	}
+
 	public static function defaults($type = null) {
 		$handlers = static::_handlers();
 		if ($type && isset($handlers[$type])) {
