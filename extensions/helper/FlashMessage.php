@@ -30,7 +30,7 @@ class FlashMessage extends \lithium\template\Helper {
 		'template' => 'flash_message',
 		'data' => array(),
 		'options' => array(
-			'library' => 'slicedup_core'
+			'library' => 'sli_util'
 		)
 	);
 
