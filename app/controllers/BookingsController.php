@@ -7,10 +7,10 @@ use app\models\Items;
 use app\models\Bookings;
 use lithium\util\Set;
 use lithium\storage\Session;
-use slicedup_users\security\CurrentUser;
-use slicedup_core\configuration\Registry;
+use sli_users\security\CurrentUser;
+use sli_util\storage\Registry;
 
-class BookingsController extends \slicedup_scaffold\controllers\ScaffoldController {
+class BookingsController extends \sli_scaffold\controllers\ScaffoldController {
 	
 	protected function _init() {
         parent::_init();

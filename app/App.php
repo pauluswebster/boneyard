@@ -8,7 +8,7 @@
  
 namespace app;
 
-use slicedup_core\configuration\Source;
+use sli_util\storage\Source;
 
 class App extends \lithium\core\StaticObject {
 	

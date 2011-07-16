@@ -11,10 +11,11 @@ use lithium\action\Response;
 use lithium\core\Libraries;
 use lithium\core\Environment;
 use lithium\util\Inflector;
-use slicedup_core\configuration\Registry;
-use slicedup_core\action\FlashMessage;
-use slicedup_core\net\http\Media;
-use slicedup_scaffold\core\Scaffold;
+use sli_util\storage\Registry;
+use sli_util\action\FlashMessage;
+use sli_util\net\http\MediaPaths;
+use sli_scaffold\core\Scaffold;
+use sli_users\security\CurrentUser;
 
 //Development
 Environment::is(function(){
@@ -43,13 +44,13 @@ $options = array(
 	),
 	'conditions' => array('ajax' => true)
 );
-Media::type('ajax', $content, $options + Media::defaultOptions());
+MediaPaths::type('ajax', $content, $options + MediaPaths::defaults());
 
 //Apply ajax templates to scaffold paths
 Scaffold::applyFilter('paths', function($self, $params, $chain){
 	extract($params);
-	$scaffold = Libraries::get('slicedup_scaffold');
-	Media::addPaths('ajax', array(
+	$scaffold = Libraries::get('sli_scaffold');
+	MediaPaths::addPaths('ajax', array(
 		'template' => array(
 			'{:library}/views/scaffold/{:template}.{:type}.php',
 			'{:library}/views/scaffold/{:template}.html.php',
@@ -64,7 +65,7 @@ Scaffold::applyFilter('paths', function($self, $params, $chain){
 	if ($name) {
 		list($library, $name) = explode('\\', $name);
 		$library = Libraries::get($library);
-		Media::addPaths('ajax', array(
+		MediaPaths::addPaths('ajax', array(
 			'template' => array(
 				$library['path'] . '/views/'.$name.'/{:template}.{:type}.php',
 				$library['path'] . '/views/'.$name.'/{:template}.html.php',
@@ -108,10 +109,10 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) use ($conf
 		return $controller;
 	}
 	
-	//ajax delay
+	//ajax delay for dev
 	$controller->applyFilter('__invoke', function($self, $params, $chain) {
         if($self->request->is('ajax')) {
-//        	sleep(1);
+        	sleep(1);
         }
         return $chain->next($self, $params, $chain);
 	});
@@ -131,8 +132,7 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) use ($conf
 	
 	//set config & auth user
 	$controller->_settings = $config;
-	$currentUser = 'slicedup_users\security\CurrentUser';
-	$user = $controller->_user = $currentUser::instance('default');
+	$controller->_user = CurrentUser::instance('default');
 	$controller->set(array(
 		'user' => $controller->_user,
 		'settings' => $controller->_settings,

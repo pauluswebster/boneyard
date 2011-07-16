@@ -51,7 +51,7 @@
 </head>
 <body class="app bookings<?=$user->admin ? ' admin' :'' ?>">
 	<?=$this->flashMessage->output();?>
-	<?=$this->view()->render(array('element' => 'layout/header'), compact('settings', 'user'));?>
+	<?=$this->_render('element', 'layout/header', compact('settings', 'user'));?>
 	<div id="container">
 		<?=$this->content;?>
 	</div>

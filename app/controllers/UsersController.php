@@ -8,10 +8,10 @@
  
 namespace app\controllers;
 
-use slicedup_core\action\FlashMessage;
-use slicedup_scaffold\core\Scaffold;
+use sli_util\action\FlashMessage;
+use sli_scaffold\core\Scaffold;
 
-class UsersController extends \slicedup_users\controllers\UsersController {
+class UsersController extends \sli_users\controllers\UsersController {
 	
 	public $scaffold;
 	

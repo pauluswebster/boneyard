@@ -9,7 +9,7 @@
 namespace app\models;
 
 use lithium\util\Set;
-use slicedup_core\configuration\Registry;
+use sli_util\storage\Registry;
 use app\models\BookingsUsers;
 
 class Bookings extends \lithium\data\Model {

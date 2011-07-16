@@ -9,7 +9,7 @@
 namespace app\models;
 
 use lithium\util\String;
-use slicedup_users\security\CurrentUser;
+use sli_users\security\CurrentUser;
 
 class Users extends \lithium\data\Model {
 

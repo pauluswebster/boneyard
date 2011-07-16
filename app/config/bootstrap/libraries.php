@@ -120,7 +120,7 @@ Libraries::add('app', array('default' => true));
 /**
  * Add some plugins:
  */
-Libraries::add('slicedup_core');
-Libraries::add('slicedup_scaffold');
-Libraries::add('slicedup_users');
+Libraries::add('sli_util');
+Libraries::add('sli_scaffold');
+Libraries::add('sli_users');
 ?>
