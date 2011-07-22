@@ -1,4 +1,16 @@
-(function(){
+(function($){
+
+	String.implement({
+		insert: function(data){
+			return this.substitute(data, /\\?\{\:([^{}]+)\}/g);
+		}
+	});
+
+	Element.from = function(text, excludeScripts){
+		var elements = Elements.from(text, excludeScripts);
+		return elements[0];
+	};
+
 	this.Li3Form = new Class({
 		Implements: [Options, Events],
 		options: {},
@@ -11,7 +23,7 @@
 			this.form.submit();
 		}
 	});
-	
+
 	this.Li3Form.Request = new Class({
 		Extends:Li3Form,
 		request: null,
@@ -36,13 +48,36 @@
 			this.request.onSubmit();
 		}
 	});
-	
+
+	//modal window
+	this.currentWindow = null;
+
+	//modal base obj
+	this.modal = {
+		width:360,
+		onOpen: function(){
+			this.mask = new Mask(document.body, {
+				onHide: function(){
+					this.destroy();
+				}
+			}).show();
+			this.mask.addEvent('click', function(){
+				this.close();
+			}.bind(this));
+		},
+		onClose: function(){
+			this.mask.hide();
+			this.mask.destroy(500, this.mask);
+			this.destroy.delay(500, this);
+		}
+	};
+
 	this.App = {
 		fadeFlashMessages: function(){
 			var flashMessages = $$('.flash-message:not(.nofade)');
 			if (flashMessages) {
 				flashMessages.set('morph', {duration: 'long', onComplete: function(){
-					console.log(this.element);
+					this.element.dispose();
 				}});
 				(function(){
 					flashMessages.morph({
@@ -56,7 +91,7 @@
 				}).delay(3000);
 			}
 		},
-		
+
 		editAnnounce: function(){
 			var announce = $('announce');
 			var data = $('announceData');
@@ -98,15 +133,51 @@
 					}
 				}
 			});
+		},
+
+		editUser: function(){
+			if (!$('userEdit')) return;
+			$('userEdit').addEvent('click', function(e){
+				e.stop();
+				currentWindow = new LightFace.Request(Object.merge(Object.clone(modal), {
+					url: this.get('href'),
+					request: {
+						method: 'get'
+					},
+					onSuccess: function(){
+						var resize = this._resize.bind(this);
+						var fade = this.fade.bind(this);
+						var unfade = this.unfade.bind(this);
+						var form = this.contentBox.getElement('form');
+						this.form = new Li3Form.Request(form, {
+							onSend: function() {
+								fade();
+							},
+							onSuccess: function(){
+								resize();
+								unfade(1);
+							}
+						}, this.messageBox);
+						this.addButton('Update', function(){
+							this.form.submit();
+						}.bind(this), 'green');
+						this.addButton('Cancel',function(){
+							this.close();
+						}.bind(this));
+						resize();
+					}
+				})).open();
+			});
 		}
 	};
-	
+
 	window.addEvent('domready',function(){
 		App.fadeFlashMessages();
 		if ($(document.body).hasClass('admin')) {
 			App.editAnnounce();
 		}
+		App.editUser();
 	});
 	
-})();
+})(document.id);
 

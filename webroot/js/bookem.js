@@ -1,44 +1,73 @@
-var currentWindow = null;
-
-//booking form modal base obj
-var modal = {
-	width:360,
-	onOpen: function(){
-		this.mask = new Mask(document.body, {
-			onHide: function(){
-				this.destroy();
+var BookingForm = new Class({
+	window: null,
+	autocomplete: null,
+	elements: {},
+	initialize: function(modal) {
+		this.window = modal;
+		$('Attending').getElements('a.remove').addEvent('click', this.removeUser.bind(this));
+		var addUser = this.addUser.bind(this);
+		var attending = new Meio.Autocomplete.Select($('BookingsAddSomeone'), users, {
+			cacheLength:0,
+		    valueFilter: function(data){
+		        return data.id;
+		    },
+			selectOnTab: false,
+			onSelect: function(elements, value){
+				elements.field.node.removeClass('ma-invalid');
+				//add user to list
+				addUser(value);
+				//reset value
+				elements.field.node.set('value', '');
+				//reposition
+				elements.list.positionNextTo(elements.field.node);
+				
+			},
+			onDeselect: function(elements){
+				elements.field.node.removeClass('ma-valid');
+				elements.field.node.addClass('ma-invalid');
+			},
+			filter: {
+				type: 'contains',
+				path: 'user'
 			}
-		}).show();
-		this.mask.addEvent('click', function(){
-			this.close();
-		}.bind(this));
-	},
-	onClose: function(){
-		this.mask.hide();
-		this.mask.destroy(500, this.mask);
-		this.destroy.delay(500, this);
-	}
-};
+		});
+		this.autocomplete = attending;
+		this.window.addEvent('close', function(){
+			$(document.body).getElements('div.ma-container').dispose();
+			try {
+				attending.destroy();
+			} catch (e) {
 
-//booking autocomplete base obj
-var autoComplete = {
-		cacheLength:0,
-    valueFilter: function(data){
-        return data.id;
-    },
-	selectOnTab: false,
-	onSelect: function(elements){
-		elements.field.node.removeClass('ma-invalid');
-		elements.field.node.addClass('ma-valid');
+			}
+		});
 	},
-	onDeselect: function(elements){
-		elements.field.node.removeClass('ma-valid');
-		elements.field.node.addClass('ma-invalid');
+
+	addUser: function(userData) {
+		if ($('Attending').getElement('.attendee input[value='+userData.id+']')) {
+			return;
+		}
+		var user = Element.from(userTmpl.insert(userData));
+		user.getElement('a.remove').addEvent('click', this.removeUser.bind(this));
+		$('Attending').grab(user);
 	},
-	filter: {
-		type: 'contains',
-		path: 'user'
+
+	removeUser: function(e) {
+		e.stop();
+		var ele = $(e.target) || false;
+		if(ele && ele.match('#Attending a.remove')) {
+			ele.getParent('.attendee').dispose();
+			var elements = this.autocomplete.elements;
+			elements.list.positionNextTo(elements.field.node);
+			return true;
+		}
 	}
+});
+
+var Booking = {
+	add: function() {},
+	edit: function() {},
+	move: function() {},
+	remove: function() {}
 };
 
 //booking form init, must be bound to the currentWindow
@@ -76,24 +105,6 @@ var initBookingForm = function(){
 	}.bind(this));
 	
 	resize();
-
-	var p1 = new Meio.Autocomplete.Select($('BookingsPlayer1'), users, Object.merge(autoComplete, {
-		valueField: $('Users0')
-	}));
-
-	var p2 = new Meio.Autocomplete.Select($('BookingsPlayer2'), users, Object.merge(autoComplete, {
-		valueField: $('Users1')
-	}));
-	
-	this.addEvent('close', function(){
-		$(document.body).getElements('div.ma-container').dispose();
-		try {
-			p1.destroy();
-			p2.destroy();
-		} catch (e) {
-
-		}
-	});
 }
 
 window.addEvent('domready',function(){
@@ -122,6 +133,7 @@ window.addEvent('domready',function(){
 			},
 			onSuccess: function(){
 				initBookingForm.call(this);
+				new BookingForm(this);
 			}
 		})).open();
 	});
@@ -140,41 +152,9 @@ window.addEvent('domready',function(){
 				},
 				onSuccess: function(){
 					initBookingForm.call(this);
+					new BookingForm(this);
 				}
 			})).open();
 		}
 	});
-
-	$('userEdit').addEvent('click', function(e){
-		e.stop();
-		currentWindow = new LightFace.Request(Object.merge(Object.clone(modal), {
-			url: this.get('href'),
-			request: {
-				method: 'get'
-			},
-			onSuccess: function(){
-				var resize = this._resize.bind(this);
-				var fade = this.fade.bind(this);
-				var unfade = this.unfade.bind(this);
-				var form = this.contentBox.getElement('form');
-				this.form = new Li3Form.Request(form, {
-					onSend: function() {
-						fade();
-					},
-					onSuccess: function(){
-						resize();
-						unfade(1);
-					}
-				}, this.messageBox);
-				this.addButton('Update', function(){
-					this.form.submit();
-				}.bind(this), 'green');
-				this.addButton('Cancel',function(){
-					this.close();
-				}.bind(this));
-				resize();
-			}
-		})).open();
-	});
-
 });

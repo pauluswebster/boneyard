@@ -21,32 +21,48 @@ $record->formatDates();
 			echo $this->form->hidden('start');
 			echo $this->form->hidden('end');
 			echo $this->form->hidden('creator_id');
-			echo $this->form->hidden('users[0]', array(
-				'id' => 'Users0', 
-				'value' => ($users->first() && $_user = $users->current()->User()) ? $_user->id : $user->id
-			));
-			echo $this->form->hidden('users[1]', array(
-				'id' => 'Users1', 
-				'value' => ($users->next() && $_user = $users->current()->User()) ? $_user->id : ''
-			));
 		?>
 		<h2>Booking Details</h2>
 		<div class="details">
 			<dl>
-				<dt>Court:</dt>
-				<dd><?php echo $record->Item()->title;?></dd>
+				<dt></dt>
+				<dd><b><?php echo $record->Item()->title;?></b></dd>
 				<dt>Date:</dt>
 				<dd><?php echo $record->_start->format('l jS F Y');?></dd>
 				<dt>Time:</dt>
 				<dd><?php echo $record->_start->format($settings['listingIntervalFormat']) . ' - ' . $record->_end->format($settings['listingIntervalFormat']);?></dd>
+				<dt>Title:</dt>
+				<dd><?php echo $this->form->input('title');?></dd>
 			</dl>
 		</div>
-		<div class="players">
-			<?php 
-				echo $this->form->field('player_1', array(
-					'value' => ($users->first() && $_user = $users->current()->User()) ? $_user->username : $user->username
-				));
-				echo $this->form->field('player_2', array(
+		<div class="attendees">
+			<h4>Attending</h4>
+			<div id="Attending">
+			<?php
+				$userTmpl = '
+					<div class="attendee">
+						{:user}
+						<a href="#" class="remove">x</a>
+						' . $this->form->hidden('users[]', array(
+							'value' => '{:id}'
+						)) . '
+					</div>
+				';
+				if($users->first()):
+					do {
+						$_user = $users->current()->User();
+						$data = array(
+							'user' => $_user->displayName(),
+							'id' => $_user->id
+						);
+						echo lithium\util\String::insert($userTmpl, $data);
+					} while($users->next());
+				endif;
+			?>
+				</div>
+			<?php
+				echo $this->form->hidden('users[]', array('value' => 0));
+				echo $this->form->field('add_someone', array(
 					'value' => ($users->next() && $_user = $users->current()->User()) ? $_user->username : ''
 				));
 			?>
@@ -63,5 +79,6 @@ $record->formatDates();
 	});
 ?>
 <script>
+	var userTmpl = '<?php echo preg_replace("/\s{2,}/", '', $userTmpl);?>';
 	var users = <?php echo json_encode(array_values($userList));?>;
 </script>

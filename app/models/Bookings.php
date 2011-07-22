@@ -42,32 +42,33 @@ class Bookings extends \lithium\data\Model {
 			}, array('start', 'end'));
 			$params['data'] = $data;
 			if ($save = $chain->next($self, $params, $chain)) {
-				if (!empty($data['users']) && $users = array_filter($data['users'])) {
+				if (isset($data['users'])) {
 					$record = $params['entity'];
 					$currentUsers = BookingsUsers::all(array(
 						'conditions' => array(
 							'booking_id' => $record->id
 						)
 					));
+					$_users = $users = array_filter($data['users']);
 					if (!empty($currentUsers)) {
 						foreach ($currentUsers as $currentUser) {
-							if ($key = array_search($currentUser->key(), $data['users'])) {
-								unset($data['users'][$key]);
+							if ($key = array_search($currentUser->key(), $_users)) {
+								unset($_users[$key]);
 							} else {
 								$currentUser->delete();
 							}
 						}
-						if (!empty($data['users'])) {
-							foreach ($data['users'] as $user) {
-								$association = BookingsUsers::create(array(
-									'booking_id' => $record->id,
-									'user_id' => $user
-								));
-								$association->save();	
-							}
+					}
+					if (!empty($_users)) {
+						foreach ($_users as $user) {
+							$association = BookingsUsers::create(array(
+								'booking_id' => $record->id,
+								'user_id' => $user
+							));
+							$association->save();
 						}
 					}
-					if (empty($record->title)) {
+					if (empty($record->title) && !empty($users)) {
 						$record->title = join(' & ', Users::find('list', array(
 							'conditions' => array(
 								'id' => $users

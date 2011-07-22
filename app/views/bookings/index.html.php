@@ -99,9 +99,18 @@
 						<?php if($details):?>
 						<div class="details shadow" title="<?php echo $title;?>">
 							<p>
-								<b>Player&nbsp;1:</b>&nbsp;<i><?php echo str_replace(' ', '&nbsp;', $users->first()->User()->fullName())?></i><br />
-								<b>Player&nbsp;2:</b>&nbsp;<i><?php echo str_replace(' ', '&nbsp;', $users->next()->User()->fullName())?></i><br />
 								<b>Time:</b>&nbsp;<i><?php echo str_replace(' ', '&nbsp;', $booking->_start->format($settings['listingIntervalFormat']) . ' - ' . $booking->_end->format($settings['listingIntervalFormat']));?></i>
+							<?php
+								if($users->first()):
+							?>
+								<b>Attending</b><br />
+							<?php
+								do {
+									$_user = $users->current()->User();
+									echo '<i>' . str_replace(' ', '&nbsp;', $_user->fullName()) . '</i><br />';
+								} while($users->next());
+								endif;
+							?>
 							</p>
 						</div>
 						<?php endif;?>
