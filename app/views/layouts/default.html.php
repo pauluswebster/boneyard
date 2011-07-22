@@ -26,6 +26,7 @@
 			'mootools-more/Locale/Locale.en-US.Date',
 			'mootools-more/Types/Date',
 			'mootools-more/Element/Element.Forms',
+			'mootools-more/Element/Elements.From',
 			'mootools-more/Element/Element.Event.Pseudos',
 			'mootools-more/Element/Element.Position',
 			'mootools-more/Element/Element.Measure',
