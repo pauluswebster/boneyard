@@ -34,12 +34,11 @@ if (!($apcEnabled = Apc::enabled()) && !is_writable($cachePath)) {
  * not, file caching will be used. Most of this code is for getting you up and running only, and
  * should be replaced with a hard-coded configuration, based on the cache(s) you plan to use.
  */
-$default = array('adapter' => 'File', 'strategies' => array('Serializer'));
-
+$file = $default = array('adapter' => 'File', 'strategies' => array('Serializer'));
 if ($apcEnabled) {
 	$default = array('adapter' => 'Apc');
 }
-Cache::config(compact('default'));
+Cache::config(compact('default', 'file'));
 
 /**
  * Caches paths for auto-loaded and service-located classes.

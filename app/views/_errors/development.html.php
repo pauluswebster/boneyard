@@ -34,14 +34,14 @@ array_unshift($stack, array(
 <h3>Exception</h3>
 
 <div class="lithium-exception-class">
-	<?=get_class($exception);?>
+	<?php echo get_class($exception);?>
 
 	<?php if ($code = $exception->getCode()): ?>
-		<span class="code">(code <?=$code; ?>)</span>
+		<span class="code">(code <?php echo $code; ?>)</span>
 	<?php endif ?>
 </div>
 
-<div class="lithium-exception-message"><?=$exception->getMessage(); ?></div>
+<div class="lithium-exception-message"><?php echo $exception->getMessage(); ?></div>
 
 <h3 id="source">Source</h3>
 
@@ -58,13 +58,13 @@ array_unshift($stack, array(
 				$code = Inspector::lines($frame['file'], $lines);
 			?>
 			<li>
-				<tt><a href="#source" id="<?=$id; ?>" class="display-source-excerpt">
-					<?=$frame['functionRef']; ?>
+				<tt><a href="#source" id="<?php echo $id; ?>" class="display-source-excerpt">
+					<?php echo $frame['functionRef']; ?>
 				</a></tt>
-				<div id="sourceCode<?=$id; ?>" style="display: none;">
+				<div id="sourceCode<?php echo $id; ?>" style="display: none;">
 
 					<div class="lithium-exception-location">
-						<?=$location; ?>
+						<?php echo $location; ?>
 					</div>
 
 					<div class="lithium-code-dump">

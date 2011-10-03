@@ -1,0 +1,113 @@
+#container {
+	padding:20px 10% 50px 10%;
+    position: relative;
+}
+
+#header h2 {
+	float:left;
+	margin:0;
+	width:auto;
+}
+
+#userNav ul {
+	float:right;
+	list-style-type:none;
+	margin:0;
+}
+
+#userNav li {
+	disply:block;
+	float:left;
+	padding:0 10px;
+	border-right: 1px solid #E6E6E6;
+}
+
+#userNav li:last-child {
+	border:none;
+}
+
+.navBar {
+	margin:10px 0;
+	border: 1px solid #E6E6E6;
+}
+
+.navBar ul {
+	list-style-type:none;
+	margin:0;
+}
+
+.navBar li {
+	disply:block;
+	float:left;
+	padding:0 10px;
+	border-right: 1px solid #E6E6E6;
+}
+
+.navBar li.right {
+	border-right: none;
+	border-left: 1px solid #E6E6E6;
+	float:right;
+}
+
+.navBar a {
+	line-height:26px;
+}
+
+td.actions {
+	width:5%;
+}
+
+td.actions a {
+	padding:0 5px;
+	border-right: 1px solid #E6E6E6;
+}
+
+td.actions a:first-child {
+	padding-left:0;
+}
+
+td.actions a:last-child {
+	border-right:none;
+}
+
+
+.clear {
+	clear:both;
+	height:0;
+}
+
+
+div.flash-message {
+	clear: both;
+	margin: 0 0 .5em 0;
+	padding: .75em 1em .55em;
+	color: #FFFFFF;
+	background: #666;
+	border: 1px solid #000000;
+	border-width: 0 0 4px 0;
+	font-size: 1.15em;
+	-moz-box-shadow: inset 0 0 12px rgba(0,0,0,.25);
+	-webkit-box-shadow: inset 0 0 12px rgba(0,0,0,.25);
+	box-shadow: inset 0 0 12px rgba(0,0,0,.25);
+	text-shadow: 0px 0px 6px rgba(0,0,0,.5);
+}
+
+div.flash-message-success {
+	background-color: #62B212;
+	border-color: #467F0D;
+}
+
+div.flash-message-error {
+	background-color: #CC1414;
+	border-color: #7F0D0D;
+}
+
+div.flash-message-default {
+	background-color: #E58F16;
+	border-color: #995F0F;
+}
+
+div.flash-message-info {
+	background-color: #E5D416;
+	border-color: #B2A511;
+}

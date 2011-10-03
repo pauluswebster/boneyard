@@ -59,14 +59,17 @@ use lithium\data\Connections;
 /**
  * Uncomment this configuration to use MySQL as your default database.
  */
-// Connections::add('default', array(
-// 	'type' => 'database',
-// 	'adapter' => 'MySql',
-// 	'host' => 'localhost',
-// 	'login' => 'root',
-// 	'password' => '',
-// 	'database' => 'my_app',
-// 	'encoding' => 'UTF-8'
-// ));
+ Connections::add('default', array(
+ 	'type' => 'database',
+ 	'adapter' => 'MySql',
+ 	'host' => 'localhost',
+ 	'login' => 'jobs',
+ 	'password' => 'pzx999eS22ufTrez',
+ 	'database' => 'jobs',
+ 	'encoding' => 'UTF-8',
+ 	'classes' => array(
+ 		'entitity' => 'sli_filters\data\entity\Record'
+ 	)
+ ));
 
 ?>

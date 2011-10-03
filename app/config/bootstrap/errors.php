@@ -9,17 +9,24 @@
 use lithium\core\ErrorHandler;
 use lithium\action\Response;
 use lithium\net\http\Media;
+use lithium\core\Environment;
 
 ErrorHandler::apply('lithium\action\Dispatcher::run', array(), function($info, $params) {
 	$response = new Response(array(
 		'request' => $params['request'],
 		'status' => $info['exception']->getCode()
 	));
-
+	
+	$template = 'development';
+	$layout = 'error';
+	if (Environment::is('production')) {
+		$template = 'production';
+	}
+	
 	Media::render($response, compact('info', 'params'), array(
 		'controller' => '_errors',
-		'template' => 'development',
-		'layout' => 'error',
+		'template' => $template,
+		'layout' => $layout,
 		'request' => $params['request']
 	));
 	return $response;
