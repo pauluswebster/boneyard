@@ -5,7 +5,7 @@
  * @copyright	Copyright 2011, Paul Webster / Slicedup (http://slicedup.org)
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
- 
+
 namespace app\util;
 
 use lithium\storage\Cache;
@@ -15,7 +15,7 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 
 	/**
 	 * Convert currency
-	 * 
+	 *
 	 * @param string $base
 	 * @param string $to
 	 * @param mixed numeric ammount to convert
@@ -30,7 +30,7 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 			return (float) $value;
 		}
 	}
-	
+
 	public static function rate($base, $to, $cache = '+12 hours') {
 		if ($base == $to) {
 			return 1;
@@ -55,10 +55,10 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 		}
 		return (float) $rate;
 	}
-	
+
 	/**
 	 * List supported currencies
-	 * 
+	 *
 	 * @param boolean $cache
 	 * @return array
 	 */
@@ -66,7 +66,7 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 		if ($cached && $cache = Cache::read('default', 'currency_list')) {
 			return $cache;
 		}
-		
+
 		$list = $matches = array();
 		if ($source = static::_getGoogleConverter()) {
 			if(preg_match_all("#<option.*?>([\p{L}\s]+).*\((\w+)\)</option>#u", $source, $matches)) {
@@ -78,15 +78,15 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 		}
 		return $list;
 	}
-	
+
 	/**
 	 * Get Google Exhange Rate Converter
-	 *  
+	 *
 	 * @param array $data parameters to pass to the converter, keys include:
 	 * 				`'a'`: amounthg ;c to convert
 	 * 				`'from'`: base currency
 	 * 				`'to'`: target currency
-	 * 
+	 *
 	 * @return mixed result of http request
 	 */
 	protected static function _getGoogleConverter($data = array()) {

@@ -13,14 +13,14 @@ $date = new \DateTime(null, $tz);
 $format = Registry::get('app.date.long');
 $active = false;
 if ($job = $user->job()) {
-	$active = $job->job->id;	
+	$active = $job->job->id;
 }
 
 $this->title('My Jobs');
 ?>
 <div class="<?php echo $plural;?>">
 	<h2>My Jobs</h2>
-	
+
 	<nav id="jobNav" class="navBar">
 		<ul>
 			<li><?php echo $this->html->link($t('{:action} {:entity}', array('action' => $t('Add'), 'entity' => $t($singular))), array('action' => 'add'));?></li>
@@ -30,7 +30,7 @@ $this->title('My Jobs');
 		</ul>
 		<div class="clear"></div>
 	</nav>
-	
+
 	<div class="index">
 		<table>
 			<tr>
@@ -44,7 +44,7 @@ $this->title('My Jobs');
 					<?php
 						if ($active == $record->id):
 							echo $this->html->link('', array(
-								'action' => 'stop', 
+								'action' => 'stop',
 								'args' => $record->key()
 							), array(
 								'title' => $t('{:action} {:entity}', array('action' => $t('Stop'), 'entity' => $t('Work'))),
@@ -52,7 +52,7 @@ $this->title('My Jobs');
 							));
 						else:
 							echo $this->html->link('', array(
-								'action' => 'start', 
+								'action' => 'start',
 								'args' => $record->key()
 							), array(
 								'title' => $t('{:action} {:entity}', array('action' => $t('Start'), 'entity' => $t('Work'))),
@@ -64,13 +64,13 @@ $this->title('My Jobs');
 				<td>
 					<strong>
 					<?php echo $this->html->link("#{$record->id}: " . $record->title, array(
-						'action' => 'edit', 
+						'action' => 'edit',
 						'args' => $record->key()
 					));
 					?></strong>
 					<br>
 					<em>
-						<strong>Status:</strong> 
+						<strong>Status:</strong>
 						<?php echo $t(Inflector::humanize($record->status())); ?>,
 						<?php if($record->completed):?>
 						<strong>Completed:</strong>
@@ -79,22 +79,22 @@ $this->title('My Jobs');
 							echo $date->format($format);
 						?>,
 						<?php endif;?>
-						<strong>Due:</strong> 
+						<strong>Due:</strong>
 						<?php
 							$date->setTimestamp($record->__due);
 							$user = $date->format($format);
 							echo $user;
 							if ($user != $record->due):
 								echo " [{$record->due} {$record->timezone}]";
-							endif;		
+							endif;
 						?>
 						<br>
 						<strong>Fee:</strong> <?php echo $record->fees();?>
 						<?php if($record->started):?>
-						, <strong>Time:</strong> <?php echo $record->timeString();?>,	
+						, <strong>Time:</strong> <?php echo $record->timeString();?>,
 						<strong>Rate:</strong> <?php echo $record->rate();?>
 						<?php endif;?>
-					</em>	
+					</em>
 				</td>
 				<td class="actions">
 					<?php

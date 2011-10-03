@@ -5,7 +5,7 @@
  * @copyright	Copyright 2011, Paul Webster / Slicedup (http://slicedup.org)
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
- 
+
 namespace app\controllers;
 
 use app\util;
@@ -14,11 +14,11 @@ use app\util\Reports;
 use sli_util\action\FlashMessage;
 
 class ReportsController extends \lithium\action\Controller {
-	
+
 	public function index() {
 		$report = 'completed';
 		if (!empty($this->request->report)) {
-			$report = $this->request->report;	
+			$report = $this->request->report;
 		} else {
 			$this->redirect(compact('report'));
 		}
@@ -33,6 +33,6 @@ class ReportsController extends \lithium\action\Controller {
 		$reports = Reports::available();
 		$this->set(compact('reportData', 'reports'));
 	}
-	
+
 }
 ?>

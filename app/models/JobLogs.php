@@ -5,11 +5,11 @@
  * @copyright	Copyright 2011, Paul Webster / Slicedup (http://slicedup.org)
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
- 
+
 namespace app\models;
 
 class JobLogs extends \lithium\data\Model {
-	
+
 	public $belongsTo = array('Users', 'Jobs');
 
 	public static function start($user_id, $job_id){
@@ -40,9 +40,9 @@ class JobLogs extends \lithium\data\Model {
 				'JobLogs.end' => 0
 			),
 			'with' => array('Jobs')
-		));		
+		));
 	}
-	
+
 	public static function timeSpent($job_id) {
 		$result = static::first(array(
 			'conditions' => array(
@@ -55,10 +55,10 @@ class JobLogs extends \lithium\data\Model {
 				'user_id',
 				'SUM(end - start) as spent'
 			)
-		));		
+		));
 		$seconds = 1;
 		if ($result) {
-			$seconds = $result->spent; 
+			$seconds = $result->spent;
 		}
 		$progress = static::first(array(
 			'conditions' => array(
@@ -71,7 +71,7 @@ class JobLogs extends \lithium\data\Model {
 		}
 		return $seconds;
 	}
-	
+
 	public static function stop($user_id) {
 		if ($job = static::current($user_id)) {
 			$job->end = time();
@@ -80,7 +80,7 @@ class JobLogs extends \lithium\data\Model {
 			}
 		}
 	}
-	
+
 }
 
 ?>

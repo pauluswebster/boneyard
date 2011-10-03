@@ -16,13 +16,13 @@ ErrorHandler::apply('lithium\action\Dispatcher::run', array(), function($info, $
 		'request' => $params['request'],
 		'status' => $info['exception']->getCode()
 	));
-	
+
 	$template = 'development';
 	$layout = 'error';
 	if (Environment::is('production')) {
 		$template = 'production';
 	}
-	
+
 	Media::render($response, compact('info', 'params'), array(
 		'controller' => '_errors',
 		'template' => $template,

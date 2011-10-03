@@ -7,7 +7,7 @@
  */
 
 $tz = date_default_timezone_get();
- 
+
 $config = array(
 	'actions' => array(
 		'public' => array(

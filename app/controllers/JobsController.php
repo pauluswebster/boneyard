@@ -5,7 +5,7 @@
  * @copyright	Copyright 2011, Paul Webster / Slicedup (http://slicedup.org)
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
- 
+
 namespace app\controllers;
 
 use app\models\Jobs;
@@ -13,9 +13,9 @@ use app\models\JobLogs;
 use sli_util\action\FlashMessage;
 
 class JobsController extends \lithium\action\Controller {
-	
+
 	public $scaffold;
-	
+
 	protected function _scaffold($controller, $params, $options) {
 		$controller->applyFilter('index', function($self, $params, $chain){
 			$conditions = array(
@@ -23,7 +23,7 @@ class JobsController extends \lithium\action\Controller {
 			);
 			$status = 'current';
 			if (!empty($self->request->status)) {
-				$status = $self->request->status; 
+				$status = $self->request->status;
 			}
 			$conditions += compact('status');
 			$recordSet = Jobs::all(array(
@@ -35,7 +35,7 @@ class JobsController extends \lithium\action\Controller {
 			return $chain->next($self, $params, $chain);
 		});
 	}
-	
+
 	public function start() {
 		if ($this->request->id) {
 			$started = JobLogs::start($this->_user->id, $this->request->id);
@@ -50,7 +50,7 @@ class JobsController extends \lithium\action\Controller {
 		}
 		$this->redirect('jobs::index');
 	}
-	
+
 	public function stop() {
 		if($job = JobLogs::stop($this->_user->id)) {
 			$this->_user->eliminate('job.current');
@@ -60,7 +60,7 @@ class JobsController extends \lithium\action\Controller {
 		}
 		$this->redirect('jobs::index');
 	}
-	
+
 	public function complete() {
 		if ($this->request->id && $job = Jobs::first($this->request->id)) {
 			if ($job->completed) {

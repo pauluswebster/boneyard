@@ -5,7 +5,7 @@
  * @copyright	Copyright 2011, Paul Webster / Slicedup (http://slicedup.org)
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
- 
+
 namespace app\util;
 
 use \DateTimeZone;
@@ -14,7 +14,7 @@ class TimeZones extends \lithium\core\StaticObject {
 
 	/**
 	 * Get a list of PHP timezones
-	 * 
+	 *
 	 * @param boolean $grouped
 	 */
 	public static function get($group = true){
@@ -41,7 +41,7 @@ class TimeZones extends \lithium\core\StaticObject {
 			}
 		}
 		return $group ? $grouped : $regions;
-	}	
+	}
 }
 
 ?>

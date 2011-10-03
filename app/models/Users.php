@@ -28,13 +28,13 @@ class Users extends \lithium\data\Model {
 	protected $_meta = array(
 		'title' => 'username'
 	);
-	
+
 	public static $scaffoldFields = array(
 		'first_name',
 		'last_name',
 		'email',
 	);
-	
+
 	public static function __init(){
 		static::_applyFilters();
 		parent::__init();
@@ -53,7 +53,7 @@ class Users extends \lithium\data\Model {
 			'currency' => array(
 				'type' => 'select',
 				'list' => CurrencyConverter::currencies()
-			),	
+			),
 			'settings.currencies' => array(
 				'type' => 'select',
 				'multiple' => true,
@@ -71,7 +71,7 @@ class Users extends \lithium\data\Model {
 		);
 		return $fields;
 	}
-	
+
 	protected static function _applyFilters() {
 		Behaviors::apply(__CLASS__, array(
 			'Serialized' => array(
@@ -80,7 +80,7 @@ class Users extends \lithium\data\Model {
 				)
 			)
 		));
-		
+
 		static::applyFilter('save', function($self, $params, &$chain) {
 			$record = $params['entity'];
 			if (!empty($params['data']['new_password'])) {
@@ -94,7 +94,7 @@ class Users extends \lithium\data\Model {
 			$params['entity'] = $record;
 			return $chain->next($self, $params, $chain);
 		});
-		
+
 		static::applyFilter('create', function($self, $params, &$chain) {
 			$record = $chain->next($self, $params, $chain);
 			if (!empty($record->password)) {

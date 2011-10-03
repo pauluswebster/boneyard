@@ -11,7 +11,7 @@ use app\util\CurrencyConverter;
 use sli_filters\util\Behaviors;
 
 class CurrencyRates extends \lithium\data\Model {
-	
+
 	public static function __init() {
 		Behaviors::apply(__CLASS__, array(
 			'Timestamped' => array(
@@ -21,10 +21,10 @@ class CurrencyRates extends \lithium\data\Model {
 		));
 		parent::__init();
 	}
-	
+
 	/**
 	 * Fetch the current rate for all existing rate's in use and update records
-	 * 
+	 *
 	 * @return integer number of rate records updated
 	 */
 	public static function fetchAllRates() {
@@ -44,7 +44,7 @@ class CurrencyRates extends \lithium\data\Model {
 		CurrencyConverter::currencies(false);
 		return $updated;
 	}
-	
+
 	public static function convert($base , $to, $amount = 1, $rate = null) {
 		if ($base == $to) {
 			$rate = 1;
@@ -63,7 +63,7 @@ class CurrencyRates extends \lithium\data\Model {
 					} else {
 						$record->rate = $rate;
 					}
-					$record->save();	
+					$record->save();
 				}
 			}
 		}

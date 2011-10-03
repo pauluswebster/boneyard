@@ -10,7 +10,7 @@ use lithium\action\Dispatcher;
 use lithium\core\Environment;
 use lithium\util\Inflector;
 use app\security\User;
-use sli_util\action\FlashMessage; 
+use sli_util\action\FlashMessage;
 use sli_util\storage\Registry;
 use sli_scaffold\core\Scaffold;
 
@@ -77,7 +77,7 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) {
 	if(!isset($controller->_user)) {
 		return $chain->next($self, $params, $chain);
 	}
-	
+
 	$r = $controller->request->params;
 	if (isset($controller->scaffold)) {
 		$r['controller'] = $controller->scaffold['controller'];
@@ -86,7 +86,7 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) {
 	$action = Inflector::underscore($r['controller']) . "::" . $r['action'];
 
 	$actionMap = Registry::get('app.actions');
-	
+
 	$user =& $controller->_user;
 	if (!$user->get()) {
 		if(!in_array($action, $actionMap['public'])) {
@@ -96,8 +96,8 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) {
 				return $required;
 			}
 		}
-	} elseif (!$user->admin && in_array($action, $actionMap['admin'])) {	
-		FlashMessage::error('Permision Denied.');	
+	} elseif (!$user->admin && in_array($action, $actionMap['admin'])) {
+		FlashMessage::error('Permision Denied.');
 		return $controller->redirect('/', array('exit' => true));
 	}
 

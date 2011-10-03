@@ -6,7 +6,7 @@ window.addEvent('domready', function(){
 	var dateInputs = $$('input.date-picker');
 	if (dateInputs.length > 0) {
 		dateInputs.set('readonly', true);
-		
+
 		dateInputs.each(function(di){
 			var dobj = {
 			    timePicker: true,
@@ -22,7 +22,7 @@ window.addEvent('domready', function(){
 			new Picker.Date(di, dobj);
 		});
 	}
-	
+
 	var flashMessages = $$('.flash-message:not(.nofade)');
 	if (flashMessages) {
 		flashMessages.set('morph', {duration: 'long', onComplete: function(){
@@ -39,5 +39,5 @@ window.addEvent('domready', function(){
 			});
 		}).delay(3000);
 	}
-	
+
 });
