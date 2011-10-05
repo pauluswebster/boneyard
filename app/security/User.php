@@ -65,7 +65,6 @@ class User extends \sli_users\security\User {
 				$timezones = $settings['timezones'];
 			}
 		}
-		$timezones = array_intersect_key(TimeZones::get(false), $timezones);
 		return array_combine($timezones, $timezones);
 	}
 
