@@ -6,7 +6,6 @@ window.addEvent('domready', function(){
 	var dateInputs = $$('input.date-picker');
 	if (dateInputs.length > 0) {
 		dateInputs.set('readonly', true);
-
 		dateInputs.each(function(di){
 			var dobj = {
 			    timePicker: true,
@@ -18,7 +17,6 @@ window.addEvent('domready', function(){
 			if (format) {
 				dobj.format = format;
 			}
-			d(dobj);
 			new Picker.Date(di, dobj);
 		});
 	}

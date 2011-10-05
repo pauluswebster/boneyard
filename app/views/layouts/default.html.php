@@ -3,7 +3,6 @@
 <head>
 	<?php echo $this->html->charset();?>
 	<title>Daily Grind > <?php echo $this->title(); ?></title>
-	<?php echo $this->html->style(array('debug', 'lithium', 'app')); ?>
 	<?php echo $this->_render('element', 'script');?>
 	<?php echo $this->scripts(); ?>
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
