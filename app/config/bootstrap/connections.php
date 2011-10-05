@@ -68,7 +68,7 @@ use lithium\data\Connections;
  	'database' => 'jobs',
  	'encoding' => 'UTF-8',
  	'classes' => array(
- 		'entitity' => 'sli_filters\data\entity\Record'
+ 		'entitity' => 'app\extensions\data\model\Record'
  	)
  ));
 
