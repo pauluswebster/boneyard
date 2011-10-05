@@ -102,8 +102,8 @@ class Jobs extends \lithium\data\Model {
 			'currency' => array(
 				'type' => 'select',
 				'list' => array(
-					'My Currencies' => $user->currencies(),
-					'All Currencies' => CurrencyConverter::currencies()
+					'All Currencies' => CurrencyConverter::currencies(),
+					'My Currencies' => $user->currencies()
 				)
 			),
 			'due' => array(
@@ -112,9 +112,9 @@ class Jobs extends \lithium\data\Model {
 			),
 			'timezone' => array(
 				'type' => 'select',
-				'list' => array(
+				'list' => TimeZones::get() + array(
 					'My TimeZones' => $user->timezones()
-				) + TimeZones::get()
+				)
 			)
 		);
 		return array(
