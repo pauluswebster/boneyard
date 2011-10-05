@@ -10,9 +10,9 @@ as much working application, as proof of concept.
 ###Installation
 If your really interested you can run it:
 
-1. git clone
+1. git clone git://github.com/websta/daily-grind.git
 
-2. git submodule init
+2. git submodule init, git submodule update
 
 3. import DB from app/config/schema/install.sql
 
