@@ -80,4 +80,4 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `first_name`, `last_name`, `token`, `active`, `admin`, `username`, `password`, `email`, `detail`, `currency`, `timezone`, `settings`) VALUES
-(1, 'Admin', 'User', 'dcb19ff84086fedbc4e01881080cb7d58c40', 1, 0, 'admin', 'password', 'admin@example.com', NULL, 'NZD', 'UTC', '{"currencies":[],"timezones":[]}');
+(1, 'Admin', 'User', 'dcb19ff84086fedbc4e01881080cb7d58c40', 1, 1, 'admin', 'password', 'admin@example.com', NULL, 'NZD', 'UTC', '{"currencies":[],"timezones":[]}');
