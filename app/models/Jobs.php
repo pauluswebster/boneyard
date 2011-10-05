@@ -69,12 +69,13 @@ class Jobs extends \lithium\data\Model {
 		}
 		$base = $record->currency;
 		$to = $currency;
-		return CurrencyRates::convert($base, $to, $record->fee);
+		$fee = CurrencyRates::convert($base, $to, $record->fee);
+		return number_format($fee, 2, '.', '');
 	}
 
 	public static function fees($record, $currency = null) {
 		$user = static::fee($record, $currency);
-		$job = $record->fee;
+		$job = number_format($record->fee, 2, '.', '');
 		$fees = '$' . $user;
 		if ($user != $job) {
 			$fees.= " [\${$job} {$record->currency}]";
