@@ -97,7 +97,7 @@ class Jobs extends \lithium\data\Model {
 		$fields = array(
 			'title',
 			'reference',
-			'desrption' => array('type' => 'textarea'),
+			'description' => array('type' => 'textarea'),
 			'fee',
 			'currency' => array(
 				'type' => 'select',
