@@ -18,7 +18,6 @@ use sli_scaffold\core\Scaffold;
  * Environment
  */
 Environment::is(function($request) {
-//	return 'production';
 	$isLocal = in_array($request->env('HTTP_HOST'), array('jobs.dev'));
 	$isCli = is_array($request->argv) && !empty($request->argv);
 	switch (true) {
