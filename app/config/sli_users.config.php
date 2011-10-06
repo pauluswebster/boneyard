@@ -14,7 +14,8 @@ $config = array(
 		'library' => 'app',
 		'class' => 'app\controllers\UsersController',
 		'actions' => array(
-			'register' => false
+			'register' => false,
+			'password_reset' => false
 		)
 	),
 	'routing' => array(
