@@ -43,12 +43,31 @@ window.addEvent('domready', function(){
 		var ts = parseInt(dateOutput.get('data-time')) * 1000;
 		var started = new Date(ts);
 		var now = new Date();
-		var ch = function(){
+
+		var minute = 1;
+		var hour = 60;
+		var day = 1440;
+
+		var updateTime = function(){
 			var now = new Date();
 			var minutes = started.diff(now, 'minute');
-			dateOutput.set('text', minutes + 'm');
+			var timeString = '';
+			while (minutes > day) {
+				var days = Math.floor(minutes/day);
+				timeString += days + 'd ';
+				minutes -= (days*day);
+			}
+			while (minutes > hour) {
+				var hours = Math.floor(minutes/hour);
+				timeString += hours + 'h ';
+				minutes -= (hours*hour);
+			}
+			if (minutes > 0) {
+				timeString += minutes + 'm';
+			}
+			dateOutput.set('text', timeString);
 		};
-		ch();
-		ch.periodical(60 * 1000);
+		updateTime();
+		updateTime.periodical(60 * 1000);
 	}
 });
