@@ -65,9 +65,12 @@ window.addEvent('domready', function(){
 			if (minutes > 0) {
 				timeString += minutes + 'm';
 			}
+			if (timeString.length == 0) {
+				timeString = '1m'
+			}
 			dateOutput.set('text', timeString);
 		};
 		updateTime();
-		updateTime.periodical(60 * 1000);
+		updateTime.periodical(30 * 1000);
 	}
 });
