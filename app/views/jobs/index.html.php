@@ -34,33 +34,11 @@ $this->title('My Jobs');
 	<div class="index">
 		<table>
 			<tr>
-				<th width="1%"></th>
 				<th width="60%"><?php echo $t('Job');?></th>
 				<th class="actions"><?php echo $t('Actions');?></th>
 			</tr>
 		<?php foreach ($recordSet as $record):?>
 			<tr>
-				<td class="app indicated">
-					<?php
-						if ($active == $record->id):
-							echo $this->html->link('', array(
-								'action' => 'stop',
-								'args' => $record->key()
-							), array(
-								'title' => $t('{:action} {:entity}', array('action' => $t('Stop'), 'entity' => $t('Work'))),
-								'class' => 'disabled'
-							));
-						else:
-							echo $this->html->link('', array(
-								'action' => 'start',
-								'args' => $record->key()
-							), array(
-								'title' => $t('{:action} {:entity}', array('action' => $t('Start'), 'entity' => $t('Work'))),
-								'class' => 'enabled'
-							));
-						endif;
-					?>
-				</td>
 				<td>
 					<strong>
 					<?php echo $this->html->link("#{$record->id}: " . $record->title, array(
@@ -98,7 +76,8 @@ $this->title('My Jobs');
 				</td>
 				<td class="actions">
 					<?php
-						$_actions = array('edit', 'complete', 'delete');
+						$_actions = array('complete', 'edit', 'delete');
+						array_unshift($_actions, ($active == $record->id) ? 'stop' : 'start');
 						foreach ($_actions as $action):
 							echo $this->html->link($t(ucfirst($action)), array('action' => $action, 'args' => $record->key()), array('class' => 'clean-gray'));
 						endforeach;

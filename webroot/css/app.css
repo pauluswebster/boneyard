@@ -535,23 +535,3 @@ a.clean-gray-small {
 	box-shadow: inset 0 0 5px 2px #aaaaaa, 0 1px 0 0 #eeeeee;
 	color: #ff59ff;
 }
-
-/* debug styles used temporrarily */
-.app .indicated {
-	margin: 0;
-	list-style: none;
-}
-.app .indicated li {
-	display: inline;
-}
-.app .indicated li + li:before {
-	content: " / ";
-}
-.app .indicated .enabled:after {
-	content: "\0020 \2714";
-	color: #4ddb4a;
-}
-.app .indicated .disabled:after {
-	content: "\0020 \2718";
-	color: #d13ef2;
-}
