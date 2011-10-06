@@ -25,7 +25,7 @@
 	<?php
 		echo $this->html->link($t('Stop'), 'jobs::stop', array(
 			'title' => $t('{:action} {:entity}', array('action' => $t('Stop'), 'entity' => $t('Work'))),
-			'class' => 'clean-gray clean-gray-small'
+			'class' => 'button button-small button-red'
 		));
 	?>
 	<span class="dateFormat" data-time="<?php echo $active->start;?>"></span>

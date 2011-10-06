@@ -16,7 +16,7 @@ $this->title('Reports');
 <nav id="reportNav" class="navBar">
 	<ul>
 		<?php foreach($reports as $type => $report):?>
-		<li><?php echo $this->html->link($t($report), array('action' => 'index', 'report' => $type), array('class' => 'clean-gray'));?></li>
+		<li><?php echo $this->html->link($t($report), array('action' => 'index', 'report' => $type), array('class' => 'button'));?></li>
 		<?php endforeach;?>
 	</ul>
 	<div class="clear"></div>

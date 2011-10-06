@@ -23,9 +23,9 @@ $this->title('My Jobs');
 
 	<nav id="jobNav" class="navBar">
 		<ul>
-			<li><?php echo $this->html->link($t('{:action} {:entity}', array('action' => $t('Add'), 'entity' => $t($singular))), array('action' => 'add'), array('class' => 'clean-gray'));?></li>
+			<li><?php echo $this->html->link($t('{:action} {:entity}', array('action' => $t('Add'), 'entity' => $t($singular))), array('action' => 'add'), array('class' => 'button'));?></li>
 			<?php foreach($statuses as $status):?>
-			<li class="right"><?php echo $this->html->link($t(Inflector::humanize($status)), array('action' => 'index', 'status' => $status), array('class' => 'clean-gray'));?></li>
+			<li class="right"><?php echo $this->html->link($t(Inflector::humanize($status)), array('action' => 'index', 'status' => $status), array('class' => 'button'));?></li>
 			<?php endforeach;?>
 		</ul>
 		<div class="clear"></div>
@@ -77,9 +77,13 @@ $this->title('My Jobs');
 				<td class="actions">
 					<?php
 						$_actions = array('complete', 'edit', 'delete');
-						array_unshift($_actions, ($active == $record->id) ? 'stop' : 'start');
+						if ($active == $record->id):
+							echo $this->html->link($t('Stop'), array('action' =>  'stop', 'args' => $record->key()), array('class' => 'button button-small button-red'));
+						else:
+							echo $this->html->link($t('Start'), array('action' => 'start', 'args' => $record->key()), array('class' => 'button button-small button-green'));
+						endif;
 						foreach ($_actions as $action):
-							echo $this->html->link($t(ucfirst($action)), array('action' => $action, 'args' => $record->key()), array('class' => 'clean-gray'));
+							echo $this->html->link($t(ucfirst($action)), array('action' => $action, 'args' => $record->key()), array('class' => 'button button-small'));
 						endforeach;
 					?>
 				</td>
