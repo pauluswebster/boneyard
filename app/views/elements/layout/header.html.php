@@ -10,7 +10,7 @@
 
 <?php if($user()):?>
 <header id="header">
-	<h2>Daily Grind</h2>
+	<h1>Daily Grind</h1>
 	<nav id="userNav">
 		<ul>
 			<li><?php echo $user->first_name;?></li>
@@ -18,24 +18,28 @@
 			<li><?php echo $this->html->link($t('Logout'), '/logout'); ?></li>
 		</ul>
 	</nav>
+
+	<?php if($active = $user->job()):?>
+	<div id="activeJob">
+	<p><?php echo "#{$active->job->id}: {$active->job->title}";?></p>
+	<?php
+		echo $this->html->link($t('Stop'), 'jobs::stop', array(
+			'title' => $t('{:action} {:entity}', array('action' => $t('Stop'), 'entity' => $t('Work'))),
+			'class' => 'clean-gray clean-gray-small'
+		));
+	?>
+	<span class="dateFormat" data-time="<?php echo $active->start;?>"></span>
+	</div>
+	<?php endif;?>
+
+	<nav id="primaryNav">
+		<ul>
+			<li id="reportLink"><?php echo $this->html->link($t('Reports'), 'reports::index');?></li>
+			<li id="jobLink"><?php echo $this->html->link($t('Jobs'), 'jobs::index'); ?></li>
+		</ul>
+		<div class="clear"></div>
+	</nav>
+
 	<div class="clear"></div>
 </header>
-
-<nav id="primaryNav" class="navBar">
-	<ul>
-		<li><?php echo $this->html->link($t('Jobs'), 'jobs::index'); ?></li>
-		<li><?php echo $this->html->link($t('Reports'), 'reports::index');?></li>
-		<?php if($active = $user->job()):?>
-		<li class="right app indicated">
-			<?php
-				echo $this->html->link("#{$active->job->id}: {$active->job->title}", 'jobs::stop', array(
-					'title' => $t('{:action} {:entity}', array('action' => $t('Stop'), 'entity' => $t('Work'))),
-					'class' => 'disabled'
-				));
-			?>
-		</li>
-		<?php endif;?>
-	</ul>
-	<div class="clear"></div>
-</nav>
 <?php endif;?>

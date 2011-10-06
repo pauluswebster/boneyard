@@ -38,4 +38,17 @@ window.addEvent('domready', function(){
 		}).delay(3000);
 	}
 
+	if ($('activeJob')) {
+		var dateOutput = $('activeJob').getElement('.dateFormat');
+		var ts = parseInt(dateOutput.get('data-time')) * 1000;
+		var started = new Date(ts);
+		var now = new Date();
+		var ch = function(){
+			var now = new Date();
+			var minutes = started.diff(now, 'minute');
+			dateOutput.set('text', minutes + 'm');
+		};
+		ch();
+		ch.periodical(60 * 1000);
+	}
 });

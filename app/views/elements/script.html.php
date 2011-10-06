@@ -7,6 +7,7 @@
  */
 echo $this->html->style(array(
 	'app',
+	'fonts',
 	'mootools-datepicker'
 ));
 

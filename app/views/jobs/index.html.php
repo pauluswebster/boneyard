@@ -23,9 +23,9 @@ $this->title('My Jobs');
 
 	<nav id="jobNav" class="navBar">
 		<ul>
-			<li><?php echo $this->html->link($t('{:action} {:entity}', array('action' => $t('Add'), 'entity' => $t($singular))), array('action' => 'add'));?></li>
+			<li><?php echo $this->html->link($t('{:action} {:entity}', array('action' => $t('Add'), 'entity' => $t($singular))), array('action' => 'add'), array('class' => 'clean-gray'));?></li>
 			<?php foreach($statuses as $status):?>
-			<li class="right"><?php echo $this->html->link($t(Inflector::humanize($status)), array('action' => 'index', 'status' => $status));?></li>
+			<li class="right"><?php echo $this->html->link($t(Inflector::humanize($status)), array('action' => 'index', 'status' => $status), array('class' => 'clean-gray'));?></li>
 			<?php endforeach;?>
 		</ul>
 		<div class="clear"></div>
@@ -100,7 +100,7 @@ $this->title('My Jobs');
 					<?php
 						$_actions = array('edit', 'complete', 'delete');
 						foreach ($_actions as $action):
-							echo $this->html->link($t(ucfirst($action)), array('action' => $action, 'args' => $record->key()));
+							echo $this->html->link($t(ucfirst($action)), array('action' => $action, 'args' => $record->key()), array('class' => 'clean-gray'));
 						endforeach;
 					?>
 				</td>
