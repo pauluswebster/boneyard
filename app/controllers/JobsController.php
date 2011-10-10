@@ -10,6 +10,7 @@ namespace app\controllers;
 
 use app\models\Jobs;
 use app\models\JobLogs;
+use sli_util\storage\Registry;
 use sli_util\action\FlashMessage;
 
 class JobsController extends \lithium\action\Controller {
@@ -31,9 +32,26 @@ class JobsController extends \lithium\action\Controller {
 				'order' => 'due asc, completed desc'
 			));
 			$statuses = array_reverse(array_keys(Jobs::statuses()));
-			$params = compact('statuses', 'state', 'recordSet') + $params;
+
+			$tz = new \DateTimeZone($self->_user->timezone);
+			$date = new \DateTime(null, $tz);
+			$format = Registry::get('app.date.long');
+			$active = false;
+			if ($job = $self->_user->job()) {
+				$active = $job->job->id;
+			}
+			$params = compact('statuses', 'status', 'recordSet', 'date', 'format', 'active') + $params;
 			return $chain->next($self, $params, $chain);
 		});
+
+		$filter = function($self, $params, $chain){
+			$params['actions'] = array();
+			return $chain->next($self, $params, $chain);
+		};
+
+		$controller->applyFilter('edit', $filter);
+		$controller->applyFilter('add', $filter);
+
 	}
 
 	public function start() {

@@ -25,10 +25,11 @@
 	<?php
 		echo $this->html->link($t('Stop'), 'jobs::stop', array(
 			'title' => $t('{:action} {:entity}', array('action' => $t('Stop'), 'entity' => $t('Work'))),
-			'class' => 'button button-small button-red'
+			'class' => 'button button-small button-red button-stop'
 		));
 	?>
-	<span class="dateFormat" data-time="<?php echo $active->start;?>"></span>
+	<span class="timed" data-time="<?php echo $active->start;?>"><?php echo $active->timeSpent(true, true);?></span>
+	<span id="activeTotal">(<span class="timed" data-time="<?php echo time() - $active->job->time();?>"><?php echo $active->job->timeString();?></span>)</span>
 	</div>
 	<?php endif;?>
 

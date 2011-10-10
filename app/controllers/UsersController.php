@@ -21,6 +21,9 @@ class UsersController extends \sli_users\controllers\UsersController {
 			if (!$self->_user->admin || empty($params['id'])) {
 				$request['id'] = $self->_user->id;
 			}
+			$params['actions'] = array();
+			$params['redirect'] = 'Jobs::index';
+			$params['messages']['success'] = 'Details Updated.';
 			return $chain->next($self, $params, $chain);
 		});
 	}

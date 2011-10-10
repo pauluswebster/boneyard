@@ -38,39 +38,40 @@ window.addEvent('domready', function(){
 		}).delay(3000);
 	}
 
-	if ($('activeJob')) {
-		var dateOutput = $('activeJob').getElement('.dateFormat');
-		var ts = parseInt(dateOutput.get('data-time')) * 1000;
-		var started = new Date(ts);
-		var now = new Date();
-
+	var updateTime = function(element){
 		var minute = 1;
 		var hour = 60;
 		var day = 1440;
+		var ts = parseInt(element.get('data-time')) * 1000;
+		var started = new Date(ts);
+		var now = new Date();
+		var minutes = started.diff(now, 'minute');
+		var timeString = '';
+		while (minutes > day) {
+			var days = Math.floor(minutes/day);
+			timeString += days + 'd ';
+			minutes -= (days*day);
+		}
+		while (minutes > hour) {
+			var hours = Math.floor(minutes/hour);
+			timeString += hours + 'h ';
+			minutes -= (hours*hour);
+		}
+		if (minutes > 0) {
+			timeString += minutes + 'm';
+		}
+		if (timeString.length == 0) {
+			timeString = '1m'
+		}
+		element.set('text', timeString);
+	};
 
-		var updateTime = function(){
-			var now = new Date();
-			var minutes = started.diff(now, 'minute');
-			var timeString = '';
-			while (minutes > day) {
-				var days = Math.floor(minutes/day);
-				timeString += days + 'd ';
-				minutes -= (days*day);
-			}
-			while (minutes > hour) {
-				var hours = Math.floor(minutes/hour);
-				timeString += hours + 'h ';
-				minutes -= (hours*hour);
-			}
-			if (minutes > 0) {
-				timeString += minutes + 'm';
-			}
-			if (timeString.length == 0) {
-				timeString = '1m'
-			}
-			dateOutput.set('text', timeString);
-		};
-		updateTime();
-		updateTime.periodical(30 * 1000);
+	var timed = $$('.timed');
+	if (timed) {
+		timed.each(function(element){
+			updateTime(element);
+			updateTime.periodical(30 * 1000, window, [element]);
+		});
 	}
+
 });

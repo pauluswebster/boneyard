@@ -8,6 +8,8 @@
 
 namespace app\models;
 
+use app\util\Time;
+
 class JobLogs extends \lithium\data\Model {
 
 	public $belongsTo = array('Users', 'Jobs');
@@ -43,22 +45,27 @@ class JobLogs extends \lithium\data\Model {
 		));
 	}
 
-	public static function timeSpent($job_id) {
-		$result = static::first(array(
-			'conditions' => array(
-				'JobLogs.job_id' => $job_id,
-				'JobLogs.end' => array('>' => 0)
-			),
-			'fields' => array(
-				'start',
-				'end',
-				'user_id',
-				'SUM(end - start) as spent'
-			)
-		));
-		$seconds = 1;
-		if ($result) {
-			$seconds = $result->spent;
+	public static function timeSpent($job_id, $string = false, $current = false) {
+		if (is_object($job_id)) {
+			$job_id = $job_id->job_id;
+		}
+		$seconds = 0;
+		if (!$current) {
+			$result = static::first(array(
+				'conditions' => array(
+					'JobLogs.job_id' => $job_id,
+					'JobLogs.end' => ($current ? 0 : array('>' => 0))
+				),
+				'fields' => array(
+					'start',
+					'end',
+					'user_id',
+					'SUM(end - start) as spent'
+				)
+			));
+			if ($result) {
+				$seconds = $result->spent;
+			}
 		}
 		$progress = static::first(array(
 			'conditions' => array(
@@ -69,7 +76,10 @@ class JobLogs extends \lithium\data\Model {
 		if ($progress) {
 			$seconds += time() - $progress->start;
 		}
-		return $seconds;
+		if (empty($seconds)) {
+			$seconds = $string ? 60 : 1;
+		}
+		return $string ? Time::period($seconds) : $seconds;
 	}
 
 	public static function stop($user_id) {
