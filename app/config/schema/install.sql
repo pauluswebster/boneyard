@@ -55,6 +55,28 @@ CREATE TABLE IF NOT EXISTS `job_logs` (
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `tasks`
+--
+
+CREATE TABLE IF NOT EXISTS `tasks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `user_id` int(10) NOT NULL,
+  `job_id` int(10) NOT NULL,
+  `started` int(10) unsigned NOT NULL DEFAULT '0',
+  `completed` int(10) NOT NULL DEFAULT '0',
+  `due` int(10) unsigned NOT NULL,
+  `timezone` varchar(32) NOT NULL,
+  `created` int(10) NOT NULL,
+  `modified` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
