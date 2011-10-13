@@ -38,9 +38,13 @@ class User extends \sli_users\security\User {
 		parent::_init();
 	}
 
-	public function job() {
+	public function job($query = false) {
 		if ($user_id = $this->id) {
-			return $this->retrieve('job.current');
+			$job = $this->retrieve('job.current');
+			if (!$job && $query && $job = JobLogs::current($user_id)) {
+				$this->store('job.current', $job);
+			}
+			return $job;
 		}
 	}
 

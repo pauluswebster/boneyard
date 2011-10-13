@@ -37,7 +37,7 @@ class JobsController extends \lithium\action\Controller {
 			$date = new \DateTime(null, $tz);
 			$format = Registry::get('app.date.long');
 			$active = false;
-			if ($job = $self->_user->job()) {
+			if ($job = $self->_user->job(true)) {
 				$active = $job->job->id;
 			}
 			$params = compact('statuses', 'status', 'recordSet', 'date', 'format', 'active') + $params;
