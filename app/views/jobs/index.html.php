@@ -55,14 +55,15 @@ $this->title('My Jobs');
 					<br>
 					<em>
 						<strong>Status:</strong>
-						<?php echo $t(Inflector::humanize($record->status())); ?>,
-						<?php if($record->completed):?>
+						<?php echo $t(Inflector::humanize($record->status())); ?>
+						<?php if($record->completed):?>,
 						<strong>Completed:</strong>
 						<?php
 							$date->setTimestamp($record->completed);
 							echo $date->format($format);
-						?>,
+						?>
 						<?php endif;?>
+						<?php if($record->__due):?>,
 						<strong>Due:</strong>
 						<?php
 							$date->setTimestamp($record->__due);
@@ -72,18 +73,23 @@ $this->title('My Jobs');
 								echo " [{$record->due} {$record->timezone}]";
 							endif;
 						?>
+						<?php endif;?>
 						<br>
+						<?php if($time = $record->time()):?>
 						<strong>Time:</strong>
 						<?php if($active == $record->id):?>
-						<span class="timed" data-time="<?php echo time() - $record->time();?>"><?php echo $record->timeString();?></span>,
+						<span class="timed" data-time="<?php echo time() - $time;?>"><?php echo $record->timeString();?></span>
 						<?php else:?>
-						<?php echo $record->timeString();?>,
+						<?php echo $record->timeString();?>
 						<?php endif;?>
+						<?php endif;?>
+						<?php if((float) $record->fee > 0):?><?php if($time):?>,<?php endif;?>
 						<strong>Fee:</strong> <?php echo $record->fees();?>
-						<?php if($record->started):?>
-						,
+						<?php if($record->started):?>,
 						<strong>Rate:</strong> <?php echo $record->rate();?>
 						<?php endif;?>
+						<?php endif;?>
+						&nbsp;
 					</em>
 				</td>
 			</tr>
