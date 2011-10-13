@@ -25,7 +25,7 @@ if (PHP_SAPI === 'cli') {
  */
 $cachePath = Libraries::get(true, 'resources') . '/tmp/cache';
 
-if (!($apcEnabled = Apc::enabled()) && !is_writable($cachePath)) {
+if (!is_writable($cachePath)) {
 	return;
 }
 
@@ -34,11 +34,9 @@ if (!($apcEnabled = Apc::enabled()) && !is_writable($cachePath)) {
  * not, file caching will be used. Most of this code is for getting you up and running only, and
  * should be replaced with a hard-coded configuration, based on the cache(s) you plan to use.
  */
-$file = $default = array('adapter' => 'File', 'strategies' => array('Serializer'));
-if ($apcEnabled) {
-	$default = array('adapter' => 'Apc');
-}
-Cache::config(compact('default', 'file'));
+$default = array('adapter' => 'File', 'strategies' => array('Serializer'));
+
+Cache::config(compact('default'));
 
 /**
  * Caches paths for auto-loaded and service-located classes.
