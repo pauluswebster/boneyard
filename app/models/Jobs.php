@@ -64,19 +64,26 @@ class Jobs extends \lithium\data\Model {
 	public static function fee($record, $currency = null) {
 		if (!isset($currency)) {
 			$currency = User::instance('default')->currency();
-		} else if (!$currency) {
-			return $record->fee;
 		}
-		$base = $record->currency;
-		$to = $currency;
-		$fee = CurrencyRates::convert($base, $to, $record->fee);
+		if (!$currency) {
+			$fee = $record->fee;
+		} else {
+			$base = $record->currency;
+			$to = $currency;
+			$fee = CurrencyRates::convert($base, $to, $record->fee);
+		}
+		if (!$record->fixed) {
+			$hours = static::hours($record);
+			if ($hours < 1) $hours = 1;
+			$fee = $fee * $hours;
+		}
 		return number_format($fee, 2, '.', '');
 	}
 
 	public static function fees($record, $currency = null) {
 		$user = static::fee($record, $currency);
-		$job = number_format($record->fee, 2, '.', '');
 		$fees = '$' . $user;
+		$job = static::fee($record, false);
 		if ($user != $job) {
 			$fees.= " [\${$job} {$record->currency}]";
 		}
@@ -90,7 +97,19 @@ class Jobs extends \lithium\data\Model {
 		$hours = static::hours($record);
 		if ($hours < 1) $hours = 1;
 		$rate = number_format($fee/$hours, 2, '.', '');
-		return $raw ? $rate : "{$hours}h @ \${$rate}";
+		if (!$raw) {
+			$rate = "{$hours}h @ \${$rate}";
+			if (!$record->fixed) {
+				$job = static::fee($record, false);
+				if ($fee != $job) {
+					$job = number_format($record->fee, 2, '.', '');
+					$rate.= " [\${$job} {$record->currency}]";
+				}
+			} else {
+				//converted fx of hourly rate
+			}
+		}
+		return $rate;
 	}
 
 	public static function getScaffoldFormFields(){
@@ -100,6 +119,14 @@ class Jobs extends \lithium\data\Model {
 			'reference',
 			'description' => array('type' => 'textarea'),
 			'fee',
+			'fixed'=> array(
+				'type' => 'select',
+				'list' => array(
+					1 => 'Fixed Fee',
+					0 => 'Hourly Fee'
+				),
+				'label' => 'Fee Basis'
+			),
 			'currency' => array(
 				'type' => 'select',
 				'list' => array(
