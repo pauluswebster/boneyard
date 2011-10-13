@@ -391,7 +391,10 @@ img.shadow {
 }
 
 #jobLink{
-	background:url(../img/page_process.png) top center no-repeat;
+	background:url(../img/jobs.png) top center no-repeat;
+}
+#taskLink{
+	background:url(../img/tasks.png) top center no-repeat;
 }
 #reportLink{
 	background:url(../img/report.png) top center no-repeat;
