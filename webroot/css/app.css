@@ -392,13 +392,13 @@ img.shadow {
 }
 
 #primaryNav #jobLink{
-	background-position:4px -265px;
+	background-position:2px -265px;
 }
 #primaryNav #reportLink{
-	background-position:0px -397px;
+	background-position:5px -330px;
 }
 #primaryNav #taskLink{
-	background-position:6px -330px;
+	background-position:3px -397px;
 }
 
 #primaryNav li a{
