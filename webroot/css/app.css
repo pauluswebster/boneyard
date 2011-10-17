@@ -373,7 +373,7 @@ img.shadow {
 #primaryNav {
 	float:right;
 	clear:right;
-	margin:20px 20px 0 0;
+	margin:15px 20px 0 0;
 }
 
 #primaryNav ul {
@@ -384,20 +384,21 @@ img.shadow {
 #primaryNav li {
 	disply:block;
 	float:right;
-	height:60px;
+	height:65px;
 	width:50px;
 	overflow:hidden;
 	margin-left:10px;
+	background:transparent url(../img/icon-sprite.png) 100% 100% no-repeat;
 }
 
-#jobLink{
-	background:url(../img/jobs.png) top center no-repeat;
+#primaryNav #jobLink{
+	background-position:4px -265px;
 }
-#taskLink{
-	background:url(../img/tasks.png) top center no-repeat;
+#primaryNav #reportLink{
+	background-position:0px -397px;
 }
-#reportLink{
-	background:url(../img/report.png) top center no-repeat;
+#primaryNav #taskLink{
+	background-position:6px -330px;
 }
 
 #primaryNav li a{
@@ -417,6 +418,13 @@ img.shadow {
 
 #activeJob p {
 	margin-bottom:5px;
+}
+
+#activeJob a {
+	float:left;
+	display: block;
+	width:auto;
+	margin-right:5px;
 }
 
 #activeTotal {
@@ -655,21 +663,29 @@ a.button-small {
     color: #fff;
 }
 
-.button-start:after, .button-stop:after {
-	content: "\00A0 \23F0";
+.button-ico {}
+.button-ico-img {
+	display:block;
+	float:left;
+	width:12px;
+	height:12px;
+	margin:-1px 3px 0 0;
+	overflow:visible;
+	background:transparent url(../img/icon-sprite.png) 100% 100% no-repeat;
 }
 
-.button-complete:before {
-	content: "\2714 \00A0";
-	color: #76b347;
+.button-start .button-ico-img, .button-stop .button-ico-img {
+	background-position:0px -1px;
 }
 
-.button-edit:before {
-	content: "\270E \00A0";
-	color:#333333;
+.button-edit .button-ico-img {
+	background-position:0px -29px;
 }
 
-.button-delete:before {
-	content: "\2718 \00A0";
-	color: #ee432e;
+.button-delete .button-ico-img {
+	background-position:0px -59px;
+}
+
+.button-complete .button-ico-img {
+	background-position:0px -87px;
 }

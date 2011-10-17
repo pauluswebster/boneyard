@@ -3,6 +3,17 @@ var d = function(_var_){
 };
 
 window.addEvent('domready', function(){
+	//icon buttons
+
+	var buttons = $$('.button-start, .button-stop, .button-complete, .button-edit, .button-delete');
+	if (buttons.length > 0) {
+		buttons.each(function(button){
+			new Element('span', {'class': 'button-ico-img'}).inject(button, 'top');
+		});
+	}
+
+
+	//datepickers
 	var dateInputs = $$('input.date-picker');
 	if (dateInputs.length > 0) {
 		dateInputs.set('readonly', true);
@@ -21,6 +32,7 @@ window.addEvent('domready', function(){
 		});
 	}
 
+	//flash message fade
 	var flashMessages = $$('.flash-message:not(.nofade)');
 	if (flashMessages) {
 		flashMessages.set('morph', {duration: 'long', onComplete: function(){
@@ -38,6 +50,7 @@ window.addEvent('domready', function(){
 		}).delay(3000);
 	}
 
+	//timers
 	var updateTime = function(element){
 		var minute = 1;
 		var hour = 60;
