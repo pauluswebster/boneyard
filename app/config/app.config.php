@@ -21,8 +21,8 @@ $config = array(
 		)
 	),
 	'date' => array(
-		'long' => 'D d M, H:i',
-		'js-long' => '%a %d %b, %H:%M'
+		'long' => 'D d M Y, H:i',
+		'js-long' => '%a %d %b %Y, %H:%M'
 	),
 	'timezone' => array(
 		'default' => $tz
