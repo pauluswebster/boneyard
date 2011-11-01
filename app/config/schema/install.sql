@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS `currency_rates` (
   `rate` float(6,4) NOT NULL,
   `modified` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `base` (`base`,`to`)
+  KEY `base` (`base`),
+  KEY `to` (`to`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -48,10 +49,13 @@ CREATE TABLE IF NOT EXISTS `job_logs` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `job_id` int(10) unsigned NOT NULL,
+  `task_id` int(10) unsigned DEFAULT NULL,
   `start` int(10) unsigned NOT NULL,
   `end` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`,`job_id`)
+  KEY `user_id` (`user_id`),
+  KEY `task_id` (`task_id`),
+  KEY  `job_id` (`job_id`),
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 --
