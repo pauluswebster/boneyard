@@ -75,9 +75,9 @@ class WorkUnitsController extends \lithium\action\Controller {
 			$job = JobLogs::start($this->_user->id, $this->request->job_id, $this->request->task_id);
 			if ($job) {
 				$this->_user->active($job);
-				FlashMessage::success("Started work on #{$job->id}.");
+				FlashMessage::success("Started work on job #{$job->job_id}.");
 			} else {
-				FlashMessage::error("Invalid job, id #{$this->request->id}.");
+				FlashMessage::error("Invalid job #{$this->request->job_id}.");
 			}
 		} else {
 			FlashMessage::error("Invalid job.");
@@ -96,7 +96,7 @@ class WorkUnitsController extends \lithium\action\Controller {
 		$redirect = 'jobs::index';
 		if($job = JobLogs::stop($this->_user->id)) {
 			$this->_user->eliminate('job.current');
-			FlashMessage::success("Stopped work on #{$job->id}.");
+			FlashMessage::success("Stopped work on job #{$job->job_id}.");
 		} else {
 			FlashMessage::success("Stopped work.");
 		}
@@ -123,7 +123,7 @@ class WorkUnitsController extends \lithium\action\Controller {
 						FlashMessage::success("Task #{$task->id} completed.");
 					}
 				} else {
-					FlashMessage::error("Invalid task.");
+					FlashMessage::error("Invalid task #{$this->request->task_id}.");
 				}
 			} else {
 				if ($job->completed) {
@@ -135,13 +135,13 @@ class WorkUnitsController extends \lithium\action\Controller {
 				}
 			}
 		} else {
-			FlashMessage::error("Invalid job.");
+			FlashMessage::error("Invalid job #{$this->request->job_id}.");
 		}
 		if ($this->request->task_id && isset($task)) {
 			$redirect = array(
 				'controller' => 'tasks',
 				'action' => 'active_job',
-				'id' => $job->job_id
+				'id' => $task->job_id
 			);
 		}
 		$this->redirect($redirect);
