@@ -116,9 +116,6 @@ class JobLogs extends \lithium\data\Model {
 		if ($progress) {
 			$seconds += time() - $progress->start;
 		}
-		if (empty($seconds)) {
-			$seconds = $string ? 60 : 0;
-		}
 		return $string ? Time::period($seconds) : $seconds;
 	}
 

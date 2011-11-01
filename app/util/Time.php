@@ -28,6 +28,7 @@ class Time extends \lithium\core\StaticObject {
 		extract($options);
 
 		if($seconds < static::MINUTE) {
+			$seconds = $seconds ?: 1;
 			$periods = array('second');
 		}
 
