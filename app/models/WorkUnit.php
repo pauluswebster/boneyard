@@ -39,10 +39,10 @@ class WorkUnit extends \lithium\data\Model {
 
 	public static function status($record) {
 		$status = 'in_progress';
-		if(empty($record->started)):
+		if(empty($record->started) && empty($record->completed)):
 			$status = 'new';
 		elseif(!empty($record->completed)):
-			$status = 'complete';
+			$status = 'completed';
 		endif;
 		return $status;
 	}
