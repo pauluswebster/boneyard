@@ -135,4 +135,5 @@ class WorkUnit extends \lithium\data\Model {
 		return static::time($record, true);
 	}
 }
+
 ?>
