@@ -92,14 +92,14 @@ $this->title('My Jobs');
 							echo $date->format($format);
 						?>
 						<?php endif;?>
-						<?php if($record->__due):?>,
+						<?php if($record->due()):?>,
 						<strong>Due:</strong>
 						<?php
-							$date->setTimestamp($record->__due);
+							$date->setTimestamp($record->due(true));
 							$user = $date->format($format);
 							echo $user;
-							if ($user != $record->due):
-								echo " [{$record->due} {$record->timezone}]";
+							if ($user != $record->due()):
+								echo " [{$record->due()} {$record->timezone}]";
 							endif;
 						?>
 						<?php endif;?>
