@@ -48,6 +48,14 @@ $config = array(
 					'edit',
 					'delete'
 				)
+			),
+			'tasks' => array(
+				'actions' => array(
+					'index',
+					'add',
+					'edit',
+					'delete'
+				)
 			)
 		)
 	)
