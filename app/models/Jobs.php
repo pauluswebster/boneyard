@@ -65,7 +65,7 @@ class Jobs extends WorkUnit {
 		return $rate;
 	}
 
-	public static function tasks($record) {
+	public static function tasks($record, $status = 'current') {
 		if (is_object($record)) {
 			if (isset($record->taskCount)) {
 				return $record->taskCount;
@@ -74,7 +74,12 @@ class Jobs extends WorkUnit {
 		} else {
 			$id = $record;
 		}
-		$count = Tasks::count(array('conditions' => array('job_id' => $id)));
+		$count = Tasks::count(array(
+			'conditions' => array(
+				'job_id' => $id,
+				'status' => $status
+			)
+		));
 		if (is_object($record)) {
 			$record->taskCount = $count;
 		}
