@@ -60,10 +60,6 @@ Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 		return $controller;
 	}
 	$controller->_user = User::instance('default');
-	$controller->set(array(
-		'locale' => Environment::get('locale'),
-		'user' => $controller->_user
-	));
 	return $controller;
 });
 
@@ -99,6 +95,17 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) {
 		FlashMessage::error('Permision Denied.');
 		return $controller->redirect('/', array('exit' => true));
 	}
+
+	$bodyClass = array(
+		'app',
+		$controller->_user->get() ? 'user' : 'public',
+		Environment::get()
+	);
+	$controller->set(array(
+		'bodyClass' => join(' ', $bodyClass),
+		'locale' => Environment::get('locale'),
+		'user' => $controller->_user
+	));
 
 	return $chain->next($self, $params, $chain);
 });
