@@ -8,6 +8,9 @@ window.addEvent('domready', function(){
 	var buttons = $$('.button-start, .button-stop, .button-complete, .button-edit, .button-delete');
 	if (buttons.length > 0) {
 		buttons.each(function(button){
+			var text = new Element('span', {'class': 'button-ico-text', 'text': button.get('text')});
+			button.empty();
+			text.inject(button);
 			new Element('span', {'class': 'button-ico-img'}).inject(button, 'top');
 		});
 	}
