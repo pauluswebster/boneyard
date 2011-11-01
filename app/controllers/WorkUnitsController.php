@@ -72,6 +72,7 @@ class WorkUnitsController extends \lithium\action\Controller {
 	public function start() {
 		$redirect = 'jobs::index';
 		if ($this->request->job_id) {
+			JobLogs::stop($this->_user->id);
 			$job = JobLogs::start($this->_user->id, $this->request->job_id, $this->request->task_id);
 			if ($job) {
 				$this->_user->active($job);

@@ -15,14 +15,6 @@ class JobLogs extends \lithium\data\Model {
 	public $belongsTo = array('Users', 'Jobs', 'Tasks');
 
 	public static function start($user_id, $job_id, $task_id = null){
-		if ($current = static::current($user_id)) {
-			if ($current->job_id == $job_id) {
-				if (!$task_id || $current->task_id == $task_id) {
-					return $current;
-				}
-			}
-			static::stop($current);
-		}
 		$job = Jobs::first(array('conditions' => array('id' => $job_id)));
 		if (!$job) {
 			$class = get_called_class();
