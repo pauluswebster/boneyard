@@ -62,9 +62,8 @@ class DateTimeZoned extends \sli_filters\data\model\behavior\Modified {
 	}
 
 	protected static function _export($field, $value, &$data, $config) {
-		$time = $value ?: time();
 		$timezone = static::_timezone($data, $config);
-		if ($dateTime = \DateTime::createFromFormat($config['rawFormat'], $time, $timezone)) {
+		if ($value && $dateTime = \DateTime::createFromFormat($config['rawFormat'], $value, $timezone)) {
 			$dateTime->setTimezone($timezone);
 			$data["_{$field}"] = $dateTime;
 			$data["__{$field}"] = $value;
