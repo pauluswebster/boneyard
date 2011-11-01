@@ -10,7 +10,7 @@ use lithium\util\Inflector;
 $this->title('My Jobs');
 ?>
 <div class="<?php echo $plural;?>">
-	<h2>My <?php echo Inflector::humanize($status);?> Jobs</h2>
+	<h2>My <?php echo Inflector::humanize($status) . ' ' . $t($plural);?></h2>
 
 	<nav id="jobNav" class="navBar">
 		<ul>
@@ -25,29 +25,58 @@ $this->title('My Jobs');
 	<div class="index">
 		<table>
 			<tr>
-				<th><?php echo $t('Job');?></th>
+				<th><?php echo $t($singular);?></th>
 			</tr>
+		<?php if(!$recordSet->count()):?>
+			<tr>
+				<td>
+					<p><br><strong>No <?php echo $t(Inflector::humanize($status)) . ' ' . $t($plural);?>.
+					<br><br>
+					<?php echo $this->html->link($t('{:action} {:entity}', array('action' => $t('Add'), 'entity' => $t($singular))), array('action' => 'add'), array('class' => 'button'));?>
+					</strong></p>
+				</td>
+			</tr>
+		<?php endif;?>
 		<?php foreach ($recordSet as $record):?>
 			<tr>
 				<td>
 					<div class="actions">
 					<?php
-						echo $this->html->link($t('Complete'), array('action' => 'complete', 'args' => $record->key()), array('class' => 'button button-small button-complete'));
-						if ($active == $record->id):
-							echo $this->html->link($t('Stop'), array('action' =>  'stop', 'args' => $record->key()), array('class' => 'button button-small button-red button-stop'));
+						echo $this->html->link($t('Complete'), array(
+							'controller' => 'work_units',
+							'action' => 'complete',
+							'job_id' => $record->id
+						), array('class' => 'button button-small button-complete'));
+						if ($active && $active->job_id == $record->id):
+							echo $this->html->link($t('Stop'), array(
+								'controller' => 'work_units',
+								'action' =>  'stop',
+								'job_id' => $record->id
+							), array('class' => 'button button-small button-red button-stop'));
 						else:
-							echo $this->html->link($t('Start'), array('action' => 'start', 'args' => $record->key()), array('class' => 'button button-small button-green button-start'));
+							echo $this->html->link($t('Start'), array(
+								'controller' => 'work_units',
+								'action' => 'start',
+								'job_id' => $record->id
+							), array('class' => 'button button-small button-green button-start'));
 						endif;
 					?>
 					<div class="clear"></div>
 					<?php
 						echo $this->html->link($t('Delete'), array('action' => 'delete', 'args' => $record->key()), array('class' => 'button button-small button-delete'));
 						echo $this->html->link($t('Edit'), array('action' => 'edit', 'args' => $record->key()), array('class' => 'button button-small button-edit'));
+						if ($record->tasks()):
+							echo $this->html->link($t('Tasks') . " ({$record->tasks()})", array(
+								'controller' => 'tasks',
+								'action' => 'active_job',
+								'args' => $record->key()
+							), array('class' => 'button button-small'));
+						endif;
 					?>
 					</div>
 
 					<strong>
-					<?php echo $this->html->link("#{$record->id}: " . $record->title, array(
+					<?php echo $this->html->link("#{$record->id} " . $record->title, array(
 						'action' => 'edit',
 						'args' => $record->key()
 					));
@@ -78,9 +107,9 @@ $this->title('My Jobs');
 						<?php if($time = $record->time()):?>
 						<strong>Time:</strong>
 						<?php if($active == $record->id):?>
-						<span class="timed" data-time="<?php echo time() - $time;?>"><?php echo $record->timeString();?></span>
+						<span class="timed" data-time="<?php echo time() - $time;?>"><?php echo $record->time(true);?></span>
 						<?php else:?>
-						<?php echo $record->timeString();?>
+						<?php echo $record->time(true);?>
 						<?php endif;?>
 						<?php endif;?>
 						<?php if((float) $record->fee > 0):?><?php if($time):?>,<?php endif;?>

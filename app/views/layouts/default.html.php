@@ -7,11 +7,19 @@
 	<?php echo $this->scripts(); ?>
 	<?php echo $this->html->link('Icon', null, array('type' => 'icon')); ?>
 </head>
-<body class="app <?php echo $user() ? 'user' : 'public'?>">
+<body class="<?php echo $bodyClass;?>">
 	<div id="container">
 		<?php echo $this->_render('element', 'layout/header', compact('user'));?>
 		<div id="content">
-			<?php echo $this->flashMessage->output();?>
+			<?php if($user()):?>
+			<nav id="userNav">
+				<ul>
+					<li><?php echo $user->first_name;?>:</li>
+					<li><?php echo $this->html->link($t('My Details'), 'users::edit'); ?></li>
+					<li><?php echo $this->html->link($t('Logout'), '/logout'); ?></li>
+				</ul>
+			</nav>
+			<?php endif;?>
 			<?php echo $this->content(); ?>
 		</div>
 		<footer id="footer">
