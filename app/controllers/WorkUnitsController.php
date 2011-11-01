@@ -9,6 +9,7 @@
 namespace app\controllers;
 
 use app\models\Jobs;
+use app\models\Tasks;
 use app\models\JobLogs;
 use sli_util\storage\Registry;
 use sli_util\action\FlashMessage;
@@ -111,18 +112,32 @@ class WorkUnitsController extends \lithium\action\Controller {
 
 	public function complete() {
 		$redirect = 'jobs::index';
-		if ($this->request->id && $job = Jobs::first($this->request->id)) {
-			if ($job->completed) {
-				FlashMessage::error("Job #{$job->id} already completed.");
+		if ($this->request->job_id && $job = Jobs::first($this->request->job_id)) {
+			if ($this->request->task_id) {
+				if ($task = Tasks::first($this->request->task_id)) {
+					if ($task->completed) {
+						FlashMessage::error("Task #{$task->id} already completed.");
+					} else {
+						$task->completed = time();
+						$task->save();
+						FlashMessage::success("Task #{$task->id} completed.");
+					}
+				} else {
+					FlashMessage::error("Invalid task.");
+				}
 			} else {
-				$job->completed = time();
-				$job->save();
-				FlashMessage::success("Job #{$job->id} completed.");
+				if ($job->completed) {
+					FlashMessage::error("Job #{$job->id} already completed.");
+				} else {
+					$job->completed = time();
+					$job->save();
+					FlashMessage::success("Job #{$job->id} completed.");
+				}
 			}
 		} else {
 			FlashMessage::error("Invalid job.");
 		}
-		if (isset($job, $job->task_id)) {
+		if ($this->request->task_id && isset($task)) {
 			$redirect = array(
 				'controller' => 'tasks',
 				'action' => 'active_job',
@@ -130,7 +145,6 @@ class WorkUnitsController extends \lithium\action\Controller {
 			);
 		}
 		$this->redirect($redirect);
-		$this->redirect('jobs::index');
 	}
 }
 
