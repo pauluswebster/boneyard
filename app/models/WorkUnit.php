@@ -18,7 +18,7 @@ class WorkUnit extends \lithium\data\Model {
 
 	protected static $_statuses = array(
 		'current' => array('completed' => 0),
-		'new' => array('started' => 0),
+		'new' => array('started' => 0, 'completed' => 0),
 		'in_progress' => array('started' => array('>' => 0), 'completed' => 0),
 		'completed' => array('completed' => array('>' => 0))
 	);
