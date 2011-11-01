@@ -17,7 +17,8 @@ class DateTimeZoned extends \sli_filters\data\model\behavior\Modified {
 		'timezone_field' => null,
 		'timezone' => null,
 		'format' => 'Y-m-d H:i:s',
-		'rawFormat' => 'U'
+		'rawFormat' => 'U',
+		'filter' => array('create', 'find', 'save')
 	);
 
 	protected static function _apply($class, &$settings) {
@@ -30,33 +31,45 @@ class DateTimeZoned extends \sli_filters\data\model\behavior\Modified {
 		foreach ($settings['fields'] as $field => &$config) {
 			$config = $config + static::$_fieldDefaults;
 			$args = array('_export', $field, '{:field}', '{:data}', $config);
-			$methods['create'] = $methods['find'] = array(
-				'call' => $invoke,
-				'args' => $args
-			);
-			$methods['save'] = array(
-				'call' => $invoke,
-				'args' => array('_prepare') + $args
-			);
+			if (in_array('create', $config['filter'])) {
+				$methods['create'] = array(
+					'call' => $invoke,
+					'args' => $args
+				);
+			}
+			if (in_array('find', $config['filter'])) {
+				$methods['find'] = array(
+					'call' => $invoke,
+					'args' => $args
+				);
+			}
+			if (in_array('save', $config['filter'])) {
+				$methods['save'] = array(
+					'call' => $invoke,
+					'args' => array('_prepare') + $args
+				);
+			}
 			$config += $methods;
 		}
 	}
 
 	protected static function _prepare($field, $value, $data, $config) {
 		$timezone = static::_timezone($data, $config);
-		$dateTime = \DateTime::createFromFormat($config['format'], $value, $timezone);
-		$dateTime->setTimezone($timezone);
-		return $dateTime->format($config['rawFormat']);
+		if ($dateTime = \DateTime::createFromFormat($config['format'], $value, $timezone)) {
+			$dateTime->setTimezone($timezone);
+			return $dateTime->format($config['rawFormat']);
+		}
 	}
 
 	protected static function _export($field, $value, &$data, $config) {
-		$value = $value ?: time();
+		$time = $value ?: time();
 		$timezone = static::_timezone($data, $config);
-		$dateTime = \DateTime::createFromFormat($config['rawFormat'], $value, $timezone);
-		$dateTime->setTimezone($timezone);
-		$data["_{$field}"] = $dateTime;
-		$data["__{$field}"] = $value;
-		return $dateTime->format($config['format']);
+		if ($dateTime = \DateTime::createFromFormat($config['rawFormat'], $time, $timezone)) {
+			$dateTime->setTimezone($timezone);
+			$data["_{$field}"] = $dateTime;
+			$data["__{$field}"] = $value;
+			return $dateTime->format($config['format']);
+		}
 	}
 
 	protected static function _timezone($data, $config) {

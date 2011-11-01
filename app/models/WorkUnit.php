@@ -68,6 +68,12 @@ class WorkUnit extends \lithium\data\Model {
 		return JobLogs::timeSpent(array($key => $record->id));
 	}
 
+	public static function due($record, $raw = false) {
+		if (isset($record->__due)) {
+			return $raw ? $record->__due : $record->due;
+		}
+	}
+
 	protected static function _applyFilters() {
 		$user = User::instance('default');
 		$class = get_called_class();
@@ -77,7 +83,8 @@ class WorkUnit extends \lithium\data\Model {
 					'due' => array(
 						'timezone' => $user->timezone(),
 						'timezone_field' => 'timezone',
-						'format' => Registry::get('app.date.long')
+						'format' => Registry::get('app.date.long'),
+						'filter' => array('find', 'save')
 					)
 				)
 			),
