@@ -15,6 +15,16 @@ window.addEvent('domready', function(){
 		});
 	}
 
+	var buttons = $$('.button-select');
+	if (buttons.length > 0) {
+		buttons.each(function(button){
+			var text = new Element('span', {'class': 'button-ico-text', 'text': button.get('text')});
+			button.empty();
+			text.inject(button);
+			new Element('span', {'class': 'button-ico-img right'}).inject(button, 'top');
+		});
+	}
+
 
 	//datepickers
 	var dateInputs = $$('input.date-picker');
@@ -87,6 +97,33 @@ window.addEvent('domready', function(){
 		timed.each(function(element){
 			updateTime(element);
 			updateTime.periodical(30 * 1000, window, [element]);
+		});
+	}
+
+	//select buttons
+	var selectButtons = $$('.button-select');
+	if (selectButtons.length > 0) {
+		selectButtons.each(function(bs){
+			var options = bs.getNext('.button-select-options');
+			if (options) {
+
+				var show = function(){
+					bs.addClass('active');
+					options.setStyle('display', 'block');
+				}
+
+				var hide = function() {
+					bs.removeClass('active');
+					options.setStyle('display', 'none');
+				}
+
+				bs.addEvent('click', function(e){
+					e.preventDefault();
+					this.hasClass('active') ? hide() : show();
+				});
+
+				options.addEvent('mouseleave', hide);
+			}
 		});
 	}
 
