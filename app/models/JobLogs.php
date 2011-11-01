@@ -41,6 +41,10 @@ class JobLogs extends \lithium\data\Model {
 			$job->started = $start;
 			$job->save();
 		}
+		if (!empty($task) && empty($task->started)) {
+			$task->started = $start;
+			$task->save();
+		}
 		$log = static::create(compact('user_id', 'job_id', 'task_id', 'start'));
 		$log->save();
 		return static::current($user_id);
