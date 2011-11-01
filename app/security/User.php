@@ -42,9 +42,26 @@ class User extends \sli_users\security\User {
 		if ($user_id = $this->id) {
 			$job = $this->retrieve('job.current');
 			if (!$job && $query && $job = JobLogs::current($user_id)) {
-				$this->store('job.current', $job);
+				$this->store('job.current', $job->data());
 			}
 			return $job;
+		}
+	}
+
+	public function active($record = null, $query = true) {
+		if ($user_id = $this->id) {
+			if (is_object($record)) {
+				$this->store('job.current', $record->key());
+				$active = $record;
+			} else {
+				$active = $this->retrieve('job.current');
+				if ($active) {
+					$active = JobLogs::active($active);
+				} else if (!$active && $query && $active = JobLogs::current($user_id)) {
+					$this->store('job.current', $active->key());
+				}
+			}
+			return $active;
 		}
 	}
 

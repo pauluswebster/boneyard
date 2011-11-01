@@ -52,18 +52,26 @@ class WorkUnit extends \lithium\data\Model {
 		return Time::hours($spent);
 	}
 
-	public static function time($record) {
-		return JobLogs::timeSpent($record->id);
+	public static function time($record, $string = false) {
+		$time = static::timeSpent($record);
+		return !$string ? $time : Time::period($time);
 	}
 
-	public static function timeString($record) {
-		return Time::period(static::time($record));
+	public static function timeSpent($record) {
+		if (isset($record->timeSpent)) {
+			return $record->timeSpent;
+		}
+		$key = 'job_id';
+		if (get_called_class() == 'app\models\Tasks') {
+			$key = 'task_id';
+		}
+		return JobLogs::timeSpent(array($key => $record->id));
 	}
 
 	protected static function _applyFilters() {
 		$user = User::instance('default');
-
-		Behaviors::apply(__CLASS__, array(
+		$class = get_called_class();
+		Behaviors::apply($class, array(
 			'DateTimeZoned' => array(
 				'fields' => array(
 					'due' => array(
@@ -110,6 +118,14 @@ class WorkUnit extends \lithium\data\Model {
 		}
 		unset($conditions['status']);
 		$conditions = $status + $conditions;
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public static function timeString($record) {
+		trigger_error(__METHOD__, E_USER_DEPRECATED);
+		return static::time($record, true);
 	}
 }
 ?>

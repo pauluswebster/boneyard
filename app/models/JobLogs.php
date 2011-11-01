@@ -12,50 +12,87 @@ use app\util\Time;
 
 class JobLogs extends \lithium\data\Model {
 
-	public $belongsTo = array('Users', 'Jobs');
+	public $belongsTo = array('Users', 'Jobs', 'Tasks');
 
-	public static function start($user_id, $job_id){
+	public static function start($user_id, $job_id, $task_id = null){
 		if ($current = static::current($user_id)) {
 			if ($current->job_id == $job_id) {
-				return $current;
+				if (!$task_id || $current->task_id == $task_id) {
+					return $current;
+				}
 			}
 			static::stop($current);
 		}
 		$job = Jobs::first(array('conditions' => array('id' => $job_id)));
 		if (!$job) {
-			return false;
+			$class = get_called_class();
+			throw new Exception(sprintf('Job not found in %s', $class));
 		}
+		if ($task_id) {
+			$task = Tasks::first(array('conditions' => array('id' => $task_id)));
+			if (!$task) {
+				$class = get_called_class();
+				throw new Exception(sprintf('Job not found in %s', $class));
+			}
+		}
+
 		$start = time();
 		if (empty($job->started)) {
 			$job->started = $start;
 			$job->save();
 		}
-		$log = static::create(compact('user_id', 'job_id', 'start'));
+		$log = static::create(compact('user_id', 'job_id', 'task_id', 'start'));
 		$log->save();
 		return static::current($user_id);
 	}
 
+	public static function stop($user_id) {
+		if ($active = static::current($user_id)) {
+			$active->end = time();
+			if ($active->save()) {
+				return $active;
+			}
+		}
+	}
+
 	public static function current($user_id) {
-		return static::first(array(
+		$record = static::first(array(
 			'conditions' => array(
 				'JobLogs.user_id' => $user_id,
 				'JobLogs.end' => 0
 			),
-			'with' => array('Jobs')
 		));
+		if ($record) {
+			$record->job = Jobs::first($record->job_id);
+			$record->task = !$record->task_id ? null :Tasks::first($record->task_id);
+		}
+		return $record;
 	}
 
-	public static function timeSpent($job_id, $string = false, $current = false) {
-		if (is_object($job_id)) {
-			$job_id = $job_id->job_id;
+	public static function active($key) {
+		$record = static::first(array(
+			'conditions' => array(
+				'JobLogs.id' => $key['id'],
+				'JobLogs.end' => 0
+			),
+		));
+		if ($record) {
+			$record->job = Jobs::first($record->job_id);
+			$record->task = !$record->task_id ? null :Tasks::first($record->task_id);
+		}
+		return $record;
+	}
+
+	public static function timeSpent($scope, $string = false, $current = false) {
+		if (!is_array($scope)) {
+			$scope = array('job_id' => $job_id);
 		}
 		$seconds = 0;
 		if (!$current) {
 			$result = static::first(array(
 				'conditions' => array(
-					'JobLogs.job_id' => $job_id,
-					'JobLogs.end' => ($current ? 0 : array('>' => 0))
-				),
+					'end' => ($current ? 0 : array('>' => 0))
+				) + $scope,
 				'fields' => array(
 					'start',
 					'end',
@@ -69,7 +106,34 @@ class JobLogs extends \lithium\data\Model {
 		}
 		$progress = static::first(array(
 			'conditions' => array(
-				'JobLogs.job_id' => $job_id,
+				'end' => 0
+			)  + $scope
+		));
+		if ($progress) {
+			$seconds += time() - $progress->start;
+		}
+		if (empty($seconds)) {
+			$seconds = $string ? 60 : 0;
+		}
+		return $string ? Time::period($seconds) : $seconds;
+	}
+
+	public static function unit($record) {
+		if (isset($record->task)) {
+			return $record->task;
+		} else {
+			return $record->job;
+		}
+	}
+
+	/**
+	 * @deprecated
+	 */
+	public static function time($record, $string = false) {
+		trigger_error(__METHOD__, E_USER_DEPRECATED);
+		$progress = static::first(array(
+			'conditions' => array(
+				'JobLogs.job_id' => $record->job_id,
 				'JobLogs.end' => 0
 			)
 		));
@@ -81,16 +145,6 @@ class JobLogs extends \lithium\data\Model {
 		}
 		return $string ? Time::period($seconds) : $seconds;
 	}
-
-	public static function stop($user_id) {
-		if ($job = static::current($user_id)) {
-			$job->end = time();
-			if ($job->save()) {
-				return $job;
-			}
-		}
-	}
-
 }
 
 ?>

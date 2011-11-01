@@ -65,6 +65,22 @@ class Jobs extends WorkUnit {
 		return $rate;
 	}
 
+	public static function tasks($record) {
+		if (is_object($record)) {
+			if (isset($record->taskCount)) {
+				return $record->taskCount;
+			}
+			$id = $record->id;
+		} else {
+			$id = $record;
+		}
+		$count = Tasks::count(array('conditions' => array('job_id' => $id)));
+		if (is_object($record)) {
+			$record->taskCount = $count;
+		}
+		return $count;
+	}
+
 	public static function getScaffoldFormFields(){
 		$user = User::instance('default');
 		$fields = array(
