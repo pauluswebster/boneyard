@@ -18,6 +18,14 @@
  */
 use lithium\net\http\Router;
 use lithium\core\Environment;
+use sli_util\storage\Registry;
+
+Router::connect('/{:args}', array(
+	'controller' => 'Redirects',
+	'action' => 'hop',
+	'http:host' => Registry::get('env.hosts.service')
+));
+
 
 /**
  * Here, we are connecting `'/'` (the base path) to controller called `'Pages'`,
