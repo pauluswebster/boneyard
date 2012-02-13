@@ -6,7 +6,7 @@ use lithium\action\DispatchException;
 use sli_util\storage\Registry;
 use app\models\Redirects;
 
-class RedirectsController extends \lithium\action\Controller {
+class RedirectsController extends ServiceController {
 	
 	public function hop() {
 		$redirect = Redirects::first(array(
