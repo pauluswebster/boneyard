@@ -1,7 +1,21 @@
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !favicon.ico$
-    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
-</IfModule>
+Options +FollowSymLinks
+RewriteEngine on
+RewriteBase /
+
+#www - site
+RewriteCond %{HTTP_HOST} ^progression\.co\.nz$ [NC]
+RewriteRule ^(.*)$ http://www.progression.co.nz/$1 [L,R=301]
+
+#no www - service
+RewriteCond %{HTTP_HOST} ^www\.pmd\.io$ [NC]
+RewriteRule ^(.*)$ http://pmd.io/$1 [L,R=301]
+
+#index
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /index\.php\ HTTP/
+RewriteRule ^index\.php$ http://%{HTTP_HOST}/ [R=301,L]
+
+#app
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !favicon.ico$
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
