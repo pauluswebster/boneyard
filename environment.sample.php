@@ -13,12 +13,14 @@ $config = array(
 		)
 	),
 	'hosts' => array(
+		'site' => '',
 		'service' => '',
-		'default' => ''
+		'projects' => '',
+		'clients' => ''
 	),
 	'analytics' => array(
-		'service' => '',
-		'default' => ''
+		'site' => '',
+		'service' => ''
 	)
 );
 
