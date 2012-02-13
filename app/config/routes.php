@@ -20,6 +20,27 @@ use lithium\net\http\Router;
 use lithium\core\Environment;
 use sli_util\storage\Registry;
 
+
+/**
+ * Host type detection continuation route
+ */
+Router::connect('/{:args}', array(), array(
+	'continue' => true,
+	'handler' => function($request){
+		$host = $request->env('HTTP_HOST');
+		$hostName = null;
+		$hosts = Registry::get('env.hosts');
+		array_map(function($_host, $_hostName) use ($host, &$hostName) {
+			if ($_host['host'] == $host) {
+				$hostName = $_hostName;
+			}
+		}, $hosts, array_keys($hosts));
+		Registry::set('env.host', $hostName);
+	}
+));
+
+
+
 Router::connect('/{:args}', array(
 	'controller' => 'Redirects',
 	'action' => 'hop',
