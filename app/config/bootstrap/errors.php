@@ -9,6 +9,7 @@
 use lithium\core\ErrorHandler;
 use lithium\action\Response;
 use lithium\net\http\Media;
+use lithium\core\Environment;
 
 ErrorHandler::apply('lithium\action\Dispatcher::run', array(), function($info, $params) {
 	$response = new Response(array(
@@ -19,7 +20,7 @@ ErrorHandler::apply('lithium\action\Dispatcher::run', array(), function($info, $
 	Media::render($response, compact('info', 'params'), array(
 		'library' => true,
 		'controller' => '_errors',
-		'template' => 'development',
+		'template' => Environment::is('production') ? 'production' : 'development',
 		'layout' => 'error',
 		'request' => $params['request']
 	));
