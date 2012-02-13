@@ -20,7 +20,6 @@ use lithium\net\http\Router;
 use lithium\core\Environment;
 use sli_util\storage\Registry;
 
-
 /**
  * Host type detection continuation route
  */
@@ -39,14 +38,32 @@ Router::connect('/{:args}', array(), array(
 	}
 ));
 
+$hosts = Registry::get('env.hosts');
 
-
+/*
+ * Service Routes
+ */
 Router::connect('/{:args}', array(
 	'controller' => 'Redirects',
 	'action' => 'hop',
-	'http:host' => Registry::get('env.hosts.service')
+	'http:host' => $hosts['service']
 ));
 
+/*
+ * Site Routes
+ */
+
+Router::connect('/', array(
+	'controller' => 'Pages',
+	'action' => 'view',
+	'http:host' => $hosts['site']
+));
+
+Router::connect('/{:args}', array(
+	'controller' => 'Pages',
+	'action' => 'view',
+	'http:host' => $hosts['site']
+));
 
 /**
  * Here, we are connecting `'/'` (the base path) to controller called `'Pages'`,
@@ -56,13 +73,13 @@ Router::connect('/{:args}', array(
  *
  * @see app\controllers\PagesController
  */
-Router::connect('/', 'Pages::view');
+//Router::connect('/', 'Pages::view');
 
 /**
  * Connect the rest of `PagesController`'s URLs. This will route URLs like `/pages/about` to
  * `PagesController`, rendering `/views/pages/about.html.php` as a static page.
  */
-Router::connect('/pages/{:args}', 'Pages::view');
+//Router::connect('/pages/{:args}', 'Pages::view');
 
 /**
  * Add the testing routes. These routes are only connected in non-production environments, and allow
@@ -108,6 +125,6 @@ if (!Environment::is('production')) {
  * In almost all cases, custom routes should be added above this one, since route-matching works in
  * a top-down fashion.
  */
-Router::connect('/{:controller}/{:action}/{:args}');
+//Router::connect('/{:controller}/{:action}/{:args}');
 
 ?>
