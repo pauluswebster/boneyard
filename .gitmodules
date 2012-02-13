@@ -4,3 +4,6 @@
 [submodule "libraries/sli_util"]
 	path = libraries/sli_util
 	url = git@github.com:slicedup/sli_util.git
+[submodule "webroot/theme"]
+	path = webroot/theme
+	url = git@github.com:p-m-d/theme.git
