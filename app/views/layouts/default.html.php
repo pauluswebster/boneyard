@@ -46,7 +46,7 @@
 					<h4>Wanaka, New Zealand, Worldwide</h4>
 				</hgroup>
 				<section class='title-right'>
-					<a href='#contact' title='Contact p.m.d. now!'>
+					<a href='/#contact' title='Contact p.m.d. now!'>
 						<span>Contact p.m.d. now!</span>
 					</a>
 				</section>
