@@ -21,7 +21,7 @@ ErrorHandler::apply('lithium\action\Dispatcher::run', array(), function($info, $
 		'library' => true,
 		'controller' => '_errors',
 		'template' => Environment::is('production') ? 'production' : 'development',
-		'layout' => 'error',
+		'layout' => Environment::is('production') ? 'default' : 'error',
 		'request' => $params['request']
 	));
 	return $response;
