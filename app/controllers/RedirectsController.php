@@ -9,6 +9,11 @@ use app\models\Redirects;
 class RedirectsController extends ServiceController {
 	
 	public function hop() {
+		$status = Environment::is('production') ? 301 : 302;
+		if (empty($this->request->args[0])) {
+			$url = Registry::get('env.hosts.site');
+			return $this->redirect("{$url['scheme']}://{$url['host']}", array('status' => $status, 'exit' => true));
+		}
 		$redirect = Redirects::first(array(
 			'conditions' => array(
 				'segment' => $this->request->args[0]
@@ -20,7 +25,6 @@ class RedirectsController extends ServiceController {
 		$redirect->set(array('hops' => $redirect->hops + 1));
 		$redirect->save();
 		if (false && !$redirect->track) {
-			$status = Environment::is('production') ? 301 : 302;
 			return $this->redirect($redirect->url, array('status' => $status, 'exit' => true));
 		}
 		$this->set(array(
