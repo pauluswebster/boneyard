@@ -1,230 +1,73 @@
-<?php
-/**
- * Lithium: the most rad php framework
- *
- * @copyright     Copyright 2011, Union of RAD (http://union-of-rad.org)
- * @license       http://opensource.org/licenses/bsd-license.php The BSD License
- */
-
-use lithium\core\Libraries;
-use lithium\data\Connections;
-
-$this->title('Home');
-
-$self = $this;
-
-$notify = function($status, $message, $solution = null) {
-	$html  = "<div class=\"test-result test-result-{$status}\">{$message}</div>";
-	$html .= "<div class=\"test-result solution\">{$solution}</div>";
-	return $html;
-};
-
-$support = function($classes) {
-	$result = '<ul class="indicated">';
-
-	foreach ($classes as $class => $enabled) {
-		$name = substr($class, strrpos($class, '\\') + 1);
-		$url = 'http://lithify.me/docs/' . str_replace('\\', '/', $class);
-		$class = $enabled ? 'enabled' : 'disabled';
-		$title = $enabled ? "Adapter `{$name}` is enabled." : "Adapter `{$name}` is disabled.";
-
-		$result .= "<li><a href=\"{$url}\" title=\"{$title}\" class=\"{$class}\">{$name}</a></li>";
-	}
-	$result .= '</ul>';
-
-	return $result;
-};
-
-$compiled = function($flag) {
-	ob_start();
-	phpinfo(INFO_GENERAL);
-	return strpos(ob_get_clean(), $flag) !== false;
-};
-
-$checks = array(
-	'resourcesWritable' => function() use ($notify) {
-		if (is_writable($path = Libraries::get(true, 'resources'))) {
-			return $notify('success', 'Resources directory is writable.');
-		}
-		$path = str_replace(dirname(LITHIUM_APP_PATH) . '/', null, $path);
-		$solution = null;
-
-		if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-			$solution  = 'To fix this, run the following from the command line: ';
-			$solution .= "<code>$ chmod -R 0777 {$path}</code>.";
-		} else {
-			$path = realpath($path);
-			$solution  = 'To fix this, give <code>modify</code> rights to the user ';
-			$solution .= "<code>Everyone</code> on directory <code>{$path}</code>.";
-		}
-		return $notify(
-			'fail',
-			'Your resource path is not writeable.',
-			$solution
-		);
-	},
-	'magicQuotes' => function() use ($notify) {
-		if (get_magic_quotes_gpc() === 0) {
-			return;
-		}
-		return $notify(
-			'fail',
-			'Magic quotes are enabled in your PHP configuration.',
-			'Please set <code>magic_quotes_gpc = Off</code> in your <code>php.ini</code> settings.'
-		);
-	},
-	'registerGlobals' => function() use ($notify) {
-		if (!ini_get('register_globals')) {
-			return;
-		}
-		return $notify(
-			'fail',
-			'Register globals is enabled in your PHP configuration.',
-			'Please set <code>register_globals = Off</code> in your <code>php.ini</code> settings.'
-		);
-	},
-	'curlwrappers' => function() use ($notify, $compiled) {
-		if (!$compiled('with-curlwrappers')) {
-			return;
-		}
-		return $notify(
-			'fail',
-			'Curlwrappers are enabled, some things might not work as expected.',
-			"This is an expiremental and usually broken feature of PHP.
-			Please recompile your PHP binary without using the <code>--with-curlwrappers</code>
-			flag or use a precompiled binary that was compiled without the flag."
-		);
-	},
-	'shortOpenTag' => function() use ($notify, $compiled) {
-		if (!ini_get('short_open_tag')) {
-			return;
-		}
-		return $notify(
-			'notice',
-			'Short open tags are enabled, you may want to disable them.',
-			"It is recommended to not rely on this option being enabled.
-			To increase the portability of your code disable this option by setting
-			<code>short_open_tag = Off</code> in your <code>php.ini</code>."
-		);
-	},
-	'dbSupport' => function() use ($notify, $support) {
-		$paths = array('data.source', 'adapter.data.source.database', 'adapter.data.source.http');
-		$list = array();
-
-		foreach ($paths as $path) {
-			$list = array_merge($list, Libraries::locate($path, null, array('recursive' => false)));
-		}
-		$list = array_filter($list, function($class) { return method_exists($class, 'enabled'); });
-		$map = array_combine($list, array_map(function($c) { return $c::enabled(); }, $list));
-
-		return $notify(
-			'notice',
-			'Database support',
-			$support($map)
-		);
-	},
-	'cacheSupport' => function() use ($notify, $support) {
-		$list = Libraries::locate('adapter.storage.cache', null, array('recursive' => false));
-		$list = array_filter($list, function($class) { return method_exists($class, 'enabled'); });
-		$map = array_combine($list, array_map(function($c) { return $c::enabled(); }, $list));
-
-		return $notify(
-			'notice',
-			'Cache support',
-			$support($map)
-		);
-	},
-	'database' => function() use ($notify) {
-		$config = Connections::config();
-
-		if (!empty($config)) {
-			return $notify('success', 'Database connection/s configured.');
-		}
-		return $notify(
-			'notice',
-			'No database connection defined.',
-			"To create a database connection:
-			<ol>
-				<li>Edit the file <code>config/bootstrap.php</code>.</li>
-				<li>
-					Uncomment the line having
-					<code>require __DIR__ . '/bootstrap/connections.php';</code>.
-				</li>
-				<li>Edit the file <code>config/bootstrap/connections.php</code>.</li>
-			</ol>"
-		);
-	},
-	'change' => function() use ($notify, $self) {
-		$template = $self->html->link('template', 'http://lithify.me/docs/lithium/template');
-
-		return $notify(
-			'notice',
-			"You're using the application's default home page.",
-			"To change this {$template}, edit the file
-			<code>views/pages/home.html.php</code>.
-			To change the layout,
-			(that is what's wrapping content)
-			edit the file <code>views/layouts/default.html.php</code>."
-		);
-	},
-	'routing' => function() use ($notify, $self) {
-		$routing = $self->html->link('routing', 'http://lithify.me/docs/lithium/net/http/Router');
-
-		return $notify(
-			'notice',
-			'Use custom routing.',
-			"To change the {$routing} edit the file <code>config/routes.php</code>."
-		);
-	},
-	'tests' => function() use ($notify, $self) {
-		$tests = $self->html->link('run all tests', array(
-			'controller' => 'lithium\test\Controller',
-			'args' => 'all'
-		));
-		$dashboard = $self->html->link('test dashboard', array('controller' => 'lithium\test\Controller'));
-		$ticket = $self->html->link('file a ticket', 'https://github.com/UnionOfRAD/lithium/issues');
-
-		return $notify(
-			'notice',
-			'Run the tests.',
-			"Check the builtin {$dashboard} or {$tests} now to ensure Lithium
-			is working as expected. Do not hesitate to {$ticket} in case a test fails."
-		);
-	}
-);
-
-?>
-
-<?php foreach ($checks as $check): ?>
-	<?php echo $check(); ?>
-<?php endforeach; ?>
-
-<ul class="additional-resources">
-	<li>
-		<?php echo $this->html->link('Quickstart', 'http://lithify.me/docs/manual/quickstart'); ?>
-		is a guide for PHP users who are looking to get a good idea of what Lithium can do.
-		The guide is part of the official Lithium manual,
-		<?php echo $this->html->link('The Definitive Guide', 'http://lithify.me/docs/manual'); ?>.
-	</li>
-	<li>
-		The <?php echo $this->html->link('API documentation', 'http://lithify.me/docs/lithium'); ?>
-		has all the implementation details you've been looking for.
-	</li>
-	<li>
-		Chat with other Lithium users and the team developing Lithium.
-		For <em>general support</em> hop on the
-		<?php echo $this->html->link('#li3 channel', 'irc://irc.freenode.net/#li3'); ?>
-		or read the
-		<?php echo $this->html->link('logs', 'http://lithify.me/bot/logs/li3'); ?>.
-		For <em>core discussions</em> join us in the
-		<?php echo $this->html->link('#li3-core channel', 'irc://irc.freenode.net/#li3-core'); ?>
-		or read the
-		<?php echo $this->html->link('logs', 'http://lithify.me/bot/logs/li3-core'); ?>.
-	</li>
-	<li>
-		Browse the Lithium
-		<?php echo $this->html->link('Repository', 'https://github.com/UnionOfRAD/lithium'); ?>
-		or read the
-		<?php echo $this->html->link('Wiki', 'https://github.com/UnionOfRAD/lithium/wiki'); ?>.
-	</li>
-</ul>
+<div id='page-content'>
+	<p>Progression Media &amp; Development (p.m.d.) provides website design, web development,
+	internet consultation, website management and a broad spectrum of web services.</p>
+	<p>p.m.d. is <a href="http://www.webprogression.co.nz" target="_blank" class="wp">Paul Webster, web developer &amp; consultant</a>,
+	projects are undertaken in-house and in conjunction with outsourced contributors as and where required.</p>
+	<p><a href="#contact">Contact p.m.d.</a> today to create, manage & maintain all aspects of your web presence including:</p>
+	<ul class='list-star'>
+		<li>Website design &amp; construction</li>
+		<li>Web application development</li>
+		<li>Search engine optimization &amp; search engine marketing (SEO/SEM)</li>
+		<li>Social media strategy &amp; integration</li>
+		<li>Provisioning of web hosting, domain names &amp; email services</li>
+		<li>General consultancy on how you can best do business online</li>
+	</ul>
+	<p>Any and all related enquiries are also welcome.</p>
+	<hr>
+	<a name="contact"></a>
+	<section class='contact-info'>
+		<h2 class='underlined-header'>Contact p.m.d.</h2>
+		<p>Please provide your details below and I'll endeavour to be in touch same day
+		on weekdays, or the next business day on weekends etc.</p>
+		<form action='/contact' id='ContactForm' method='post'>
+			<div class="input">
+				<label for='name'>Name *</label>
+				<input id='name' name='name' placeholder='Enter your name...' required='required' title='Name' type='text' />
+			</div>
+			<div class="input">
+				<label for='email'>Email *</label>
+				<input id='email' name='email' placeholder='Email address...' required='required' title='Email address' type='email' />
+			</div>
+			<div class="input">
+				<label for='subject'>Subject *</label>
+				<input id='subject' name='subject' placeholder='Specify subject...' required='required' title='Subject' type='text' />
+			</div>
+			<div class="input">
+				<label for='message'>Message *</label>
+				<textarea id='message' name='message' placeholder='Message text...' required='required' rows='10' title='Message text'></textarea>
+			</div>
+			<div class="box-message box-info">
+				<div class="box-content">
+					<p>Sending....</p>
+				</div>
+			</div>
+			<div class="box-message box-success">
+				<div class="box-content">
+					<p>Thanks for your enquiry, I'll get back to you as soon as possible!</p>
+				</div>
+			</div>
+			<div class="box-message box-warning">
+				<div class="box-content">
+					<p>Please check all fields, there was an issue with your submission.</p>
+				</div>
+			</div>
+			<div class="box-message box-error">
+				<div class="box-content">
+					<p>Hmmm... there was an issue sending that message, please try again.</p>
+				</div>
+			</div>
+			<div class="submit">
+				<input type='submit' value='Send message' class="purple" disabled="disbaled" />
+			</div>
+			<br>
+			<?php 
+				$tz = new \DateTimeZone('Pacific/Auckland');
+				$date = new \DateTime(null, $tz);
+			?>
+			<p class="color-purple"><b>Note:</b> <i>p.m.d. is New Zealand based, our timezone (currently <?php echo $date->format('l h:ia');?>) is a bit out
+			of whack with the northern part of the world, so please excuse any delays this may cause.</i></p>
+		</form>
+	</section>
+	<hr>
+</div>
+<?php echo $this->_render('element', 'layout/sidebar', array('sidebar' => 'recommends'))?>

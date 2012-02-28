@@ -11,9 +11,14 @@ class PagesController extends SiteController {
 		return $this->render(array('template' => join('/', $path)));
 	}
 	
+	/**
+	 * @todo 
+	 * 1. Validation proper
+	 * 2. template responses
+	 * 3. Mailer & mail template
+	 */
 	public function contact () {
-		return;
-		$ref = in_array(strpos($_SERVER['HTTP_REFERER'], "://{$_SERVER['HTTP_HOST']}"), array(4, 5));
+		$ref = isset($_SERVER['HTTP_REFERER']) && in_array(strpos($_SERVER['HTTP_REFERER'], "://{$_SERVER['HTTP_HOST']}"), array(4, 5));
 		if (!empty($_POST) && $_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest" && $ref) {
 			
 			$textFilter = array(
@@ -67,10 +72,11 @@ class PagesController extends SiteController {
 			}
 			
 			echo json_encode(compact('success', 'errors'));
+			exit;
 		
-		} else {
-			header('Location: /');
 		}
+		
+		return $this->redirect('/');
 	}
 }
 

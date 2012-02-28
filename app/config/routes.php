@@ -59,6 +59,12 @@ Router::connect('/', array(
 	'http:host' => $hosts['site']
 ));
 
+Router::connect('/contact', array(
+	'controller' => 'Pages',
+	'action' => 'contact',
+	'http:host' => $hosts['site']
+));
+
 Router::connect('/{:args}', array(
 	'controller' => 'Pages',
 	'action' => 'view',
