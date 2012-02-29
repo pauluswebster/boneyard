@@ -18,7 +18,7 @@ use sli_scaffold\core\Scaffold;
  * Environment
  */
 Environment::is(function($request) {
-	$isLocal = in_array($request->env('HTTP_HOST'), array('jobs.dev'));
+	$isLocal = in_array($request->env('HTTP_HOST'), array('dailygrind.dev'));
 	$isCli = is_array($request->argv) && !empty($request->argv);
 	switch (true) {
 		case (isset($request->params['env'])):
