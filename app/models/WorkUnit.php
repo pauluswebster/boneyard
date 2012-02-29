@@ -8,6 +8,7 @@
 
 namespace app\models;
 
+use lithium\util\Set;
 use sli_util\storage\Registry;
 use sli_filters\util\Behaviors;
 use app\models\JobLogs;
@@ -20,7 +21,7 @@ class WorkUnit extends \lithium\data\Model {
 		'current' => array('completed' => 0),
 		'new' => array('started' => 0, 'completed' => 0),
 		'in_progress' => array('started' => array('>' => 0), 'completed' => 0),
-		'completed' => array('completed' => array('>' => 0))
+		'completed' => array('conditions' => array('completed' => array('>' => 0)), 'order' => 'completed desc')
 	);
 
 	public static function __init() {
@@ -112,19 +113,22 @@ class WorkUnit extends \lithium\data\Model {
 
 		static::applyFilter('find', function($self, $params, $chain){
 			if (isset($params['options']['conditions']['status'])) {
-				$conditions =& $params['options']['conditions'];
-				$self::invokeMethod('_applyStatusConditions', array(&$conditions));
+				$options =& $params['options'];
+				$self::invokeMethod('_applyStatusQueryOptions', array(&$options));
 			}
 			return $chain->next($self, $params, $chain);
 		});
 	}
 
-	protected static function _applyStatusConditions(&$conditions) {
-		if (!($status = static::statuses($conditions['status']))) {
+	protected static function _applyStatusQueryOptions(&$options) {
+		if (!($status = static::statuses($options['conditions']['status']))) {
 			$status = static::statuses('current');
 		}
-		unset($conditions['status']);
-		$conditions = $status + $conditions;
+		if (!isset($status['conditions'])) {
+			$status = array('conditions' => $status);
+		}
+		unset($options['conditions']['status']);
+		$options = Set::merge($options, $status);
 	}
 
 	/**

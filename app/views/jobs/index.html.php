@@ -15,6 +15,11 @@ $this->title('My Jobs');
 	<nav id="jobNav" class="navBar">
 		<ul>
 			<li><?php echo $this->html->link($t('{:action} {:entity}', array('action' => $t('Add'), 'entity' => $t($singular))), array('action' => 'add'), array('class' => 'button'));?></li>
+			<?php if($pages > 1):?>
+			<li class="right">
+				<?php echo $this->_render('element', 'work_units/paging');?>
+			</li>
+			<?php endif;?>
 			<?php foreach($statuses as $_status): $bClass = $status == $_status ? ' active' : ''?>
 			<li class="right"><?php echo $this->html->link($t(Inflector::humanize($_status)), array('action' => 'index', 'status' => $_status), array('class' => 'button' . $bClass));?></li>
 			<?php endforeach;?>
@@ -42,11 +47,13 @@ $this->title('My Jobs');
 				<td>
 					<div class="actions">
 					<?php
-						echo $this->html->link($t('Complete'), array(
-							'controller' => 'work_units',
-							'action' => 'complete',
-							'job_id' => $record->id
-						), array('class' => 'button button-small button-complete'));
+						if ($status != 'completed'):
+							echo $this->html->link($t('Complete'), array(
+								'controller' => 'work_units',
+								'action' => 'complete',
+								'job_id' => $record->id
+							), array('class' => 'button button-small button-complete'));
+						endif;
 						if ($active && $active->job_id == $record->id):
 							echo $this->html->link($t('Stop'), array(
 								'controller' => 'work_units',

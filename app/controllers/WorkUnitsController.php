@@ -46,9 +46,18 @@ class WorkUnitsController extends \lithium\action\Controller {
 				$status = $self->request->status;
 			}
 			$conditions += compact('status');
+			$page = $self->request->page ?: 1;
+			$limit = 20;
+			$count = $recordSet = $model::count(array(
+				'conditions' => $conditions,
+				'order' => 'due asc',
+			));
+			$pages = $count ? floor($count/$limit) : 0;
 			$recordSet = $model::all(array(
 				'conditions' => $conditions,
-				'order' => 'due asc, completed desc'
+				'order' => 'due asc',
+				'limit' => $limit,
+				'page' => $page
 			));
 			$statuses = array_reverse(array_keys($model::statuses()));
 
@@ -56,7 +65,7 @@ class WorkUnitsController extends \lithium\action\Controller {
 			$date = new \DateTime(null, $tz);
 			$format = Registry::get('app.date.long');
 			$active = $self->_user->active();
-			$params = compact('statuses', 'status', 'recordSet', 'date', 'format', 'active') + $params;
+			$params = compact('statuses', 'status', 'recordSet', 'date', 'format', 'active', 'page', 'pages', 'limit') + $params;
 			return $chain->next($self, $params, $chain);
 		});
 
