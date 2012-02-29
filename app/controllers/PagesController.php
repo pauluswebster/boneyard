@@ -67,7 +67,7 @@ class PagesController extends SiteController {
 				";
 			
 				$subject = 'Enquiry From Website';
-				$to = Registry::get('site.contact.to');
+				$to = Registry::get('env.contact.to');
 				$success = mail($to, $subject, $message);
 			}
 			

@@ -5,6 +5,9 @@
  * Create a copy of this file as `environment.php` and configure
  */
 $config = array(
+	'contact' => array(
+		'to' => 'me@example.com'
+	),
 	'connections' => array(
 		'default' => array(
 			'login' => '',
@@ -14,9 +17,7 @@ $config = array(
 	),
 	'hosts' => array(
 		'site' => '',
-		'service' => '',
-		'projects' => '',
-		'clients' => ''
+		'service' => ''
 	),
 	'analytics' => array(
 		'site' => '',
