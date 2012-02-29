@@ -140,17 +140,24 @@ class Reports extends \lithium\core\StaticObject {
 		while($thisMonth->format('j') > 1) {
 			$thisMonth->modify('-1 day');
 		}
-		$periods['this_month'] = array(
+		$string = 'this_month_' . $thisMonth->format('(M`y)');
+		$periods[$string] = array(
 			'start' => $thisMonth->getTimestamp()
 		);
 
 		//lastMonths : previous calendar month
 		$lastMonths = clone $thisMonth;
-		$lastMonths->modify('-1 month');
-		$periods['last_month'] = array(
-			'start' => $lastMonths->getTimestamp(),
-			'end' => $thisMonth->getTimestamp()
-		);
+		$lastMonthEnd = clone $thisMonth;
+		$months = 3;
+		while ($months--) {
+			$lastMonths->modify('-1 month');
+			$string = 'prev_month_' . $lastMonths->format('(M`y)');
+			$periods[$string] = array(
+				'start' => $lastMonths->getTimestamp(),
+				'end' => $lastMonthEnd->getTimestamp()
+			);
+			$lastMonthEnd->modify('-1 month');
+		}
 
 		//thisYear : current calendar year
 		$thisYear = clone $today;
@@ -160,18 +167,19 @@ class Reports extends \lithium\core\StaticObject {
 		while($thisYear->format('j') > 1) {
 			$thisYear->modify('-1 day');
 		}
-		$periods['this_year'] = array(
+		$string = 'this_year_' . $thisYear->format('(Y)');
+		$periods[$string] = array(
 			'start' => $thisYear->getTimestamp(),
 		);
 
 		$taxYear = clone $today;
-		while($taxYear->format('n') > 4) {
-			$taxYear->modify('-1 month');
+		$y = $taxYear->format('Y');
+		if ($taxYear->format('n') < 4) {
+			$y--;
 		}
-		while($taxYear->format('j') > 1) {
-			$taxYear->modify('-1 day');
-		}
-		$periods['tax_year'] = array(
+		$taxYear->setDate($y, 4, 1);
+		$string = "tax_year_({$y})";
+		$periods[$string] = array(
 			'start' => $taxYear->getTimestamp(),
 		);
 

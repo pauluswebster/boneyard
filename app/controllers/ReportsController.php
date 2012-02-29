@@ -8,8 +8,6 @@
 
 namespace app\controllers;
 
-use app\util;
-
 use app\util\Reports;
 use sli_util\action\FlashMessage;
 
