@@ -8,6 +8,7 @@
 
 $config = array(
 	'name' => 'default',
+	'class' => 'app\security\User',
 	'model' => array(
 		'class' =>	'\app\models\Users'
 	),
