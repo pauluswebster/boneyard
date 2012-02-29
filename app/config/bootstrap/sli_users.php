@@ -7,6 +7,7 @@
  */
 
 $config = array(
+	'name' => 'default',
 	'model' => array(
 		'class' =>	'\app\models\Users'
 	),
