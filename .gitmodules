@@ -1,6 +1,3 @@
-[submodule "libraries/lithium"]
-	path = libraries/lithium
-	url = git@github.com:slicedup/lithium.git
 [submodule "libraries/sli_filters"]
 	path = libraries/sli_filters
 	url = git@github.com:slicedup/sli_filters.git
