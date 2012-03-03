@@ -26,7 +26,10 @@ $config = array(
 		'logoutRedirect' => '/login'
 	),
 	'persist' => array(
-		'name' => 'cookie'
+		'storage' => array(
+			'name' => 'cookie',
+			'adapter' => 'Cookie'
+		)
 	)
 );
 ?>
