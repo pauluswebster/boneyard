@@ -16,3 +16,6 @@
 [submodule "libraries/sli_util"]
 	path = libraries/sli_util
 	url = git@github.com:slicedup/sli_util.git
+[submodule "libraries/_source/chosen"]
+	path = libraries/_source/chosen
+	url = git://github.com/julesjanssen/chosen.git
