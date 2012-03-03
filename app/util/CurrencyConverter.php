@@ -40,17 +40,17 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 			'from' => $base,
 			'to' => $to
 		);
+		$rate = 1;
 		$cacheKey = "currency_{$base}_{$to}";
 		if (!$cache || !($rate = Cache::read('default', $cacheKey))) {
 			$result = static::_getGoogleConverter($data);
-			$matches = array();
-			if ($rate = null && preg_match("#bld>(?P<rate>[\d\.]+).*{$to}#", $result, $matches)) {
+			if (preg_match("#bld>(?P<rate>[\d\.]+).*{$to}#", $result, $matches)) {
 				if (is_numeric($matches['rate'])) {
 					$rate = $matches['rate'];
+					if ($cache) {
+						Cache::write('default', $cacheKey, $rate, $cache);
+					}
 				}
-			}
-			if ($rate && $cache) {
-				Cache::write('default', $cacheKey, $rate, $cache);
 			}
 		}
 		return (float) $rate;
@@ -62,7 +62,7 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 	 * @param boolean $cache
 	 * @return array
 	 */
-	public static function currencies($cached = true, $cachetime = '+1 week') {
+	public static function currencies($cached = true, $cachetime = '+1 month') {
 		if ($cached && $cache = Cache::read('default', 'currency_list')) {
 			return $cache;
 		}
@@ -82,6 +82,8 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 	/**
 	 * Get Google Exhange Rate Converter
 	 *
+	 * @todo Service calls failing after recent core update
+	 *
 	 * @param array $data parameters to pass to the converter, keys include:
 	 * 				`'a'`: amounthg ;c to convert
 	 * 				`'from'`: base currency
@@ -90,17 +92,25 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 	 * @return mixed result of http request
 	 */
 	protected static function _getGoogleConverter($data = array()) {
+		$url = 'http://www.google.com/finance/converter';
+		if ($data) {
+			$url .= '?' . http_build_query($data, null, '&');
+		}
+		if ($html = file_get_contents($url)) {
+			return utf8_encode($html);
+		}
+		/*
 		$http = new Service(array(
 			'host' => 'www.google.com',
-			'socket' => 'Stream'
 		));
 		$path = '/finance/converter';
 		try {
-			$responseText = @$http->send('get', $path, $data);
+			$responseText = $http->send('get', $path, $data);
 		} catch (\lithium\core\NetworkException $e) {
 			$responseText = false;
 		}
 		return $responseText;
+		*/
 	}
 }
 
