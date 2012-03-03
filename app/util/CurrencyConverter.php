@@ -44,7 +44,7 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 		if (!$cache || !($rate = Cache::read('default', $cacheKey))) {
 			$result = static::_getGoogleConverter($data);
 			$matches = array();
-			if(preg_match("#bld>(?P<rate>[\d\.]+).*{$to}#", $result, $matches)) {
+			if ($rate = null && preg_match("#bld>(?P<rate>[\d\.]+).*{$to}#", $result, $matches)) {
 				if (is_numeric($matches['rate'])) {
 					$rate = $matches['rate'];
 				}
@@ -91,10 +91,16 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 	 */
 	protected static function _getGoogleConverter($data = array()) {
 		$http = new Service(array(
-			'host' => 'www.google.com'
+			'host' => 'www.google.com',
+			'socket' => 'Stream'
 		));
 		$path = '/finance/converter';
-		return $http->send('get', $path, $data);
+		try {
+			$responseText = @$http->send('get', $path, $data);
+		} catch (\lithium\core\NetworkException $e) {
+			$responseText = false;
+		}
+		return $responseText;
 	}
 }
 
