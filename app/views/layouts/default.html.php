@@ -9,9 +9,9 @@
 </head>
 <body class="<?php echo $bodyClass;?>">
 	<div id="container">
-		<?php echo $this->_render('element', 'layout/header', compact('user'));?>
+		<?php echo $this->_render('element', 'layout/header');?>
 		<div id="content">
-			<?php if($user()):?>
+			<?php if($authorized):?>
 			<nav id="userNav">
 				<ul>
 					<li><?php echo $user->first_name;?>:</li>
