@@ -183,6 +183,10 @@ textarea {
 	min-height:100px;
 }
 
+.public #container input[type=text], .public #container input[type=password] {
+	width:97%;
+}
+
 input[type=reset], input[type=file] {
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
@@ -340,13 +344,16 @@ img.shadow {
 #container {
 	padding:10px 10% 50px 10%;
     position: relative;
-    min-width:960px;
 }
 
 .public #container {
 	width:340px;
 	padding:0;
 	margin:50px auto 0 auto;
+}
+
+.user #container {
+	min-width:960px;
 }
 
 #content {
