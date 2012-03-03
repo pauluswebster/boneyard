@@ -37,8 +37,8 @@ class Users extends \lithium\data\Model {
 	);
 
 	public static function __init(){
-		static::_applyFilters();
 		parent::__init();
+		static::_applyFilters();
 	}
 
 	public static function getScaffoldFormFields(){
