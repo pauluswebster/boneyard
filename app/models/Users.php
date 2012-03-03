@@ -9,6 +9,7 @@
 namespace app\models;
 
 use lithium\util\String;
+use lithium\security\Password;
 use app\security\User;
 use sli_filters\util\Behaviors;
 use app\util\TimeZones;
@@ -88,8 +89,7 @@ class Users extends \lithium\data\Model {
 				unset($params['data']['new_password']);
 			}
 			if (!empty($record->new_password)) {
-				//$record->password = String::hash($record->new_password);
-				$record->password = $record->new_password;
+				$record->password = Password::hash($record->new_password);
 			}
 			$params['entity'] = $record;
 			return $chain->next($self, $params, $chain);
