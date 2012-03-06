@@ -126,5 +126,14 @@ window.addEvent('domready', function(){
 			}
 		});
 	}
-
+	
+	//select fields
+	var selects = $$('select');
+	if (selects.length > 0) {
+		selects.addEvent('liszt:ready', function(){
+			this.getParent('div').addClass('select-chosen');
+		});
+		selects.chosen();
+	}
+	
 });

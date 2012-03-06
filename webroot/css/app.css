@@ -172,12 +172,21 @@ input[type=text], input[type=password], textarea {
 	display: block;
 	padding: .25em .5em;
 }
-input[type=text], input[type=password], textarea {
-	width: 97%;
+input[type=text], input[type=password], input[type=email], textarea {
+	width: 60%;
 	max-width: 950px;
 	margin: .5em 0 1em 0;
 	padding:.5em;
 }
+textarea {
+	width: 97%;
+	min-height:100px;
+}
+
+.public #container input[type=text], .public #container input[type=password] {
+	width:97%;
+}
+
 input[type=reset], input[type=file] {
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
@@ -194,6 +203,25 @@ select {
 	display: block;
 	margin: .5em 0 1em 0;
 }
+
+select[multiple] {
+	width:70%;
+}
+
+.select-chosen {
+	padding:5px 0 10px 0;	
+}
+
+.select-chosen .chzn-container {
+	padding-top:5px;
+	display:block;
+}
+
+input.date-picker, input#JobsFee {
+	width:200px;
+}
+
+
 div.checkbox {
 	clear: both;
 	padding: 1em 0;
@@ -322,6 +350,10 @@ img.shadow {
 	width:340px;
 	padding:0;
 	margin:50px auto 0 auto;
+}
+
+.user #container {
+	min-width:960px;
 }
 
 #content {

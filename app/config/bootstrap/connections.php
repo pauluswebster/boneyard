@@ -63,12 +63,12 @@ use lithium\data\Connections;
  	'type' => 'database',
  	'adapter' => 'MySql',
  	'host' => 'localhost',
- 	'login' => 'jobs',
+ 	'login' => 'dailygrind',
  	'password' => 'pzx999eS22ufTrez',
- 	'database' => 'jobs',
+ 	'database' => 'dailygrind',
  	'encoding' => 'UTF-8',
  	'classes' => array(
- 		'entitity' => 'app\extensions\data\model\Record'
+ 		'entity' => 'app\extensions\data\model\entity\DimensionalRecord'
  	)
  ));
 

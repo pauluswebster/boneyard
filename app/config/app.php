@@ -42,11 +42,6 @@ Environment::is(function($request) {
 Registry::load(__DIR__ . '/app.config.php', array(), 'app');
 
 /**
- * User class init
- */
-User::instance('default');
-
-/**
  * Scaffold config
  */
 Scaffold::config(Registry::get('app.scaffold'));
@@ -96,17 +91,18 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) {
 		return $controller->redirect('/', array('exit' => true));
 	}
 
+	$authorized = $controller->_user->id();
 	$bodyClass = array(
 		'app',
-		$controller->_user->get() ? 'user' : 'public',
+		$authorized ? 'user' : 'public',
 		Environment::get()
 	);
 	$controller->set(array(
 		'bodyClass' => join(' ', $bodyClass),
 		'locale' => Environment::get('locale'),
-		'user' => $controller->_user
+		'user' => $controller->_user,
+		'authorized' => $authorized
 	));
-
 	return $chain->next($self, $params, $chain);
 });
 ?>

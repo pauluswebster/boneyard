@@ -7,6 +7,8 @@
  */
 
 $config = array(
+	'name' => 'default',
+	'class' => 'app\security\User',
 	'model' => array(
 		'class' =>	'\app\models\Users'
 	),
@@ -24,7 +26,10 @@ $config = array(
 		'logoutRedirect' => '/login'
 	),
 	'persist' => array(
-		'name' => 'cookie'
+		'storage' => array(
+			'name' => 'cookie',
+			'adapter' => 'Cookie'
+		)
 	)
 );
 ?>

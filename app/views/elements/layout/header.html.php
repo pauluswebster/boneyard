@@ -9,7 +9,7 @@
 ?>
 
 <header id="header">
-	<?php if($user()):?>
+	<?php if($authorized):?>
 	<h1>Daily Grind</h1>
 
 	<?php if($active = $user->active()):?>

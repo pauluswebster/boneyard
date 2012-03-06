@@ -8,7 +8,7 @@
 
 namespace app\extensions\data\model\entity;
 
-class Record extends \lithium\data\entity\Record {
+class DimensionalRecord extends \lithium\data\entity\Record {
 
 	/**
 	 * (non-PHPdoc)
@@ -29,14 +29,17 @@ class Record extends \lithium\data\entity\Record {
 		$current = $this;
 		$null = null;
 		$path = explode('.', $name);
+		$current = $this->__get($path[0]);
+		if (!is_array($current) && !$current instanceOf \ArrayAccess) {
+			return $current;
+		}
+		array_shift($path);
 		$length = count($path) - 1;
-
 		foreach ($path as $i => $key) {
 			if (!isset($current[$key])) {
 				return $null;
 			}
 			$current = $current[$key];
-
 			if (is_scalar($current) && $i < $length) {
 				return $null;
 			}
