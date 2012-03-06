@@ -96,21 +96,9 @@ class CurrencyConverter extends \lithium\core\StaticObject {
 		if ($data) {
 			$url .= '?' . http_build_query($data, null, '&');
 		}
-		if ($html = file_get_contents($url)) {
+		if ($html = @file_get_contents($url)) {
 			return utf8_encode($html);
 		}
-		/*
-		$http = new Service(array(
-			'host' => 'www.google.com',
-		));
-		$path = '/finance/converter';
-		try {
-			$responseText = $http->send('get', $path, $data);
-		} catch (\lithium\core\NetworkException $e) {
-			$responseText = false;
-		}
-		return $responseText;
-		*/
 	}
 }
 
