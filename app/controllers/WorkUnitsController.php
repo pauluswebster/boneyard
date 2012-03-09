@@ -11,8 +11,8 @@ namespace app\controllers;
 use app\models\Jobs;
 use app\models\Tasks;
 use app\models\JobLogs;
-use sli_util\storage\Registry;
-use sli_util\action\FlashMessage;
+use sli_base\storage\Registry;
+use sli_base\action\FlashMessage;
 use lithium\action\DispatchException;
 
 class WorkUnitsController extends \lithium\action\Controller {

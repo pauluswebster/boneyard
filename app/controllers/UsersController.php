@@ -8,7 +8,7 @@
 
 namespace app\controllers;
 
-use sli_util\action\FlashMessage;
+use sli_base\action\FlashMessage;
 use sli_scaffold\core\Scaffold;
 
 class UsersController extends \sli_users\controllers\UsersController {

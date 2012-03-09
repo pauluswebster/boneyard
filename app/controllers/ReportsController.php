@@ -9,7 +9,7 @@
 namespace app\controllers;
 
 use app\util\Reports;
-use sli_util\action\FlashMessage;
+use sli_base\action\FlashMessage;
 
 class ReportsController extends \lithium\action\Controller {
 

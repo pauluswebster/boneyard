@@ -10,8 +10,8 @@ use lithium\action\Dispatcher;
 use lithium\core\Environment;
 use lithium\util\Inflector;
 use app\security\User;
-use sli_util\action\FlashMessage;
-use sli_util\storage\Registry;
+use sli_base\action\FlashMessage;
+use sli_base\storage\Registry;
 use sli_scaffold\core\Scaffold;
 
 /**

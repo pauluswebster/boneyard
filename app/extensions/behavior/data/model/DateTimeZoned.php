@@ -11,7 +11,7 @@ namespace app\extensions\behavior\data\model;
 /**
  * Format unix timestamped fields into timezone aware string date formats
  */
-class DateTimeZoned extends \sli_filters\data\model\behavior\Modified {
+class DateTimeZoned extends \sli_base\data\model\behavior\Modified {
 
 	protected static $_fieldDefaults = array(
 		'timezone_field' => null,

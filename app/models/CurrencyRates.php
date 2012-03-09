@@ -8,7 +8,7 @@
 namespace app\models;
 
 use app\util\CurrencyConverter;
-use sli_filters\util\Behaviors;
+use sli_base\util\Behaviors;
 
 class CurrencyRates extends \lithium\data\Model {
 

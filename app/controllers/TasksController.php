@@ -10,7 +10,7 @@ namespace app\controllers;
 
 use app\models\Jobs;
 use app\models\Tasks;
-use sli_util\util\Store;
+use sli_base\util\Store;
 
 class TasksController extends WorkUnitsController {
 

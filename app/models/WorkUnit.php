@@ -9,8 +9,8 @@
 namespace app\models;
 
 use lithium\util\Set;
-use sli_util\storage\Registry;
-use sli_filters\util\Behaviors;
+use sli_base\storage\Registry;
+use sli_base\util\Behaviors;
 use app\models\JobLogs;
 use app\util\Time;
 use app\security\User;

@@ -8,7 +8,7 @@
 
 namespace app\models;
 
-use sli_util\storage\Registry;
+use sli_base\storage\Registry;
 use app\util\TimeZones;
 use app\security\User;
 

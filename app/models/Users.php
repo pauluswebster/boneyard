@@ -11,7 +11,7 @@ namespace app\models;
 use lithium\util\String;
 use lithium\security\Password;
 use app\security\User;
-use sli_filters\util\Behaviors;
+use sli_base\util\Behaviors;
 use app\util\TimeZones;
 use app\util\CurrencyConverter;
 
