@@ -1,7 +1,7 @@
 <?php
 namespace app\extensions\helper;
 
-use sli_util\storage\Registry;
+use sli_base\storage\Registry;
 
 class Service extends \lithium\template\Helper {
 	

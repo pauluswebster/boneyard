@@ -36,7 +36,7 @@
  * @see lithium\core\Environment
  */
 use lithium\data\Connections;
-use sli_util\storage\Registry;
+use sli_base\storage\Registry;
 
 $default = Registry::get('env.connections.default');
 

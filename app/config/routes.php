@@ -18,7 +18,7 @@
  */
 use lithium\net\http\Router;
 use lithium\core\Environment;
-use sli_util\storage\Registry;
+use sli_base\storage\Registry;
 
 /**
  * Host type detection continuation route

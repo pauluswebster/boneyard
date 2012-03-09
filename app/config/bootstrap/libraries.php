@@ -120,7 +120,7 @@ Libraries::add('app', array('default' => true));
 /**
  * Add some plugins:
  */
-Libraries::add('sli_util');
+Libraries::add('sli_base');
 
 // Libraries::add('li3_docs');
 

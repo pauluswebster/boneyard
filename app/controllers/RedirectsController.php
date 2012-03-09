@@ -3,7 +3,7 @@ namespace app\controllers;
 
 use lithium\core\Environment;
 use lithium\action\DispatchException;
-use sli_util\storage\Registry;
+use sli_base\storage\Registry;
 use app\models\Redirects;
 
 class RedirectsController extends ServiceController {
