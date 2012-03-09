@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\extensions\helper;
+namespace sli_base\extensions\helper;
 
 
 class FlashMessage extends \lithium\template\Helper {
@@ -17,7 +17,7 @@ class FlashMessage extends \lithium\template\Helper {
 	 * @var $_classes array
 	 */
 	protected $_classes = array(
-		'storage' => 'sli_util\action\FlashMessage'
+		'storage' => 'sli_base\action\FlashMessage'
 	);
 
 	/**
@@ -30,7 +30,7 @@ class FlashMessage extends \lithium\template\Helper {
 		'template' => 'flash_message',
 		'data' => array(),
 		'options' => array(
-			'library' => 'sli_util'
+			'library' => 'sli_base'
 		)
 	);
 

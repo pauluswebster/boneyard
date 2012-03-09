@@ -6,12 +6,11 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\tests\cases\net\http;
+namespace sli_base\tests\cases\net\http;
 
-use sli_util\net\http\MediaPaths;
-use lithium\net\http\Media;
+use sli_base\net\http\Media;
 
-class MediaPathsTest extends \lithium\test\Unit {
+class MediaTest extends \lithium\test\Unit {
 
 	public function setUp() {
 		Media::type('testMedia', 'test/media', array(
@@ -26,20 +25,20 @@ class MediaPathsTest extends \lithium\test\Unit {
 	public function testAdd(){
 		$base = Media::type('testMedia');
 		$reset = function(){
-			MediaPaths::setPaths('testMedia', array(
+			Media::setPaths('testMedia', array(
 				'template' => '{:library}/views/{:controller}/{:template}.{:type}.php',
 				'layout'   => '{:library}/views/layouts/{:layout}.{:type}.php',
 				'element'  => '{:library}/views/elements/{:template}.{:type}.php'
 			));
 		};
 		//invalid media type
-		$result = MediaPaths::addPaths('invalidType', array(
+		$result = Media::addPaths('invalidType', array(
 			'template' => '{:library}/views/testone/{:template}.{:type}.php'
 		));
 		$this->assertFalse($result);
 
 		//add single, string target
-		$add = MediaPaths::addPaths('testMedia', array(
+		$add = Media::addPaths('testMedia', array(
 			'template' => '{:library}/views/testone/{:template}.{:type}.php'
 		));
 		$config = Media::type('testMedia');
@@ -53,7 +52,7 @@ class MediaPathsTest extends \lithium\test\Unit {
 
 		//append
 		$reset();
-		$add = MediaPaths::addPaths('testMedia', array(
+		$add = Media::addPaths('testMedia', array(
 			'template' => '{:library}/views/testone/{:template}.{:type}.php'
 		), false);
 		$config = Media::type('testMedia');
@@ -66,7 +65,7 @@ class MediaPathsTest extends \lithium\test\Unit {
 		$this->assertEqual($expected, $result);
 
 		//duplicate template
-		$add = MediaPaths::addPaths('testMedia', array(
+		$add = Media::addPaths('testMedia', array(
 			'template' => '{:library}/views/testone/{:template}.{:type}.php'
 		));
 		$config = Media::type('testMedia');
@@ -75,7 +74,7 @@ class MediaPathsTest extends \lithium\test\Unit {
 
 		$reset();
 		//add single, array target
-		$add = MediaPaths::addPaths('testMedia', array(
+		$add = Media::addPaths('testMedia', array(
 			'template' => '{:library}/views/testtwo/{:template}.{:type}.php'
 		));
 		$config = Media::type('testMedia');
@@ -89,7 +88,7 @@ class MediaPathsTest extends \lithium\test\Unit {
 
 		$reset();
 		//add multiple mixed targets
-		$add = MediaPaths::addPaths('testMedia', array(
+		$add = Media::addPaths('testMedia', array(
 			'template' => array(
 				'{:library}/views/testfour/{:template}.{:type}.php',
 				'{:library}/views/testthree/{:template}.{:type}.php',
@@ -118,7 +117,7 @@ class MediaPathsTest extends \lithium\test\Unit {
 		$this->assertEqual($expected, $result);
 
 		//add new config
-		$add = MediaPaths::addPaths('testMedia', array(
+		$add = Media::addPaths('testMedia', array(
 			'widget' => array(
 				'{:library}/views/widgets/{:template}.{:type}.php'
 			)
@@ -158,16 +157,16 @@ class MediaPathsTest extends \lithium\test\Unit {
 				'{:library}/views/widgets/{:template}.{:type}.php'
 			)
 		);
-		MediaPaths::addPaths('testMedia', $paths);
+		Media::addPaths('testMedia', $paths);
 
 		//invalid media type
-		$result = MediaPaths::removePaths('invalidType', array(
+		$result = Media::removePaths('invalidType', array(
 			'template' => '{:library}/views/testone/{:template}.{:type}.php'
 		));
 		$this->assertFalse($result);
 
 		//remove string path
-		$remove = MediaPaths::removePaths('testMedia', '{:library}/views/testthree/{:template}.{:type}.php');
+		$remove = Media::removePaths('testMedia', '{:library}/views/testthree/{:template}.{:type}.php');
 		$config = Media::type('testMedia');
 		$this->assertEqual($config['options']['paths'], $remove);
 		$result = $config['options']['paths']['template'];
@@ -180,7 +179,7 @@ class MediaPathsTest extends \lithium\test\Unit {
 		$this->assertEqual($expected, $result);
 
 		//remove array path
-		$remove = MediaPaths::removePaths('testMedia', array(
+		$remove = Media::removePaths('testMedia', array(
 			'template' => '{:library}/views/testfour/{:template}.{:type}.php',
 			'layout' => array(
 				'{:library}/views/layouts/testone/{:layout}.{:type}.php',
@@ -204,12 +203,12 @@ class MediaPathsTest extends \lithium\test\Unit {
 		$this->assertEqual($expected, $result);
 
 		//remove with pattern, template set
-		$remove = MediaPaths::removePaths('testMedia', array(
+		$remove = Media::removePaths('testMedia', array(
 			'template' => '/testone/'
 		));
 		$this->assertEqual($config['options']['paths'], $remove);
 
-		$remove = MediaPaths::removePaths('testMedia', array(
+		$remove = Media::removePaths('testMedia', array(
 			'template' => '/testone/'
 		), true);
 		$this->assertEqual($config['options']['paths']['element'], $remove['element']);
@@ -223,7 +222,7 @@ class MediaPathsTest extends \lithium\test\Unit {
 		$this->assertEqual($expected, $result);
 
 		//remove with pattern from all
-		$remove = MediaPaths::removePaths('testMedia', '/testtwo/', true);
+		$remove = Media::removePaths('testMedia', '/testtwo/', true);
 		$config = Media::type('testMedia');
 		$result = $config['options']['paths']['template'];
 		$expected = array(

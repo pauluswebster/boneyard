@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\storage;
+namespace sli_base\storage;
 
 /**
  * The `Source` class provides standard access methods for reading,

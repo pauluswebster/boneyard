@@ -6,9 +6,9 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\tests\cases\extensions\strategy\storage\source;
+namespace sli_base\tests\cases\extensions\strategy\storage\source;
 
-use sli_util\storage\Source;
+use sli_base\storage\Source;
 
 class IniTest extends \lithium\test\Unit {
 

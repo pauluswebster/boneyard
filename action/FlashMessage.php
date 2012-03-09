@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\action;
+namespace sli_base\action;
 
 
 class FlashMessage extends \lithium\core\StaticObject {

@@ -6,9 +6,9 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\tests\cases\util;
+namespace sli_base\tests\cases\util;
 
-use sli_util\util\Store;
+use sli_base\util\Store;
 
 class StoreTest extends \lithium\test\Unit {
 

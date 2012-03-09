@@ -6,9 +6,9 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\tests\cases\storage;
+namespace sli_base\tests\cases\storage;
 
-use sli_util\storage\Registry;
+use sli_base\storage\Registry;
 
 class RegistryTest extends \lithium\test\Unit {
 

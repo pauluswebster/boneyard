@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\tests\cases\extensions\helper;
+namespace sli_base\tests\cases\extensions\helper;
 
 use lithium\test;
 
@@ -14,8 +14,8 @@ use lithium\storage\Session;
 use lithium\template\View;
 use lithium\template\view\adapter\File;
 use lithium\tests\mocks\template\MockRenderer;
-use sli_util\action\FlashMessage as Storage;
-use sli_util\extensions\helper\FlashMessage;
+use sli_base\action\FlashMessage as Storage;
+use sli_base\extensions\helper\FlashMessage;
 
 class FlashMessageTest extends \lithium\test\Unit {
 

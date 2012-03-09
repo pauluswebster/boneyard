@@ -6,10 +6,10 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\tests\cases\action;
+namespace sli_base\tests\cases\action;
 
 use lithium\storage\Session;
-use sli_util\action\FlashMessage;
+use sli_base\action\FlashMessage;
 
 class FlashMessageTest extends \lithium\test\Unit {
 

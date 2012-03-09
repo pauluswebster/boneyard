@@ -6,9 +6,9 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\tests\cases\extensions\strategy\storage\source;
+namespace sli_base\tests\cases\extensions\strategy\storage\source;
 
-class ExportTest extends \sli_util\tests\cases\storage\SourceTest {
+class ExportTest extends \sli_base\tests\cases\storage\SourceTest {
 
 }
 

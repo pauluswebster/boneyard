@@ -6,15 +6,15 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\storage;
+namespace sli_base\storage;
 
 /**
  * The `Registry` class provides global storage for configuration settings,
- * convenient loading/saving via `sli_util\storage\Configuration` and data
- * access with `sli_util\storage\ArrayStore`;
+ * convenient loading/saving via `sli_base\storage\Configuration` and data
+ * access with `sli_base\storage\ArrayStore`;
  *
- * @see sli_util\storage\ArrayStore
- * @see sli_util\storage\Configuration
+ * @see sli_base\storage\ArrayStore
+ * @see sli_base\storage\Configuration
  */
 class Registry extends \lithium\core\StaticObject {
 
@@ -24,8 +24,8 @@ class Registry extends \lithium\core\StaticObject {
 	 * @var array
 	 */
 	protected static $_classes = array(
-		'storage' => 'sli_util\storage\ArrayStore',
-		'source' => 'sli_util\storage\Source'
+		'storage' => 'sli_base\storage\ArrayStore',
+		'source' => 'sli_base\storage\Source'
 	);
 
 	/**
@@ -38,7 +38,7 @@ class Registry extends \lithium\core\StaticObject {
 	/**
 	 * Overloaded static calls are passed to storage instance
 	 *
-	 * @see sli_util\storage\ArrayStore
+	 * @see sli_base\storage\ArrayStore
 	 * @param string $method
 	 * @param array $params
 	 * @return mixed

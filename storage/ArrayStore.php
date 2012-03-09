@@ -6,15 +6,15 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\storage;
+namespace sli_base\storage;
 
-use sli_util\util\Store;
+use sli_base\util\Store;
 
 /**
  * The `ArrayStore` storage class provides simple array storage and access via
  * standard array access & dot-delimeted array paths.
  *
- * @see sli_util\util\Store
+ * @see sli_base\util\Store
  */
 class ArrayStore extends \lithium\core\Object implements \ArrayAccess {
 

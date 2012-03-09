@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\extensions\adapter\storage\source;
+namespace sli_base\extensions\adapter\storage\source;
 
 use SplFileInfo;
 

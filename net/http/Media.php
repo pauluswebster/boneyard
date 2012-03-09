@@ -6,9 +6,9 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\net\http;
+namespace sli_base\net\http;
 
-class MediaPaths extends \lithium\net\http\Media {
+class Media extends \lithium\net\http\Media {
 
 	public static function setDefaults($type, $default = null, $merge = false) {
 		$config = static::type($type);

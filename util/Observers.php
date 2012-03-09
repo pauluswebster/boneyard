@@ -6,10 +6,14 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_base\tests\cases\extensions\adapter\storage\source;
+namespace sli_base\util;
 
-class FileTest extends \sli_base\tests\cases\storage\SourceTest {
+/**
+ * The `Observers` class.
+ */
+class Observers extends \sli_base\core\FilterObjects {
+
+	protected static $_path = 'observer';
 
 }
-
 ?>

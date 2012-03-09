@@ -6,10 +6,8 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_base\tests\cases\extensions\adapter\storage\source;
+namespace sli_base\tests\mocks\models;
 
-class FileTest extends \sli_base\tests\cases\storage\SourceTest {
-
-}
+class MockPost extends \sli_base\tests\mocks\models\MockModel {}
 
 ?>

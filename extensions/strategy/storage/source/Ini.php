@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\extensions\strategy\storage\source;
+namespace sli_base\extensions\strategy\storage\source;
 
 /**
  * The storage.source.strategy `Ini` class.

@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_util\util;
+namespace sli_base\util;
 
 use lithium\util\Set;
 
