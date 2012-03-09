@@ -1,12 +1,6 @@
 [submodule "libraries/lithium"]
 	path = libraries/lithium
 	url = git@github.com:slicedup/lithium.git
-[submodule "libraries/sli_filters"]
-	path = libraries/sli_filters
-	url = git@github.com:slicedup/sli_filters.git
-[submodule "libraries/sli_libs"]
-	path = libraries/sli_libs
-	url = git@github.com:slicedup/sli_libs.git
 [submodule "libraries/sli_mailer"]
 	path = libraries/sli_mailer
 	url = git@github.com:slicedup/sli_mailer.git
@@ -19,9 +13,12 @@
 [submodule "libraries/sli_users"]
 	path = libraries/sli_users
 	url = git@github.com:slicedup/sli_users.git
-[submodule "libraries/sli_util"]
-	path = libraries/sli_util
-	url = git@github.com:slicedup/sli_util.git
 [submodule "libraries/_source/foundation"]
 	path = libraries/_source/foundation
 	url = git://github.com/zurb/foundation.git
+[submodule "libraries/sli_base"]
+	path = libraries/sli_base
+	url = git@github.com:slicedup/sli_base.git
+[submodule "libraries/sli_cms"]
+	path = libraries/sli_cms
+	url = git@github.com:slicedup/sli_cms.git
