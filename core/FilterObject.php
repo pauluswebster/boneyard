@@ -8,6 +8,8 @@
 
 namespace sli_base\core;
 
+use lithium\util\collection\Filters;
+
 /**
  * The `FilterObject` base class.
  */
