@@ -1,6 +1,3 @@
-[submodule "libraries/lithium"]
-	path = libraries/lithium
-	url = git://github.com/UnionOfRAD/lithium.git
 [submodule "libraries/sli_scaffold"]
 	path = libraries/sli_scaffold
 	url = git@github.com:slicedup/sli_scaffold.git
