@@ -45,9 +45,6 @@ class Timestamped extends \sli_base\data\model\Behavior {
 				if (is_array($field)) {
 					$field = $field['field'];
 				}
-				if (!static::_checkSchema($class, array($field))) {
-					$settings[$action] = false;
-				}
 			}
 		}
 		return $settings;
