@@ -10,6 +10,16 @@ namespace sli_base\data\model\behavior;
 
 use lithium\data\model\Query;
 
+/**
+ * The `Tree` model behavior.
+ * 
+ * This behavior provides support for MPTT/Nested set functionality, and
+ * supporting utility methods for SQL backed models.
+ * 
+ * @todo most of it!
+ * @todo - look at Model::instanceMethods, v handy for this one
+ *
+ */
 class Tree extends \sli_base\data\model\Behavior {
 
 	protected static $_settings = array(
