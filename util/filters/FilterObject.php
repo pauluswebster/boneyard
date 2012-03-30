@@ -16,7 +16,7 @@ use lithium\util\collection\Filters;
 abstract class FilterObject extends \lithium\core\StaticObject {
 
 	/**
-	 * Default settings
+	 * Default settings for all bindings
 	 *
 	 * @var array
 	 */
@@ -26,7 +26,7 @@ abstract class FilterObject extends \lithium\core\StaticObject {
 	);
 
 	/**
-	 * Config
+	 * Config settings, set config defaults for you subclasses here
 	 *
 	 * @var array
 	 */
@@ -37,10 +37,19 @@ abstract class FilterObject extends \lithium\core\StaticObject {
 	 */
 	protected static $_filterMethods = array();
 	
+	/**
+	 * Internal storage of binding settings.
+	 * 
+	 * @var array
+	 */
 	protected static $__settings = array();
 
 	/**
 	 * Apply the filter object to a class
+	 * 
+	 * @param string $class class object is being applied to
+	 * @param array $settings settings for the binding
+	 * @return array binding settings for $class
 	 */
 	public static function apply($class, array $settings = array()) {
 		static::_settings($class, false);
@@ -52,10 +61,29 @@ abstract class FilterObject extends \lithium\core\StaticObject {
 		return static::settings($class, $settings);
 	}
 
+	/**
+	 * Get or set settings for the binding
+	 * 
+	 * @param string $class class object is being applied to
+	 * @param array $settings settings for the binding
+	 * @return array binding settings for $class
+	 */
 	public static function settings($class, array $settings = array()) {
 		return static::_settings($class, $settings);
 	}
 	
+	/**
+	 * Internal handling to get or set settings for binding
+	 * 
+	 * Note: to prpoerly handle instance based bindings this method could
+	 * be overwritten to proxy the storage & access to a property of the
+	 * class instance, i.e. by default we only handle binding settings
+	 * to single instance of a bound object.
+	 * 
+ 	 * @param string $class class object is being applied to
+	 * @param array $settings settings for the binding
+	 * @return array binding settings for $class
+	 */
 	protected static function _settings($class, $settings = array()) {
 		$self = get_called_class();
 		if (is_object($class)) {
@@ -76,6 +104,7 @@ abstract class FilterObject extends \lithium\core\StaticObject {
 	 *
 	 * @param string $class class object is being applied to
 	 * @param array $settings settings for the binding
+	 * @return $settings
 	 */
 	protected static function _apply($class, $settings) {
 		return $settings + static::$_settings;
@@ -86,7 +115,7 @@ abstract class FilterObject extends \lithium\core\StaticObject {
 	 *
 	 * @param mixed $class class name or instance
 	 * @param array $settings configuration for binding
-	 * @return null
+	 * @return $settings with `method` key modified as required
 	 */
 	protected static function _applyFilterMethods($class, $settings) {
 		$self = get_called_class();
@@ -143,7 +172,6 @@ abstract class FilterObject extends \lithium\core\StaticObject {
 	 *
 	 * @param string $method class method being filtered
 	 * @param string $filter filter method
-	 * @param array $settings filter settings
 	 * @return filter closure to apply to class
 	 */
 	protected static function _filterMethod($method, $filter){}
@@ -153,7 +181,6 @@ abstract class FilterObject extends \lithium\core\StaticObject {
 	 *
 	 * @param string $method class method being filtered
 	 * @param string $filter filter method
-	 * @params array $settings filter settings
 	 * @return filter closure to apply to class
 	 */
 	protected static function _filterBeforeMethod($method, $filter){}
@@ -163,7 +190,6 @@ abstract class FilterObject extends \lithium\core\StaticObject {
 	 *
 	 * @param string $method class method being filtered
 	 * @param string $filter filter method
-	 * @params array $settings filter settings
 	 * @return filter closure to apply to class
 	 */
 	protected static function _filterAfterMethod($method, $filter){}

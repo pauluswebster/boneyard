@@ -18,7 +18,6 @@ abstract class Behavior extends FilterObject {
 	 *
 	 * @param string $method class method being filtered
 	 * @param string $filter filter method
-	 * @param array $settings filter settings
 	 * @return filter closure to apply to class
 	 */
 	protected static function _filterMethod($method, $filter){
@@ -37,7 +36,6 @@ abstract class Behavior extends FilterObject {
 	 *
 	 * @param string $method class method being filtered
 	 * @param string $filter filter method
-	 * @params array $settings filter settings
 	 * @return filter closure to apply to class
 	 */
 	protected static function _filterBeforeMethod($method, $filter){
@@ -56,7 +54,6 @@ abstract class Behavior extends FilterObject {
 	 *
 	 * @param string $method class method being filtered
 	 * @param string $filter filter method
-	 * @params array $settings filter settings
 	 * @return filter closure to apply to class
 	 */
 	protected static function _filterAfterMethod($method, $filter){

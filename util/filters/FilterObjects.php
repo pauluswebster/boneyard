@@ -57,6 +57,12 @@ abstract class FilterObjects extends \lithium\core\StaticObject {
 		return static::$_paths;
 	}
 
+	/**
+	 * Locate a bound filter object by base name for bound class
+	 * 
+	 * @param mixed $class class name or instance filterClass is being applied to
+	 * @param string $filterClass behavior class name
+	 */
 	public static function locate($class, $filterClass) {
 		return static::_class($filterClass, $class);	
 	}
