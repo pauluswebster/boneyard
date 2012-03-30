@@ -80,22 +80,6 @@ class TimestampedTest extends \lithium\test\Unit {
 		$this->assertNoPattern('/\d{10,}/', $data['created']);
 		$this->assertPattern('/\d{10,}/', $data['modified']);
 	}
-
-
-	public function testSchemaCheck(){
-		$model = static::$model;
-		$applied = Timestamped::apply($model, array(
-			'check' => true
-		));
-
-		$this->assertFalse($applied['update']);
-
-		$record = $model::create();
-		$save = $record->save();
-		$data = $model::first()->data();
-		$this->assertTrue(isset($data['created']));
-		$this->assertFalse(isset($data['updated']));
-	}
 }
 
 ?>
