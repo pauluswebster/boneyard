@@ -10,6 +10,11 @@ namespace sli_base\data\model\behavior;
 
 use lithium\util\Inflector;
 
+/**
+ * The `Inherited` model behavior.
+ * 
+ * This behavior provides support for class table inheritance for your models.
+ */
 class Inherited extends \sli_base\data\model\Behavior {
 
 	protected static $_settings = array(
@@ -35,7 +40,6 @@ class Inherited extends \sli_base\data\model\Behavior {
 			}
 			$settings['base'] = $base;
 		}
-		
 		if ($settings['base'] != $class) {
 			$parents = array_values($class::invokeMethod('_parents'));
 			$index = array_search($settings['base'], $parents);
@@ -65,9 +69,6 @@ class Inherited extends \sli_base\data\model\Behavior {
 		return $schema;
 	}
 
-	/**
-	 * @todo address recursion, finalise inherited flag
-	 */
 	public static function createFilter($model, $params, $chain, $settings) {
 		$self = get_called_class();
 		$inherited = true;
@@ -91,7 +92,13 @@ class Inherited extends \sli_base\data\model\Behavior {
 		return $entity;
 	}
 
+	/**
+	 * @todo
+	 */
 	public static function saveFilter($model, $params, $chain, $settings) {
+		return $chain->next($model, $params, $chain);
+		//legacy below
+		
 		extract($params);
 		//set data to record
 		if (!empty($data)) {
@@ -117,25 +124,16 @@ class Inherited extends \sli_base\data\model\Behavior {
 		return $chain->next($model, $params, $chain);
 	}
 
-	public static function validateFilter($model, $params, $chain) {
+	/**
+	 * @todo
+	 */
+	public static function validateFilter($model, $params, $chain, $settings) {
 		$self = get_called_class();
 		$settings =& static::$__settings[$self][$model];
 		//validate all
 		return $chain->next($model, $params, $chain);
 	}
 
-	/**
-	 * 
-	 * Enter description here ...
-	 * 
-	 * @todo find filtering on class
-	 * @todo optimize to single query for after find of multiple records
-	 * 
-	 * @param unknown_type $model
-	 * @param unknown_type $params
-	 * @param unknown_type $chain
-	 * @param unknown_type $settings
-	 */
 	public static function findFilter($model, $params, $chain, $settings) {
 		$class = static::_name($model);
 		$base = static::_name($settings['base']);
@@ -194,7 +192,12 @@ class Inherited extends \sli_base\data\model\Behavior {
 		return $result;
 	}
 
+	/**
+	 * @todo
+	 */
 	public static function deleteFilter($model, $params, $chain, $settings) {
+		return $chain->next($model, $params, $chain);
+		//legacy below
 		if ($delete = $chain->next($model, $params, $chain)) {
 			extract($params);
 			if (isset($entity->$settings['fieldName'])) {
@@ -207,15 +210,18 @@ class Inherited extends \sli_base\data\model\Behavior {
 		}
 		return $delete;
 	}
-
+	
+	protected static function _name($class) {
+		return basename(str_replace('\\', '/', $class));
+	}
+	
+	/**
+	 * @todo probably trash
+	 */
 	protected static function _isBase($model) {
 		$self = get_called_class();
 		$settings = static::settings($model);
 		return $model == $settings['base'];
-	}
-	
-	protected static function _name($class) {
-		return basename(str_replace('\\', '/', $class));
 	}
 	
 	/**
