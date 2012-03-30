@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_base\core;
+namespace sli_base\util\filters;
 
 use lithium\core\Libraries;
 use lithium\util\collection\Filters;
@@ -34,12 +34,12 @@ abstract class FilterObjects extends \lithium\core\StaticObject {
 	 * @param array $settings configuration for binding
 	 * @return array $settings indexed by fully namespaced filter object class name
 	 */
-	public static function &apply($class, $filterClass, array $settings = array()) {
+	public static function apply($class, $filterClass, array $settings = array()) {
 		$filterClasses = static::_nomarlizeFilterList($filterClass, $settings);
 		$applied = array();
 		foreach ($filterClasses as $filter => $settings) {
 			$filterClass = static::_class($filter, $class);
-			$applied[$filterClass] =& $filterClass::apply($class, $settings);
+			$applied[$filterClass] = $filterClass::apply($class, $settings);
 		}
 		return $applied;
 	}
@@ -57,6 +57,10 @@ abstract class FilterObjects extends \lithium\core\StaticObject {
 		return static::$_paths;
 	}
 
+	public static function locate($class, $filterClass) {
+		return static::_class($filterClass, $class);	
+	}
+	
 	/**
 	 * Locate filter class
 	 *

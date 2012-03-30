@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_base\core;
+namespace sli_base\util\filters;
 
 /**
  * The `Behavior` base class.
@@ -21,9 +21,10 @@ abstract class Behavior extends FilterObject {
 	 * @param array $settings filter settings
 	 * @return filter closure to apply to class
 	 */
-	protected static function _filterMethod($method, $filter, &$settings){
+	protected static function _filterMethod($method, $filter){
 		$class = get_called_class();
-		return function($self, $params, $chain) use ($method, $class, $filter, &$settings) {
+		return function($self, $params, $chain) use ($method, $class, $filter) {
+			$settings = $class::settings($self);
 			if (!in_array($method, $settings['methods'])) {
 				return $chain->next($self, $params, $chain);
 			}
@@ -39,13 +40,14 @@ abstract class Behavior extends FilterObject {
 	 * @params array $settings filter settings
 	 * @return filter closure to apply to class
 	 */
-	protected static function _filterBeforeMethod($method, $filter, &$settings){
+	protected static function _filterBeforeMethod($method, $filter){
 		$class = get_called_class();
-		return function($self, $params, $chain) use ($method, $class, $filter, &$settings) {
+		return function($self, $params, $chain) use ($method, $class, $filter) {
+			$settings = $class::settings($self);
 			if (in_array($method .'.before', $settings['methods'])) {
 				$params = $class::$filter($self, $params, $settings);
 			}
-			return $chain->next($self, $params, $chain);
+			return $chain->next($self, $params, $chain, $settings);
 		};
 	}
 
@@ -57,9 +59,10 @@ abstract class Behavior extends FilterObject {
 	 * @params array $settings filter settings
 	 * @return filter closure to apply to class
 	 */
-	protected static function _filterAfterMethod($method, $filter, &$settings){
+	protected static function _filterAfterMethod($method, $filter){
 		$class = get_called_class();
-		return function($self, $params, $chain) use ($method, $class, $filter, &$settings) {
+		return function($self, $params, $chain) use ($method, $class, $filter) {
+			$settings = $class::settings($self);
 			$params = $chain->next($self, $params, $chain);
 			if (in_array($method .'.after', $settings['methods'])) {
 				$params = $class::$filter($self, $params, $settings);

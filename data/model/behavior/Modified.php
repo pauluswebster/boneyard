@@ -67,7 +67,7 @@ class Modified extends \sli_base\data\model\Behavior {
 	 * @param object $entity result of Model::create()
 	 * @return lithium\data\Entity
 	 */
-	public static function createAfterFilter($model, $entity, &$settings) {
+	public static function createAfterFilter($model, $entity, $settings) {
 		$fields = static::_fields($settings);
 		$data = $entity->data();
 		$applied = static::modify($data, 'create', $fields);
@@ -87,7 +87,7 @@ class Modified extends \sli_base\data\model\Behavior {
 	 * @param array $params Model::save() params
 	 * @return array params
 	 */
-	public static function saveBeforeFilter($model, $params, &$settings) {
+	public static function saveBeforeFilter($model, $params, $settings) {
 		//apply to record
 		$entity =& $params['entity'];
 		$fields = static::_fields($settings);
@@ -111,7 +111,7 @@ class Modified extends \sli_base\data\model\Behavior {
 	 * @param array $params Model::validates() params
 	 * @return array params
 	 */
-	public static function validatesBeforeFilter($model, $params, &$settings) {
+	public static function validatesBeforeFilter($model, $params, $settings) {
 		//apply to record
 		$entity =& $params['entity'];
 		$fields = static::_fields($settings);
@@ -133,7 +133,7 @@ class Modified extends \sli_base\data\model\Behavior {
 	 * @param array $result result of Model::find()
 	 * @return array params
 	 */
-	public static function findAfterFilter($model, $result, &$settings) {
+	public static function findAfterFilter($model, $result, $settings) {
 		if ($result) {
 			$self = get_called_class();
 			$apply = function(&$result) use($self, $settings){

@@ -156,43 +156,6 @@ class ModifiedTest extends \lithium\test\Unit {
 		$this->assertEqual($expected, $result);
 	}
 
-	public function testMultiApplied() {
-		$model = static::$model;
-		Modified::apply($model, array(
-			'fields' => array(
-				'body' => array(
-					'save' => array($this, 'objMethod'),
-					'find' => get_class($this) . '::staticMethod'
-				)
-			)
-		));
-		Modified::apply($model, array(
-			'fields' => array(
-				'body' => array(
-					'save' => get_class($this) . '::staticMethod',
-					'find' => array($this, 'objMethod')
-				)
-			)
-		));
-
-		$body = 'apples bananas oranges';
-
-		$post = $model::create(compact('body'));
-		$expected = $body;
-		$result = $post->data('body');
-		$this->assertEqual($expected, $result);
-
-		$post->save();
-		$expected = $body;
-		$result = $post->data('body');
-		$this->assertEqual($expected, $result);
-
-		$post = $model::first();
-		$expected = $body;
-		$result = $post->data('body');
-		$this->assertEqual($expected, $result);
-	}
-
 	public function testModifiers() {
 		$model = static::$model;
 		Modified::modifiers(array('testMod' => array(

@@ -33,8 +33,8 @@ class Timestamped extends \sli_base\data\model\Behavior {
 		'check' => false
 	);
 
-	protected static function _apply($class, &$settings) {
-		parent::_apply($class, $settings);
+	protected static function _apply($class, $settings) {
+		$settings = parent::_apply($class, $settings);
 		if (!empty($settings['check'])) {
 			$fields[] = array();
 			foreach (array('create', 'update') as $action) {
@@ -50,6 +50,7 @@ class Timestamped extends \sli_base\data\model\Behavior {
 				}
 			}
 		}
+		return $settings;
 	}
 
 	/**
@@ -61,7 +62,7 @@ class Timestamped extends \sli_base\data\model\Behavior {
 	 * @param array $params
 	 * @return array $params
 	 */
-	public static function saveBeforeFilter($model, $params, &$settings) {
+	public static function saveBeforeFilter($model, $params, $settings) {
 		extract($settings);
 		$time = time();
 		$data =& $params['data'];

@@ -6,12 +6,12 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_base\util;
+namespace sli_base\util\filters;
 
 /**
  * The `Behaviors` class.
  */
-class Behaviors extends \sli_base\core\FilterObjects {
+class Behaviors extends FilterObjects {
 
 	protected static $_path = 'behavior';
 

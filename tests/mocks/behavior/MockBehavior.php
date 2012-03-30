@@ -8,19 +8,19 @@
 
 namespace sli_base\tests\mocks\behavior;
 
-class MockBehavior extends \sli_base\core\Behavior {
+class MockBehavior extends \sli_base\util\filters\Behavior {
 
-	public static function testBeforeFilter($class, $params, &$settings) {
+	public static function testBeforeFilter($class, $params, $settings) {
 		$params[] = __METHOD__;
 		return $params;
 	}
 
-	public static function testAfterFilter($class, $params, &$settings) {
+	public static function testAfterFilter($class, $params, $settings) {
 		$params[] = __METHOD__;
 		return $params;
 	}
 
-	public static function testFilter($class, $params, $chain, &$settings) {
+	public static function testFilter($class, $params, $chain, $settings) {
 		$params[] =  __METHOD__;
 		$params = $chain->next($class, $params, $chain);
 		$params[] = __METHOD__;

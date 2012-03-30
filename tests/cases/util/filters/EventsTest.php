@@ -6,10 +6,10 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_base\tests\cases\util;
+namespace sli_base\tests\cases\util\filters;
 
 use lithium\data\Connections;
-use sli_base\util\Events;
+use sli_base\util\filters\Events;
 
 class EventsTest extends \lithium\test\Unit {
 

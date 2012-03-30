@@ -6,7 +6,7 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_base\util;
+namespace sli_base\util\filters;
 
 /**
  * The `Events` class extends upon Lihtium's native `Filters` implementation

@@ -67,31 +67,6 @@ class EncodedTest extends \lithium\test\Unit {
 		$result = $post->data('body');
 		$this->assertEqual($body, $result);
 	}
-
-	public function testMultiApplied() {
-		$model = static::$model;
-		Encoded::apply($model, array(
-			'url' => 'body'
-		));
-		Encoded::apply($model, array(
-			'base64' => 'body'
-		));
-
-		$body = 'This is some text';
-
-		$post = $model::create(compact('body'));
-		$result = $post->data('body');
-		$this->assertEqual($body, $result);
-
-		$post->save();
-		$expected = base64_encode(urlencode($body));
-		$result = $post->data('body');
-		$this->assertEqual($expected, $result);
-
-		$post = $model::first();
-		$result = $post->data('body');
-		$this->assertEqual($body, $result);
-	}
 }
 
 ?>

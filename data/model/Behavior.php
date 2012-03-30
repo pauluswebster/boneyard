@@ -14,7 +14,7 @@ namespace sli_base\data\model;
  *
  * @see sli_base\core\Behavior
  */
-class Behavior extends \sli_base\core\Behavior {
+class Behavior extends \sli_base\util\filters\Behavior {
 
 	/**
 	 * Checks the model schema for the existence of the fields

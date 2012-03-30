@@ -98,34 +98,6 @@ class SerializedTest extends \lithium\test\Unit {
 		$result = $post->data('body');
 		$this->assertEqual($expected, $result);
 	}
-
-	public function testMultiApplied() {
-		$model = static::$model;
-		Serialized::apply($model, array(
-			'json' => 'body'
-		));
-		Serialized::apply($model, array(
-			'serialize' => 'body'
-		));
-
-		$body = array(
-			'h1' => 'This is the title',
-			'This is some text'
-		);
-
-		$post = $model::create(compact('body'));
-		$result = $post->data('body');
-		$this->assertEqual($body, $result);
-
-		$post->save();
-		$expected = serialize(json_encode($body));
-		$result = $post->data('body');
-		$this->assertEqual($expected, $result);
-
-		$post = $model::first();
-		$result = $post->data('body');
-		$this->assertEqual($body, $result);
-	}
 }
 
 ?>

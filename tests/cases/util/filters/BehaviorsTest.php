@@ -6,11 +6,11 @@
  * @license 	http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
-namespace sli_base\tests\cases\util;
+namespace sli_base\tests\cases\util\filters;
 
 use lithium\core\Libraries;
 use lithium\data\Connections;
-use sli_base\util\Behaviors;
+use sli_base\util\filters\Behaviors;
 use sli_base\tests\mocks\behavior\MockBehavior;
 use sli_base\tests\mocks\models\MockModel;
 use sli_base\tests\mocks\controllers\MockController;
@@ -47,7 +47,7 @@ class BehaviorsTest extends \lithium\test\Unit {
 		$this->assertTrue(!empty($applied));
 		$this->assertTrue(isset($applied[$behavior]));
 
-		$applied =& $applied[$behavior];
+		$applied = $applied[$behavior];
 
 		$result = $applied['methods'];
 		$expected = array ('test.before', 'test.after', 'test');
@@ -80,7 +80,7 @@ class BehaviorsTest extends \lithium\test\Unit {
 		$this->assertTrue(!empty($applied));
 		$this->assertTrue(isset($applied[$behavior]));
 
-		$applied =& $applied[$behavior];
+		$applied = $applied[$behavior];
 
 		$this->assertTrue(isset($applied['somevar']));
 		$result = $applied['somevar'];
@@ -113,7 +113,7 @@ class BehaviorsTest extends \lithium\test\Unit {
 		$this->assertTrue(!empty($applied));
 		$this->assertTrue(isset($applied[$behavior]));
 
-		$applied =& $applied[$behavior];
+		$applied = $applied[$behavior];
 
 		$this->assertTrue(isset($applied['somevar']));
 		$result = $applied['somevar'];
@@ -128,7 +128,7 @@ class BehaviorsTest extends \lithium\test\Unit {
 		$this->assertTrue(!empty($applied2));
 		$this->assertTrue(isset($applied2[$behavior]));
 
-		$applied2 =& $applied2[$behavior];
+		$applied2 = $applied2[$behavior];
 
 		$this->assertTrue(isset($applied2['somevar']));
 		$result = $applied2['somevar'];
@@ -147,7 +147,7 @@ class BehaviorsTest extends \lithium\test\Unit {
 			'methods' => array('test.before', 'test.after')
 		));
 
-		$applied =& $applied[$behavior];
+		$applied = $applied[$behavior];
 
 		$expected = array (
 			"{$behavior}::testBeforeFilter",
@@ -157,7 +157,13 @@ class BehaviorsTest extends \lithium\test\Unit {
 		$result = $model::test();
 		$this->assertEqual($expected, $result);
 
-		$applied['methods'] = array('test.before', 'test.after', 'test');
+		$behavior::settings($model, array(
+			'methods' => array(
+				'test.before',
+				'test.after',
+				'test'
+			)
+		));
 
 		$expected = array (
 			"{$behavior}::testBeforeFilter",
@@ -169,7 +175,11 @@ class BehaviorsTest extends \lithium\test\Unit {
 		$result = $model::test();
 		$this->assertEqual($expected, $result);
 
-		$applied['methods'] = array('test');
+		$behavior::settings($model, array(
+			'methods' => array(
+				'test'
+			)
+		));
 
 		$expected = array (
 			"{$behavior}::testFilter",
@@ -190,7 +200,7 @@ class BehaviorsTest extends \lithium\test\Unit {
 				'methods' => array('test.before', 'test.after')
 			)
 		));
-		$applied =& $applied[$behavior];
+		$applied = $applied[$behavior];
 
 		$controller2 = new static::$controller;
 		$applied2 = Behaviors::apply($controller2, array(
@@ -198,7 +208,13 @@ class BehaviorsTest extends \lithium\test\Unit {
 				'methods' => array('test')
 			)
 		));
-		$applied2 =& $applied2[$behavior];
+		
+		$behavior::settings($controller2, array(
+			'methods' => array(
+				'test.before',
+				'test.after'
+			)
+		));
 
 		$expected = array (
 			"{$behavior}::testBeforeFilter",
@@ -208,21 +224,18 @@ class BehaviorsTest extends \lithium\test\Unit {
 		$result = $controller->test();
 		$this->assertEqual($expected, $result);
 
+		$behavior::settings($controller2, array(
+			'methods' => array(
+				'test'
+			)
+		));
+		
 		$expected = array (
 			"{$behavior}::testFilter",
 			"{$controllerClass}::test",
 			"{$behavior}::testFilter"
 		);
 		$result = $controller2->test();
-		$this->assertEqual($expected, $result);
-
-		$applied2['methods'] = array('test.before', 'test.after');
-		$expected = array (
-			"{$behavior}::testBeforeFilter",
-			"{$controllerClass}::test",
-			"{$behavior}::testAfterFilter"
-		);
-		$result = $controller->test();
 		$this->assertEqual($expected, $result);
 	}
 }
