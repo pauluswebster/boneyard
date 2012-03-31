@@ -29,6 +29,11 @@ class MockModel extends \lithium\data\Model {
 		$class = get_called_class();
 		static::$_methodFilters[$class] = array();
 	}
+	
+	public static function resetRelations() {
+		$self = static::_object();
+		$self->_relations = array();
+	}
 
 	public static function applyFilter($method, $filter = null) {
 		$class = get_called_class();
