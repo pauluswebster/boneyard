@@ -9,7 +9,6 @@
 namespace sli_base\tests\cases\data\model\behavior;
 
 use lithium\data\Connections;
-use sli_base\core\Behaviors;
 use sli_base\data\model\behavior\Modified;
 
 class ModifiedTest extends \lithium\test\Unit {
