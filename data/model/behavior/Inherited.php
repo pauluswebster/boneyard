@@ -27,7 +27,7 @@ class Inherited extends \sli_base\data\model\Behavior {
 	protected static function _apply($class, $settings) {
 		$settings = parent::_apply($class, $settings);
 		$parents = $class::invokeMethod('_parents');
-		if (empty($settings['base'])) {
+		if (empty($settings['base']) || !in_array($settings['base'], $parents)) {
 			$baseClasses = array_filter($parents, function($parent) use ($class){
 				return $class::invokeMethod('_isBase', array($parent));
 			});
@@ -40,6 +40,7 @@ class Inherited extends \sli_base\data\model\Behavior {
 			}
 			$settings['base'] = $base;
 		}
+		$settings['parents'] = array();
 		if ($settings['base'] != $class) {
 			$parents = array_values($class::invokeMethod('_parents'));
 			$index = array_search($settings['base'], $parents);
@@ -69,6 +70,10 @@ class Inherited extends \sli_base\data\model\Behavior {
 		return $schema;
 	}
 
+	/**
+	 * @todo fix data inheritance to limit record data based on schema,
+	 * correctly set the `class` to all record
+	 */
 	public static function createFilter($model, $params, $chain, $settings) {
 		$self = get_called_class();
 		$inherited = true;
