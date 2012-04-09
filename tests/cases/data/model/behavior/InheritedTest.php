@@ -174,8 +174,7 @@ class InheritedTest extends \lithium\test\Unit {
 	}
 	
 	/**
-	 * @todo - mods to creation coming, current tests match the existing
-	 * mapping which is slightly incorrect
+	 * Test record creation
 	 */
 	public function testCreate() {
 		array_map(function($model) {
@@ -188,10 +187,6 @@ class InheritedTest extends \lithium\test\Unit {
 		
 		$record = $model::create(array('title' => 'An Item'));
 		
-		$expected = $record->schema();
-		$result = Inherited::schema($model);
-		$this->assertEqual($expected, $result);
-		
 		$expected = array(
 			'title' => 'An Item',
 			'class' => basename(str_replace('\\', '/', $model))
@@ -201,29 +196,19 @@ class InheritedTest extends \lithium\test\Unit {
 		
 		$record = $modelOne::create(array('title' => 'An Item', 'flavour' => 'Chicken'));
 		
-		$expected = $record->schema();
-		$result = Inherited::schema($modelOne);
-		$this->assertEqual($expected, $result);
-		
 		$data = array(
 			'title' => 'An Item',
 			'flavour' => 'Chicken',
 			'class' => basename(str_replace('\\', '/', $modelOne))
 		);
 		$expected = array(
-			'inherited_mock_item' => array_merge($data, array(
-				'class' => basename(str_replace('\\', '/', $model))
-			))
+			'inherited_mock_item' => $data
 		) + $data;
 		$result = $record->data();
 		$this->assertEqual($expected, $result);
 		
 		
 		$record = $modelTwo::create(array('title' => 'An Item', 'flavour' => 'Beef', 'color' => 'Red'));
-		
-		$expected = $record->schema();
-		$result = Inherited::schema($modelTwo);
-		$this->assertEqual($expected, $result);
 		
 		$data = array(
 			'title' => 'An Item',
@@ -232,31 +217,187 @@ class InheritedTest extends \lithium\test\Unit {
 			'class' => basename(str_replace('\\', '/', $modelTwo))
 		);
 		$expected = array(
-			'inherited_mock_item_one' => array_merge($data, array(
-				'class' => basename(str_replace('\\', '/', $modelOne))
-			)),
-			'inherited_mock_item' => array_merge($data, array(
-				'class' => basename(str_replace('\\', '/', $model))
-			))
+			'inherited_mock_item_one' => $data,
+			'inherited_mock_item' => $data
 		) + $data;
 		$result = $record->data();
 		$this->assertEqual($expected, $result);
 	}
 	
-	public function testValidate() {
-		
-	}
+	/**
+	 * Test record validation
+	 * @todo
+	 */
+	public function testValidate() {}
 	
+	/**
+	 * Test record persistence
+	 */
 	public function testSave() {
+		array_map(function($model) {
+			Inherited::apply($model);
+		}, static::$models);
 		
+		$model = static::$models[0];
+		$modelOne = static::$models[1];
+		$modelTwo = static::$models[2];
+		$connection = $model::connection();
+		
+		$record = $model::create(array('title' => 'First Item', 'flavour' => 'Fish', 'color' => 'Blue'));
+		$record->save();
+		
+		$recordOne = $modelOne::create(array('title' => 'An Item', 'flavour' => 'Beef', 'color' => 'Red'));
+		$recordOne->save();
+		
+		$recordTwo = $modelTwo::create(array('title' => 'Another Item', 'flavour' => 'Chicken', 'color' => 'Green'));
+		$recordTwo->save();
+
+		$expected = array(
+			$model => array(
+				1 => array('id' => 1, 'title' => 'First Item', 'class' => 'MockItem'),
+				2 => array('id' => 2, 'title' => 'An Item', 'class' => 'MockItemOne'),
+				3 => array('id' => 3, 'title' => 'Another Item', 'class' => 'MockItemTwo')
+			),
+			$modelOne => array(
+				2 => array('id' => 2, 'flavour' => 'Beef'),
+				3 => array('id' => 3, 'flavour' => 'Chicken')
+			),
+			$modelTwo => array(
+				3 => array('id' => 3, 'color' => 'Green')
+			)
+		);
+		
+		$result = $connection->dump();
+		$this->assertEqual($expected, $result);
 	}
 	
+	/**
+	 * Test model find
+	 */
 	public function testFind() {
+		array_map(function($model) {
+			Inherited::apply($model);
+		}, static::$models);
 		
+		$model = static::$models[0];
+		$modelOne = static::$models[1];
+		$modelTwo = static::$models[2];
+		$connection = $model::connection();
+		
+		$rows = array(
+			array('title' => 'First Item', 'flavour' => 'Fish', 'color' => 'Blue'),
+			array('title' => 'An Item', 'flavour' => 'Beef', 'color' => 'Red'),
+			array('title' => 'Another Item', 'flavour' => 'Chicken', 'color' => 'Green')
+		);
+		$record = $model::create($rows[0]);
+		$record->save();
+		$recordOne = $modelOne::create($rows[1]);
+		$recordOne->save();
+		$recordTwo = $modelTwo::create($rows[2]);
+		$recordTwo->save();
+		
+		$expected = array(
+			array (
+				'id' => 1,
+				'title' => 'First Item',
+				'class' => 'MockItem',
+			),
+			array (
+			  'inherited_mock_item' => 
+			  array (
+			    'id' => 2,
+			    'title' => 'An Item',
+			    'class' => 'MockItemOne',
+			  ),
+			  'id' => 2,
+			  'flavour' => 'Beef',
+			  'title' => 'An Item',
+			  'class' => 'MockItemOne',
+			),
+			array (
+			  'inherited_mock_item_one' => 
+			  array (
+			    'id' => 3,
+			    'flavour' => 'Chicken',
+			  ),
+			  'inherited_mock_item' => 
+			  array (
+			    'id' => 3,
+			    'title' => 'Another Item',
+			    'class' => 'MockItemTwo',
+			  ),
+			  'id' => 3,
+			  'color' => 'Green',
+			  'flavour' => 'Chicken',
+			  'title' => 'Another Item',
+			  'class' => 'MockItemTwo',
+			)
+		);
+		
+		$result = $model::first()->data();
+		$this->assertEqual($expected[0], $result);
+		$result = $model::all()->data();
+		$this->assertEqual($expected[0], $result[1]);
+		
+		$result = $modelOne::first()->data();
+		$this->assertEqual($expected[1], $result);
+		$result = $modelOne::all()->data();
+		$this->assertEqual($expected[1], $result[2]);
+		
+		$result = $modelTwo::first()->data();
+		$this->assertEqual($expected[2], $result);
+		$result = $modelTwo::all()->data();
+		$this->assertEqual($expected[2], $result[3]);
 	}
 	
+	/**
+	 * Test record deletion
+	 */
 	public function testDelete() {
+		array_map(function($model) {
+			Inherited::apply($model);
+		}, static::$models);
 		
+		$model = static::$models[0];
+		$modelOne = static::$models[1];
+		$modelTwo = static::$models[2];
+		$connection = $model::connection();
+		
+		$rows = array(
+			array('title' => 'First Item', 'flavour' => 'Fish', 'color' => 'Blue'),
+			array('title' => 'An Item', 'flavour' => 'Beef', 'color' => 'Red'),
+			array('title' => 'Another Item', 'flavour' => 'Chicken', 'color' => 'Green')
+		);
+		$record = $model::create($rows[0]);
+		$record->save();
+		$recordOne = $modelOne::create($rows[1]);
+		$recordOne->save();
+		$recordTwo = $modelTwo::create($rows[2]);
+		$recordTwo->save();
+		
+		$record = $model::first();
+		$this->assertTrue($record instanceof \lithium\data\Entity);
+		$record->delete();
+		
+		$recordOne = $modelOne::first();
+		$this->assertTrue($recordOne instanceof \lithium\data\Entity);
+		$recordOne->delete();
+		
+		$recordTwo = $modelTwo::first();
+		$this->assertTrue($recordTwo instanceof \lithium\data\Entity);
+		$recordTwo->delete();
+		
+		$expected = null;
+		$result = $model::first();
+		$this->assertEqual($expected, $result);
+		
+		$expected = null;
+		$result = $modelOne::first();
+		$this->assertEqual($expected, $result);
+
+		$expected = null;
+		$result = $modelTwo::first();
+		$this->assertEqual($expected, $result);
 	}
 }
 
