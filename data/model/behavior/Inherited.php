@@ -14,6 +14,9 @@ use lithium\util\Inflector;
  * The `Inherited` model behavior.
  * 
  * This behavior provides support for class table inheritance for your models.
+ * 
+ * @todo properly adhere to the created relationships for observing keys etc
+ * @todo notes throughout
  */
 class Inherited extends \sli_base\data\model\Behavior {
 
@@ -24,6 +27,9 @@ class Inherited extends \sli_base\data\model\Behavior {
 		'prefix' => 'Inherited'
 	);
 
+	/**
+	 * Configure the behavior binding
+	 */
 	protected static function _apply($class, $settings) {
 		$settings = parent::_apply($class, $settings);
 		$parents = $class::invokeMethod('_parents');
@@ -60,6 +66,12 @@ class Inherited extends \sli_base\data\model\Behavior {
 		return $settings;
 	}
 
+	/**
+	 * Get combined schema of inherited models
+	 * 
+	 * @param string $model
+	 * @return array
+	 */
 	public static function schema($model) {
 		$self = get_called_class();
 		$settings = static::settings($model);
@@ -71,78 +83,85 @@ class Inherited extends \sli_base\data\model\Behavior {
 	}
 
 	/**
-	 * @todo fix data inheritance to limit record data based on schema,
-	 * correctly set the `class` to all record
+	 * Create inherited records
 	 */
 	public static function createFilter($model, $params, $chain, $settings) {
 		$self = get_called_class();
-		$inherited = true;
 		if (isset($params['options']['inherited'])) {
 			$inherited = $params['options']['inherited'];
+		} else {
+			$inherited = static::_name($model);
+			$params['options']['inherited'] = $inherited;
 		}
-		if ($inherited && $settings['parents']) {
+		if ($inherited == static::_name($model) && $settings['parents']) {
 			$relationships = array();
 			if (!isset($params['options']['relationships'])) {
 				$params['options']['relationships'] = array();
 			}
 			foreach ($settings['parents'] as $parent => &$config) {
-				$relationships[$config['fieldName']] = $parent::create($params['data'], array('inherited' => false));
+				$relationships[$config['fieldName']] = $parent::create($params['data'], $params['options']);
 				$params['data'] = $relationships[$config['fieldName']]->data() + $params['data'];
 			}
 			$params['options']['relationships'] = $relationships;
-			$params['options']['schema'] = static::schema($model);
 		}
-		$params['data']['class'] = static::_name($model);
-		$entity = $chain->next($model, $params, $chain);
-		return $entity;
+		if ($inherited) {
+			$params['data']['class'] = $inherited;
+		}
+		return $chain->next($model, $params, $chain);
 	}
 
 	/**
-	 * @todo
+	 * Save inherited records
+	 * 
+	 * @todo halt cascade on failure?
+	 * @todo map keys based on relationship
 	 */
 	public static function saveFilter($model, $params, $chain, $settings) {
-		return $chain->next($model, $params, $chain);
-		//legacy below
-		
-		extract($params);
-		//set data to record
-		if (!empty($data)) {
-			$entity->set($data);
-			$data = array();
+		if (isset($params['options']['inherited'])) {
+			$inherited = $params['options']['inherited'];
+		} else {
+			$inherited = static::_name($model);
+			$params['options']['inherited'] = $inherited;
 		}
-		//create parent record first
-		if (isset($entity->$settings['fieldName'])) {
-			$parent = $entity->$settings['fieldName'];
-			$parentModel = $parent->model();
-			$parentData = $entity->data();
-			unset($parentData[$settings['fieldName']]);
-			if (!$parent->exists()) {
-				unset($parentData[$parentModel::meta('key')]);
-			}
-			$parent->set($parentData);
-			$parent->save();
-			if (!$entity->exists()) {
-				$entity->set($parent->key());
+		if ($inherited == static::_name($model) && $settings['parents']) {
+			$entity =& $params['entity'];
+			foreach (array_reverse($settings['parents'], true) as $parent => $config) {
+				$record =& $entity->{$config['fieldName']};
+				$data = $params['data'];
+				if (!$record->exists()) {
+					unset($data[$parent::key()]);
+				}
+				$record->save($data, $params['options']);
+				if ($parent == $settings['base']) {
+					$params['data'] = $record->key() + ($params['data'] ?: array());
+				}
 			}
 		}
-		$params = compact(array_keys($params));
 		return $chain->next($model, $params, $chain);
 	}
 
 	/**
+	 * Execute validation across inherited models
+	 * 
 	 * @todo
 	 */
 	public static function validateFilter($model, $params, $chain, $settings) {
-		$self = get_called_class();
-		$settings =& static::$__settings[$self][$model];
-		//validate all
 		return $chain->next($model, $params, $chain);
 	}
 
+	/**
+	 * Bind inheritance to the query, parse options
+	 * 
+	 * @todo extend field based option support (conditions etc)
+	 */
 	public static function findFilter($model, $params, $chain, $settings) {
+		if (isset($params['options']['inherited'])) {
+			if (!$params['options']['inherited']) {
+				return $chain->next($model, $params, $chain);
+			}
+		}
 		$class = static::_name($model);
 		$base = static::_name($settings['base']);
-		
 		$mapConditions = function(&$conditions) use($class){
 			$mapped = array();
 			foreach ($conditions as $field => $condition) {
@@ -171,7 +190,7 @@ class Inherited extends \sli_base\data\model\Behavior {
 		} else {
 			$params['options']['conditions']["{$base}.class"] = $class;
 		}
-		
+
 		$result = $chain->next($model, $params, $chain);
 
 		if ($settings['parents']) {
@@ -198,29 +217,40 @@ class Inherited extends \sli_base\data\model\Behavior {
 	}
 
 	/**
-	 * @todo
+	 * Delete inheritance records
+	 * 
+	 * @todo halt cascade on failure?
 	 */
 	public static function deleteFilter($model, $params, $chain, $settings) {
-		return $chain->next($model, $params, $chain);
-		//legacy below
-		if ($delete = $chain->next($model, $params, $chain)) {
-			extract($params);
-			if (isset($entity->$settings['fieldName'])) {
-				$inherited = $entity->$settings['fieldName'];
-				if (!$inherited->delete()) {
-					$entity->save();
-					$delete = false;
+		if (isset($params['options']['inherited'])) {
+			$inherited = $params['options']['inherited'];
+		} else {
+			$inherited = static::_name($model);
+			$params['options']['inherited'] = $inherited;
+		}
+		if ($inherited == static::_name($model) && $settings['parents']) {
+			$entity =& $params['entity'];
+			foreach ($settings['parents'] as $parent => $config) {
+				if ($record =& $entity->{$config['fieldName']}) {
+					$record->delete(array('model' => $record->model()) + $params['options']);	
 				}
 			}
 		}
-		return $delete;
+		return $chain->next($model, $params, $chain);
 	}
 	
+	/**
+	 * Gets just the class name portion of a fully-name-spaced class name
+	 *
+	 * @return string
+	 */
 	protected static function _name($class) {
 		return basename(str_replace('\\', '/', $class));
 	}
 	
 	/**
+	 * Check if model is configured as the base
+	 * 
 	 * @todo probably trash
 	 */
 	protected static function _isBase($model) {
@@ -230,6 +260,8 @@ class Inherited extends \sli_base\data\model\Behavior {
 	}
 	
 	/**
+	 * Check if a model is transient in the inheritance chain
+	 * 
 	 * @todo, implement or trash
 	 */
 	protected static function _isTransient($model, $settings) {}
