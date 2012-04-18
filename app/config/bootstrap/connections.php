@@ -38,6 +38,7 @@
 use lithium\data\Connections;
 use sli_base\storage\Registry;
 use lithium\storage\Cache;
+use lithium\core\Environment;
 
 $default = Registry::get('env.connections.default');
 
@@ -57,6 +58,9 @@ $query = array('adapter' => 'Memory', 'strategies' => array('Serializer'));
 Cache::config(compact('query') + Cache::config());
 
 Connections::get("default")->applyFilter("_execute", function($self, $params, $chain) {
+	if (Environment::is('production')) {
+		return $chain->next($self, $params, $chain);
+	}
 	$log = Cache::read('query', 'log') ?: array();
 	$log[] = $params['sql'];
 	Cache::write('query', 'log', $log);
