@@ -36,37 +36,37 @@
  * @see lithium\core\Environment
  */
 use lithium\data\Connections;
+use sli_base\storage\Registry;
+use lithium\storage\Cache;
 
-/**
- * Uncomment this configuration to use MongoDB as your default database.
- */
-// Connections::add('default', array(
-// 	'type' => 'MongoDb',
-// 	'host' => 'localhost',
-// 	'database' => 'my_app'
-// ));
+$default = Registry::get('env.connections.default');
 
-/**
- * Uncomment this configuration to use CouchDB as your default database.
- */
-// Connections::add('default', array(
-// 	'type' => 'http',
-// 	'adapter' => 'CouchDb',
-// 	'host' => 'localhost',
-// 	'database' => 'my_app'
-// ));
+Connections::add('default', $default + array(
+ 	'type' => 'database',
+ 	'adapter' => 'MySql',
+ 	'host' => 'localhost',
+ 	'login' => 'root',
+ 	'password' => '',
+ 	'database' => 'my_app',
+ 	'encoding' => 'UTF-8'
+));
 
-/**
- * Uncomment this configuration to use MySQL as your default database.
- */
-// Connections::add('default', array(
-// 	'type' => 'database',
-// 	'adapter' => 'MySql',
-// 	'host' => 'localhost',
-// 	'login' => 'root',
-// 	'password' => '',
-// 	'database' => 'my_app',
-// 	'encoding' => 'UTF-8'
-// ));
 
+$query = array('adapter' => 'Memory', 'strategies' => array('Serializer'));
+
+Cache::config(compact('query') + Cache::config());
+
+Connections::get("default")->applyFilter("_execute", function($self, $params, $chain) {
+	$log = Cache::read('query', 'log') ?: array();
+	$log[] = $params['sql'];
+	Cache::write('query', 'log', $log);
+    try {
+    	 return $chain->next($self, $params, $chain); 
+    } catch (PDOException $e) {
+    	$error = Cache::read('query', 'error') ?: array();
+    	$error[] = $e->getMessage();
+    	Cache::write('query', 'error', $error);
+    }
+   	return false;
+});
 ?>

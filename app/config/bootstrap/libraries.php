@@ -120,6 +120,11 @@ Libraries::add('app', array('default' => true));
 /**
  * Add some plugins:
  */
-// Libraries::add('li3_docs');
+Libraries::add('sli_base');
+Libraries::add('sli_cms', array('bootstrap' => false));
+Libraries::add('sli_users', array('bootstrap' => false));
+Libraries::add('sli_scaffold');
+Libraries::add('sli_tom');
 
+Libraries::add('tmimport', array('bootstrap' => false));
 ?>

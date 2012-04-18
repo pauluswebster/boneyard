@@ -13,12 +13,12 @@
 [submodule "libraries/sli_users"]
 	path = libraries/sli_users
 	url = git@github.com:slicedup/sli_users.git
-[submodule "libraries/_source/foundation"]
-	path = libraries/_source/foundation
-	url = git://github.com/zurb/foundation.git
 [submodule "libraries/sli_base"]
 	path = libraries/sli_base
 	url = git@github.com:slicedup/sli_base.git
 [submodule "libraries/sli_cms"]
 	path = libraries/sli_cms
 	url = git@github.com:slicedup/sli_cms.git
+[submodule "libraries/_source/twitter_bootstrap"]
+	path = libraries/_source/twitter_bootstrap
+	url = git://github.com/twitter/bootstrap.git

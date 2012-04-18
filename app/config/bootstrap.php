@@ -37,6 +37,11 @@ require __DIR__ . '/bootstrap/libraries.php';
  * your application, with no impact on framework or application code.
  */
  require __DIR__ . '/bootstrap/errors.php';
+ 
+ /**
+ * Custom environment config
+ */
+ require __DIR__ . '/bootstrap/environment.php';
 
 /**
  * This file contains configurations for connecting to external caching resources, as well as
@@ -69,13 +74,13 @@ require __DIR__ . '/bootstrap/action.php';
  * transliterations, localized validation, and how localized text should be loaded. Uncomment this
  * line if you plan to globalize your site.
  */
-// require __DIR__ . '/bootstrap/g11n.php';
+ require __DIR__ . '/bootstrap/g11n.php';
 
 /**
  * This file contains configurations for handling different content types within the framework,
  * including converting data to and from different formats, and handling static media assets.
  */
-// require __DIR__ . '/bootstrap/media.php';
+ require __DIR__ . '/bootstrap/media.php';
 
 /**
  * This file configures console filters and settings, specifically output behavior and coloring.
