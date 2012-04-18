@@ -155,6 +155,7 @@ class TMListings extends \lithium\data\Model {
 	
 	public static function importData($query = '') {
 		$path = LITHIUM_APP_PATH . '/resources/Used';
+		@mkdir($path, 0777, true);
 		//step 1
 		if ($query) {
 			$data = file_get_contents('http://api.trademe.co.nz/v1/Search/Motors/Used.json?search_string=' . $query);
