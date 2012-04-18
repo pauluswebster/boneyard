@@ -13,9 +13,13 @@ use lithium\util\Inflector;
 /**
  * The `Inherited` model behavior.
  * 
- * This behavior provides support for class table inheritance for your models.
+ * This behavior provides support for inheritance for your models.
  * 
  * @todo properly adhere to the created relationships for observing keys etc
+ * @todo find needs a lot of work to parse field based options
+ * @todo discriminator config
+ * @todo transient handling (inherited unbound/base classes)
+ * @todo improvements for single table inheritance
  * @todo notes throughout
  */
 class Inherited extends \sli_base\data\model\Behavior {
