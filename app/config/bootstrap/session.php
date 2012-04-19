@@ -15,8 +15,8 @@
 use lithium\storage\Session;
 
 $name = basename(LITHIUM_APP_PATH);
-Session::config(array(
-	// 'cookie' => array('adapter' => 'Cookie', 'name' => $name),
+Session::config(Session::config() + array(
+	'cookie' => array('adapter' => 'Cookie', 'name' => $name),
 	'default' => array('adapter' => 'Php', 'session.name' => $name)
 ));
 
