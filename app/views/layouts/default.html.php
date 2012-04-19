@@ -18,6 +18,7 @@
 		<?php if ($this->request()->url != '/'):?>
 			<?php echo $this->element->render('layout/user-nav');?>
 		<?php endif;?>
+		<?php echo $this->flashMessage->output(null, array('options' => array()));?>
 		<?php echo $this->content(); ?>
 	</section>
 	<br><br>
