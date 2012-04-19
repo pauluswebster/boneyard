@@ -31,13 +31,7 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) {
 				));
 				return $chain->next($self, $params, $chain);
 			});
-		}
-		
-		
-		
-		
-		
-		
+		}	
 	}
 	return $chain->next($self, $params, $chain);
 });
