@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 17, 2012 at 09:18 PM
+-- Generation Time: Apr 18, 2012 at 06:37 PM
 -- Server version: 5.1.49
 -- PHP Version: 5.3.3-1ubuntu9.10
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `title` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=62 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `listings` (
   `updated` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `class` (`class`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -84,8 +84,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(24) NOT NULL,
   `password` varchar(128) NOT NULL,
   `email` varchar(128) NOT NULL,
-  `currency` varchar(3) NOT NULL,
-  `timezone` varchar(32) NOT NULL,
   `settings` mediumtext,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
