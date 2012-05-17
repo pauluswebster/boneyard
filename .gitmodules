@@ -3,7 +3,7 @@
 	url = git@github.com:slicedup/lithium.git
 [submodule "webroot/theme"]
 	path = webroot/theme
-	url = git@github.com:p-m-d/theme.git
+	url = git@github.com:websta/pmd-theme.git
 [submodule "libraries/sli_base"]
 	path = libraries/sli_base
 	url = git@github.com:slicedup/sli_base.git
