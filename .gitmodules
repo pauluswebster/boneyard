@@ -1,6 +1,6 @@
 [submodule "libraries/lithium"]
 	path = libraries/lithium
-	url = git@github.com:slicedup/lithium.git
+	url = git://github.com/UnionOfRAD/lithium.git
 [submodule "webroot/theme"]
 	path = webroot/theme
 	url = git@github.com:websta/pmd-theme.git
