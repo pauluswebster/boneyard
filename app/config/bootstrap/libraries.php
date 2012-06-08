@@ -117,6 +117,8 @@ Libraries::add('lithium');
  */
 Libraries::add('app', array('default' => true));
 
+Libraries::add('centrifuge');
+
 /**
  * Add some plugins:
  */
