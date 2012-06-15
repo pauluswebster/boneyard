@@ -317,6 +317,18 @@ class Store {
 		$array = static::get($array, $path);
 		return Set::flatten($array);
 	}
+	
+	/**
+	 * Expand flattened array via Set::extract(), optionally get value from path only
+	 *
+	 * @param array $array
+	 * @param mixed $path
+	 * @return mixed
+	 */
+	public static function expand(array $array, $path = null) {
+		$array = Set::expand($array);
+		return static::get($array, $path);
+	}
 
 	/**
 	 * Resurrect a flattened array, optionally etxract from path
