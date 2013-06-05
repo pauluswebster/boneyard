@@ -2,7 +2,7 @@
 /**
  * Lithium: the most rad php framework
  *
- * @copyright     Copyright 2011, Union of RAD (http://union-of-rad.org)
+ * @copyright     Copyright 2013, Union of RAD (http://union-of-rad.org)
  * @license       http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
@@ -11,6 +11,8 @@
  * that you maintain a separate, simplified layout for rendering errors that does not involve any
  * complex logic or dynamic data, which could potentially trigger recursive errors.
  */
+use lithium\core\Libraries;
+$path = Libraries::get(true, 'path');
 ?>
 <!doctype html>
 <html>
@@ -28,17 +30,15 @@
 			<h3>Configuration</h3>
 			<p>
 				This layout can be changed by modifying
-				<code><?php
-					echo realpath(LITHIUM_APP_PATH . '/views/layouts/error.html.php');
-				?></code>
-			</p><p>
+				<code><?="{$path}/views/layouts/error.html.php";?></code>
+			</p>
+			<p>
 				To modify your error-handling configuration, see
-				<code><?php
-					echo realpath(LITHIUM_APP_PATH . '/config/bootstrap/errors.php');
-				?></code>
+				<code><?="{$path}/config/bootstrap/errors.php";?></code>
 			</p>
 		</div>
-		<div id="content">
+
+		<div class="content">
 			<?php echo $this->content(); ?>
 		</div>
 	</div>

@@ -2,7 +2,7 @@
 /**
  * Lithium: the most rad php framework
  *
- * @copyright     Copyright 2011, Union of RAD (http://union-of-rad.org)
+ * @copyright     Copyright 2013, Union of RAD (http://union-of-rad.org)
  * @license       http://opensource.org/licenses/bsd-license.php The BSD License
  */
 
@@ -34,19 +34,19 @@ Collection::formats('lithium\net\http\Media');
  * plugin's `webroot` directory into your main application's `webroot` directory, or adding routing
  * rules in your web server's configuration.
  */
- use lithium\action\Dispatcher;
- use lithium\action\Response;
- use lithium\net\http\Media;
-// 
+// use lithium\action\Dispatcher;
+// use lithium\action\Response;
+// use lithium\net\http\Media;
+//
 // Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
 // 	list($library, $asset) = explode('/', $params['request']->url, 2) + array("", "");
-// 
+//
 // 	if ($asset && ($path = Media::webroot($library)) && file_exists($file = "{$path}/{$asset}")) {
 // 		return function() use ($file) {
 // 			$info = pathinfo($file);
 // 			$media = Media::type($info['extension']);
 // 			$content = (array) $media['content'];
-// 
+//
 // 			return new Response(array(
 // 				'headers' => array('Content-type' => reset($content)),
 // 				'body' => file_get_contents($file)
@@ -56,29 +56,4 @@ Collection::formats('lithium\net\http\Media');
 // 	return $chain->next($self, $params, $chain);
 // });
 
-Dispatcher::applyFilter('_callable', function($self, $params, $chain) {
- 	if (strpos($params['request']->url, 'img/listings/') === 0) {
- 		$file = str_replace('img/listings/', '', $params['request']->url);
- 		$file = LITHIUM_APP_PATH . '/resources/Used/' . str_replace('/', '/Photos/', $file);
- 		if (file_exists($file)) {
- 			return function() use ($file) {
-	 			$info = pathinfo($file);
-	 			$media = Media::type($info['extension']);
-	 			$content = (array) $media['content'];
-	 
-	 			$expires = 60*60*24*14;
-	 			return new Response(array(
-	 				'headers' => array(
-	 					'Content-type' => reset($content),
-	 					'Pragma' => 'public',
-	 					'Cache-Control' => "maxage={$expires}",
-	 					'Expires' => gmdate('D, d M Y H:i:s', time() + $expires) . ' GMT'
-	 				),
-	 				'body' => file_get_contents($file)
-	 			));
-	 		};
- 		}	
- 	}
- 	return $chain->next($self, $params, $chain);
-}); 
 ?>
