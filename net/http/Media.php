@@ -20,7 +20,7 @@ class Media extends \lithium\net\http\Media {
 	}
 
 	public static function defaults($type = null) {
-		$handlers = static::_handlers();
+		$handlers = static::handlers();
 		if ($type && isset($handlers[$type])) {
  			return $handlers[$type];
 		}
@@ -28,7 +28,7 @@ class Media extends \lithium\net\http\Media {
 	}
 
 	public static function defaultPaths($type = null) {
-		$handlers = static::_handlers();
+		$handlers = static::handlers();
 		if ($type && isset($handlers[$type]['paths'])) {
  			return $handlers[$type]['paths'];
 		}
