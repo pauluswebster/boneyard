@@ -10,7 +10,7 @@ use sli_base\net\http\Media;
  * Apply dispatch filters
  */
 Dispatcher::applyFilter('_call', function($self, $params, $chain) {
-	if (Environment::is('staging')) {
+	if (Environment::is('staging') && $params['callable'] instanceof \lithium\action\Controller) {
 		/*
 		 * Enforce staging user
 		 */
@@ -31,7 +31,7 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) {
 				));
 				return $chain->next($self, $params, $chain);
 			});
-		}	
+		}
 	}
 	return $chain->next($self, $params, $chain);
 });
