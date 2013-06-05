@@ -22,3 +22,6 @@
 [submodule "libraries/_source/twitter_bootstrap"]
 	path = libraries/_source/twitter_bootstrap
 	url = git://github.com/twitter/bootstrap.git
+[submodule "libraries/sli_bootstrap"]
+	path = libraries/sli_bootstrap
+	url = git@github.com:slicedup/sli_bootstrap.git
