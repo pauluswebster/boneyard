@@ -12,11 +12,6 @@ class MockModel extends \lithium\data\Model {
 
 	protected $_meta = array('connection' => 'mock-source');
 
-	public static function __init() {
-		static::_isBase(__CLASS__, true);
-		parent::__init();
-	}
-	
 	public static function test(){
 		$method = __METHOD__;
 		return static::_filter(__FUNCTION__, array(), function($self, $params) use ($method) {
@@ -29,7 +24,7 @@ class MockModel extends \lithium\data\Model {
 		$class = get_called_class();
 		static::$_methodFilters[$class] = array();
 	}
-	
+
 	public static function resetRelations() {
 		$self = static::_object();
 		$self->_relations = array();

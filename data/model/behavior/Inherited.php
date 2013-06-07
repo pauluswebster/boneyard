@@ -12,12 +12,13 @@ use lithium\util\Inflector;
 
 /**
  * The `Inherited` model behavior.
- * 
+ *
  * This behavior provides support for inheritance for your models.
- * 
+ *
  * @todo properly adhere to the created relationships for observing keys etc
  * @todo find needs a lot of work to parse field based options
  * @todo discriminator config
+ * @todo support non linear inheritance (base class not in parents)
  * @todo transient handling (inherited unbound/base classes)
  * @todo improvements for single table inheritance
  * @todo notes throughout
@@ -37,20 +38,10 @@ class Inherited extends \sli_base\data\model\Behavior {
 	protected static function _apply($class, $settings) {
 		$settings = parent::_apply($class, $settings);
 		$parents = $class::invokeMethod('_parents');
-		if (empty($settings['base']) || !in_array($settings['base'], $parents)) {
-			$baseClasses = array_filter($parents, function($parent) use ($class){
-				return $class::invokeMethod('_isBase', array($parent));
-			});
-			$base = $class;
-			while ($parent = array_shift($parents)) {
-				if (in_array($parent, $baseClasses)) {
-					break;
-				}
-				$base = $parent;
-			}
-			$settings['base'] = $base;
-		}
 		$settings['parents'] = array();
+		if (!isset($settings['base'])) {
+			$settings['base'] = $class;
+		}
 		if ($settings['base'] != $class) {
 			$parents = array_values($class::invokeMethod('_parents'));
 			$index = array_search($settings['base'], $parents);
@@ -72,16 +63,18 @@ class Inherited extends \sli_base\data\model\Behavior {
 
 	/**
 	 * Get combined schema of inherited models
-	 * 
+	 *
 	 * @param string $model
 	 * @return array
 	 */
 	public static function schema($model) {
 		$self = get_called_class();
 		$settings = static::settings($model);
-		$schema = $model::schema();
+		$schema = clone $model::schema();
 		foreach ($settings['parents'] as $parent => $config) {
-			$schema = $parent::schema() + $schema;
+			$parentSchema = clone $parent::schema();
+			$parentSchema->merge($schema);
+			$schema = $parentSchema;
 		}
 		return $schema;
 	}
@@ -116,7 +109,7 @@ class Inherited extends \sli_base\data\model\Behavior {
 
 	/**
 	 * Save inherited records
-	 * 
+	 *
 	 * @todo halt cascade on failure?
 	 * @todo map keys based on relationship
 	 */
@@ -146,7 +139,7 @@ class Inherited extends \sli_base\data\model\Behavior {
 
 	/**
 	 * Execute validation across inherited models
-	 * 
+	 *
 	 * @todo
 	 */
 	public static function validateFilter($model, $params, $chain, $settings) {
@@ -155,7 +148,7 @@ class Inherited extends \sli_base\data\model\Behavior {
 
 	/**
 	 * Bind inheritance to the query, parse options
-	 * 
+	 *
 	 * @todo extend field based option support (conditions etc)
 	 */
 	public static function findFilter($model, $params, $chain, $settings) {
@@ -176,13 +169,13 @@ class Inherited extends \sli_base\data\model\Behavior {
 			}
 			$conditions = $mapped;
 		};
-		
+
 		if (isset($params['options']['conditions'])) {
 			$mapConditions($params['options']['conditions']);
 		} else {
 			$params['options']['conditions'] = array();
 		}
-		
+
 		if ($settings['parents']) {
 			if (!isset($params['options']['with'])) {
 				$params['options']['with'] = array();
@@ -222,7 +215,7 @@ class Inherited extends \sli_base\data\model\Behavior {
 
 	/**
 	 * Delete inheritance records
-	 * 
+	 *
 	 * @todo halt cascade on failure?
 	 */
 	public static function deleteFilter($model, $params, $chain, $settings) {
@@ -236,13 +229,13 @@ class Inherited extends \sli_base\data\model\Behavior {
 			$entity =& $params['entity'];
 			foreach ($settings['parents'] as $parent => $config) {
 				if ($record =& $entity->{$config['fieldName']}) {
-					$record->delete(array('model' => $record->model()) + $params['options']);	
+					$record->delete(array('model' => $record->model()) + $params['options']);
 				}
 			}
 		}
 		return $chain->next($model, $params, $chain);
 	}
-	
+
 	/**
 	 * Gets just the class name portion of a fully-name-spaced class name
 	 *
@@ -251,10 +244,10 @@ class Inherited extends \sli_base\data\model\Behavior {
 	protected static function _name($class) {
 		return basename(str_replace('\\', '/', $class));
 	}
-	
+
 	/**
 	 * Check if model is configured as the base
-	 * 
+	 *
 	 * @todo probably trash
 	 */
 	protected static function _isBase($model) {
@@ -262,10 +255,10 @@ class Inherited extends \sli_base\data\model\Behavior {
 		$settings = static::settings($model);
 		return $model == $settings['base'];
 	}
-	
+
 	/**
 	 * Check if a model is transient in the inheritance chain
-	 * 
+	 *
 	 * @todo, implement or trash
 	 */
 	protected static function _isTransient($model, $settings) {}

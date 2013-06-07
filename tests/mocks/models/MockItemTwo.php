@@ -8,12 +8,6 @@
 
 namespace sli_base\tests\mocks\models;
 
-class MockItemTwo extends MockItemOne {
-
-	protected $_schema = array(
-		'id' => array('type' => 'integer'),
-		'color' => array('type' => 'string')
-	);
-}
+class MockItemTwo extends MockItemOne {}
 
 ?>

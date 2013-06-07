@@ -14,6 +14,31 @@ class MockSource extends \lithium\tests\mocks\data\MockSource {
 
 	public $records = array();
 
+	protected $_mockItems = array(
+		'id' => array('type' => 'integer'),
+		'title' => array('type' => 'string'),
+		'class' => array('type' => 'string')
+	);
+
+	protected $_mockItemOnes = array(
+		'id' => array('type' => 'integer'),
+		'flavour' => array('type' => 'string')
+	);
+
+	protected $_mockItemTwos = array(
+		'id' => array('type' => 'integer'),
+		'color' => array('type' => 'string')
+	);
+
+	protected $_posts = array(
+		'id' => array('type' => 'integer'),
+		'author_id' => array('type' => 'integer'),
+		'title' => array('type' => 'string'),
+		'body' => array('type' => 'text'),
+		'created' => array('type' => 'datetime'),
+		'updated' => array('type' => 'datetime')
+	);
+
 	public function create($query, array $options = array()) {
 		if (!is_object($query)) {
 			return false;
@@ -22,7 +47,7 @@ class MockSource extends \lithium\tests\mocks\data\MockSource {
 		$model = $entity->model();
 		$rows = $this->dump($model);
 		$insertId = empty($rows) ? 1 : end($rows) ? key($rows) + 1 : count($rows) + 1;
-		$schema = $entity->schema();
+		$schema = $model::schema();
 		foreach ($schema as $field => $settings) {
 			if (!isset($entity->{$field})) {
 				$entity->{$field} = !empty($settings['default']) ? $settings['default'] : null;
@@ -30,23 +55,25 @@ class MockSource extends \lithium\tests\mocks\data\MockSource {
 		}
 		$entity->set($query->data());
 		$key = $entity->key();
-		if ($id = reset($key)) {
+		if ($key && ($id = reset($key))) {
 			$insertId = $id;
+		} else {
+			$insertId = count($this->records) + 1;
 		}
 		$entity->sync($insertId);
-		$data = array_intersect_key($entity->data(), $schema);
+		$data = array_intersect_key($entity->data(), $schema->fields());
 		$this->records[$query->model()][$insertId] = $data;
 		return true;
 	}
 
 	public function read($query, array $options = array()) {
 		$model = $query->model();
-		
+
 		$links = array();
-		
+
 		$joins = $query->joins();
 		$data = isset($this->records[$model]) ? $this->records[$model] : array();
-		
+
 		$conditions = array();
 		if ($_conditions = $query->conditions()) {
 			foreach ($_conditions as $field => $value) {
@@ -56,24 +83,22 @@ class MockSource extends \lithium\tests\mocks\data\MockSource {
 				}
 			}
 		}
-		
 		$results = array();
 		foreach ($data as $id => $record) {
 			if ($conditions && array_diff($conditions, $record)) {
 				continue;
-			}	
+			}
 			$relationships = array();
-			if ($joins) {
-				foreach ($joins as $join) { 
-					$to = $join->model();
-					$alias = $join->alias();
-					$field = Inflector::underscore($alias);
+			if ($relations = $model::relations()) {
+				foreach ($relations as $alias => $join) {
+					$to = $join->data('to');
+					$field = $join->data('fieldName');
 					//@todo: join on constraint
 					//$constraint = $join->constraint();
-					//$key = $model::key();
+					$key = $model::key();
 					if (isset($this->records[$to][$id])) {
 						$relationships[$field] = $this->item($to, $this->records[$to][$id], array('class' => 'entity'));
-					}	
+					}
 				}
 			}
 			$results[$id] = $this->item($model, $record, array('class' => 'entity', 'relationships' => $relationships));
@@ -93,9 +118,9 @@ class MockSource extends \lithium\tests\mocks\data\MockSource {
 			$data = array_intersect_key($entity->data(), $schema);
 			$this->records[$query->model()][$entity->id()] = $data;
 		}
-		return true;		
+		return true;
 	}
-	
+
 	public function delete($query, array $options = array()) {
 		if (!is_object($query)) {
 			return false;
@@ -109,7 +134,7 @@ class MockSource extends \lithium\tests\mocks\data\MockSource {
 		}
 		return true;
 	}
-	
+
 	public function dump($model = null) {
 		if (isset($model)) {
 			return isset($this->records[$model]) ? $this->records[$model] : array();
@@ -119,6 +144,12 @@ class MockSource extends \lithium\tests\mocks\data\MockSource {
 
 	public function flush() {
 		$this->records = array();
+	}
+
+	public function describe($entity, $schema = array(), array $meta = array()) {
+		$source = '_' . Inflector::camelize($entity, false);
+		$fields = isset($this->$source) ? $this->$source : $schema;
+		return $this->_instance('schema', compact('fields'));
 	}
 }
 

@@ -8,20 +8,6 @@
 
 namespace sli_base\tests\mocks\models;
 
-class MockItem extends \sli_base\tests\mocks\models\MockModel {
-
-	protected $_schema = array(
-		'id' => array('type' => 'integer'),
-		'title' => array('type' => 'string'),
-		'class' => array('type' => 'string')
-	);
-	
-	public static function __init() {
-		$self = static::_object();
-		$schema = $self->_schema;
-		parent::__init();
-		$self->_schema = $schema;
-	}
-}
+class MockItem extends \sli_base\tests\mocks\models\MockModel {}
 
 ?>
