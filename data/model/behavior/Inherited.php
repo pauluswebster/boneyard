@@ -81,8 +81,14 @@ class Inherited extends \sli_base\data\model\Behavior {
 
 	/**
 	 * Create inherited records
+	 *
+	 * @todo - manage create now that it is used to create result instances
+	 *
 	 */
 	public static function createFilter($model, $params, $chain, $settings) {
+		if ($params['options']['class'] !== 'entity') {
+			return $chain->next($model, $params, $chain);
+		}
 		$self = get_called_class();
 		if (isset($params['options']['inherited'])) {
 			$inherited = $params['options']['inherited'];

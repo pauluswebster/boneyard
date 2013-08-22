@@ -61,6 +61,8 @@ class Modified extends \sli_base\data\model\Behavior {
 	 * After Create filter.
 	 * Applies configured filters to created entity.
 	 *
+	 * @todo - manage create now that it is used to create result instances
+	 *
 	 * @see lithium\data\Model::create();
 	 * @param array $settings settings for the binding
 	 * @param string $model model behavior is bound to
@@ -68,11 +70,13 @@ class Modified extends \sli_base\data\model\Behavior {
 	 * @return lithium\data\Entity
 	 */
 	public static function createAfterFilter($model, $entity, $settings) {
-		$fields = static::_fields($settings);
-		$data = $entity->data();
-		$applied = static::modify($data, 'create', $fields);
-		if ($modified  = static::_diff($applied, $data)) {
-			$entity->set($modified);
+		if ($entity instanceOf \lithium\data\Entity) {
+			$fields = static::_fields($settings);
+			$data = $entity->data();
+			$applied = static::modify($data, 'create', $fields);
+			if ($modified  = static::_diff($applied, $data)) {
+				$entity->set($modified);
+			}
 		}
 		return $entity;
 	}
