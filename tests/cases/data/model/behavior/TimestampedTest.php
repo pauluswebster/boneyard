@@ -76,7 +76,7 @@ class TimestampedTest extends \lithium\test\Unit {
 		$record = $model::create();
 		$save = $record->save();
 		$data = $model::first()->data();
-		$this->assertNoPattern('/\d{10,}/', $data['created']);
+		$this->assertNotPattern('/\d{10,}/', $data['created']);
 		$this->assertPattern('/\d{10,}/', $data['modified']);
 	}
 }
