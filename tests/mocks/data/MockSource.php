@@ -97,15 +97,15 @@ class MockSource extends \lithium\tests\mocks\data\MockSource {
 					//$constraint = $join->constraint();
 					$key = $model::key();
 					if (isset($this->records[$to][$id])) {
-						$relationships[$field] = $this->item($to, $this->records[$to][$id], array('class' => 'entity'));
+						$relationships[$field] = $to::create($this->records[$to][$id]);
 					}
 				}
 			}
-			$results[$id] = $this->item($model, $record, array('class' => 'entity', 'relationships' => $relationships));
+			$results[$id] = $model::create($record, array('relationships' => $relationships));
 		}
 		$class = 'set';
 		$options = compact('class') + $options;
-		return $this->item($model, $results, $options);
+		return $model::create($results, $options);
 	}
 
 	public function update($query, array $options = array()) {
