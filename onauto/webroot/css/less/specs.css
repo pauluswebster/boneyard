@@ -1,0 +1,4 @@
+#search-sidebar select,
+#search-sidebar input[type=text] {
+  width: 170px;
+}

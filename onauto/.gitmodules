@@ -1,0 +1,27 @@
+[submodule "libraries/lithium"]
+	path = libraries/lithium
+	url = git@github.com:slicedup/lithium.git
+[submodule "libraries/sli_mailer"]
+	path = libraries/sli_mailer
+	url = git@github.com:slicedup/sli_mailer.git
+[submodule "libraries/sli_scaffold"]
+	path = libraries/sli_scaffold
+	url = git@github.com:slicedup/sli_scaffold.git
+[submodule "libraries/sli_tom"]
+	path = libraries/sli_tom
+	url = git@github.com:slicedup/sli_tom.git
+[submodule "libraries/sli_users"]
+	path = libraries/sli_users
+	url = git@github.com:slicedup/sli_users.git
+[submodule "libraries/sli_base"]
+	path = libraries/sli_base
+	url = git@github.com:slicedup/sli_base.git
+[submodule "libraries/sli_cms"]
+	path = libraries/sli_cms
+	url = git@github.com:slicedup/sli_cms.git
+[submodule "libraries/_source/twitter_bootstrap"]
+	path = libraries/_source/twitter_bootstrap
+	url = git://github.com/twitter/bootstrap.git
+[submodule "libraries/sli_bootstrap"]
+	path = libraries/sli_bootstrap
+	url = git@github.com:slicedup/sli_bootstrap.git
