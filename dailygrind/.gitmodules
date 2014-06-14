@@ -1,0 +1,18 @@
+[submodule "libraries/sli_scaffold"]
+	path = libraries/sli_scaffold
+	url = git@github.com:slicedup/sli_scaffold.git
+[submodule "libraries/sli_tom"]
+	path = libraries/sli_tom
+	url = git@github.com:slicedup/sli_tom.git
+[submodule "libraries/sli_users"]
+	path = libraries/sli_users
+	url = git@github.com:slicedup/sli_users.git
+[submodule "libraries/_source/chosen"]
+	path = libraries/_source/chosen
+	url = git://github.com/julesjanssen/chosen.git
+[submodule "libraries/sli_base"]
+	path = libraries/sli_base
+	url = git@github.com:slicedup/sli_base.git
+[submodule "libraries/lithium"]
+	path = libraries/lithium
+	url = git://github.com/UnionOfRAD/lithium.git

@@ -1,0 +1,6 @@
+app/resources/tmp/*
+.buildpath
+.project
+.settings*
+.DS_Store?
+._*
