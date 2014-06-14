@@ -1,19 +1,34 @@
 <?php
-use lithium\net\http\Router;
-use lithium\action\Dispatcher;
+	use lithium\core\Libraries;
+	use lithium\net\http\Router;
+	use lithium\action\Dispatcher;
+	use lithium\core\Environment;
 
-Dispatcher::config(array('rules' => array(
-	'client' => array('action' => 'client_{:action}')
-)));
+/**
+ * Config
+ */
+	$config  = Environment::get('centrifuge');
+	extract($config);
 
-Router::connect('/client/{:args}', array('client' => true), array(
-	'continue' => true, 
-	'persist' => array('controller', 'client')
-));
+	Dispatcher::config(array('rules' => array(
+		'client' => array('action' => 'client_{:action}')
+	)));
 
-Router::connect('/projects/{:action}', array('controller' => 'projects', 'library' => 'centrifuge'));
-Router::connect('/projects/{:action}/{:id:\d+}', array('controller' => 'projects', 'library' => 'centrifuge'));
-Router::connect('/clients/{:action}', array('controller' => 'clients', 'library' => 'centrifuge'));
-Router::connect('/clients/{:action}/{:id:\d+}', array('controller' => 'clients', 'library' => 'centrifuge'));
+	Router::connect($base, array('controller' => 'Views', 'action' => 'display', 'library' => 'centrifuge'), array(
+		'persist' => array('library', 'controller')
+	));
 
+	Router::connect($base . 'client', array('controller' => 'Views', 'action' => 'display', 'library' => 'centrifuge', 'client' => true), array(
+		'persist' => array('library', 'controller', 'client')
+	));
+
+	Router::connect($base . 'client/{:args}', array('client' => true, 'library' => 'centrifuge'), array(
+		'continue' => true,
+		'persist' => array('library', 'controller', 'client')
+	));
+
+	Router::connect($base . '{:args}', array('library' => 'centrifuge'), array(
+		'continue' => true,
+		'persist' => array('library', 'controller')
+	));
 ?>
