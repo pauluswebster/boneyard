@@ -1,3 +1,5 @@
-#Centrifuge - Project Management
+Centrifuge - Project Management
+===============================
 
-##Sample Application
+Sample Application
+--------------------
