@@ -16,13 +16,13 @@ Dispatcher::applyFilter('_call', function($self, $params, $chain) {
 		 */
 		$controller = $params['callable'];
 		$user =& User::instance('staging');
-		if (!$user->get() && $controller->request->url != 'staging/login') {
+		if (!$user->get() && $controller->request->url != '/staging/login') {
 			$required = $user->required($controller);
 			if ($required instanceOf \lithium\action\Response) {
 				FlashMessage::write(array('message' => 'Please login.', 'class' => 'nofade'));
 				return $required;
 			}
-		} elseif ($controller->request->url == 'staging/login') {
+		} elseif ($controller->request->url == '/staging/login') {
 			$controller->applyFilter('__invoke', function($self, $params, $chain) {
 				Media::addPaths('html', array(
 					'layout' => array(
