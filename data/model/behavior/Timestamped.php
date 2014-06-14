@@ -26,10 +26,11 @@ class Timestamped extends \sli_base\data\model\Behavior {
 			'format' => null,
 		),
 		'update' => array(
-			'field' => 'updated',
+			'field' => 'modified',
 			'format' => null,
 		),
-		'format' => 'Y-m-d H:i:s',
+		'format' => 'U',
+		'timezone' => null,
 		'check' => false
 	);
 
@@ -61,20 +62,20 @@ class Timestamped extends \sli_base\data\model\Behavior {
 	 */
 	public static function saveBeforeFilter($model, $params, $settings) {
 		extract($settings);
-		$time = time();
 		$data =& $params['data'];
 		$entity =& $params['entity'];
+		$datetime = new \DateTime('now', $timezone);
 		if ($create && !$entity->exists()) {
 			if (!is_array($create)) {
 					$create = array('field' => $create, 'format' => null);
 			}
-			$data[$create['field']] = date(($create['format']?:$format), $time);
+			$data[$create['field']] = $datetime->format($create['format'] ?: $format);
 		}
 		if ($update) {
 			if (!is_array($update)) {
 				$update = array('field' => $update, 'format' => null);
 			}
-			$data[$update['field']] = date(($update['format']?:$format), $time);
+			$data[$update['field']] = $datetime->format($update['format'] ?: $format);
 		}
 		return $params;
 	}
