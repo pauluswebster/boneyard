@@ -1,0 +1,10 @@
+.buildpath
+.project
+.settings/
+app/resources/tmp/cache/
+app/resources/tmp/logs/*.php
+app/resources/tmp/tests/*.php
+/environment.php
+app/resources/Categories.json
+app/resources/Used.json
+app/resources/Used/
