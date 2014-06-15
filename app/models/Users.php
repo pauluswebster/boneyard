@@ -23,13 +23,8 @@ class Users extends AppModel {
 	public static $scaffoldFields = array(
 		'first_name',
 		'last_name',
-		'email',
+		'email'
 	);
-
-	public static function __init(){
-		parent::__init();
-		static::_applyFilters();
-	}
 
 	public static function getScaffoldFormFields(){
 		$fields = array(
@@ -40,12 +35,12 @@ class Users extends AppModel {
 			'username',
 			'new_password' => array('type' => 'password', 'autocomplete' => 'off'),
 			'active' => array('type' => 'hidden', 'value' => 1),
-			'admin' => array('type' => 'checkbox'),
 		);
 		return $fields;
 	}
 
 	protected static function _applyFilters() {
+		parent::_applyFilters();
 		Behaviors::apply(__CLASS__, array(
 			'Serialized' => array(
 				'fields' => array(

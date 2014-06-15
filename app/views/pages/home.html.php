@@ -13,7 +13,7 @@
 		<p>First timer? Getting started is easy, we just need a few details:</p>
 		<?php echo $this->form->create(null, array('url' => '/pages/listings'));?>
 		<?php echo $this->form->field('email', array('type' => 'email', 'class' => 'input-text'));?>
-		<?php echo $this->form->field('trader', array('type' => 'text', 'label' => 'Trader Number'))?>
+		<?php echo $this->form->field('first_name', array('type' => 'text'))?>
 		<?php echo $this->form->submit('Register', array('class' => 'btn'));?>
 		<?php echo $this->form->end();?>
 	</div>

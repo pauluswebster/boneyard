@@ -11,8 +11,8 @@
 </head>
 <body class="container" id="container">
 	<header id="header" class="page-header">
-		<h1><a href="/">OnAuto</a></h1>
-		<h3>Wholesale Vehicle Classifieds</h3>
+		<h1><a href="/">Monito</a></h1>
+		<h3>Observe Anything, Control Everything</h3>
 	</header>
 	<section class="container" id="content">
 		<?php if ($this->request()->url != '/'):?>

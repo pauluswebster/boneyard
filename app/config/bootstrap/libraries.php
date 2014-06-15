@@ -117,14 +117,15 @@ Libraries::add('lithium');
  */
 Libraries::add('app', array('default' => true));
 
+Libraries::add('monito');
+
 /**
  * Add some plugins:
  */
 Libraries::add('sli_base');
 Libraries::add('sli_users');
-Libraries::add('sli_scaffold');
+Libraries::add('sli_scaffold', ['config' => ['defaults' => ['model' => 'app\models\AppModel', 'source' => true]]]);
 Libraries::add('sli_tom');
+Libraries::add('sli_jobs');
 //Libraries::add('sli_cms', array('bootstrap' => false));
-
-Libraries::add('tmimport', array('bootstrap' => false));
 ?>

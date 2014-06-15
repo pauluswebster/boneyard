@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace monito\models;
 
 use sli_base\util\filters\Behaviors;
 
@@ -11,7 +11,7 @@ class AppModel extends \lithium\data\Model {
 	}
 
 	protected static function _applyFilters() {
-		Behaviors::apply(get_called_class(), 'Timestamped');
+		Behaviors::apply(get_called_class(), array('Timestamped'));
 	}
 }
 

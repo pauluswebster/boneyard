@@ -25,7 +25,7 @@ $config = array(
 		),
 		'auth' => array(
 			'scope' => array(
-				'admin' => true
+				'email LIKE "%@monito.co.nz"'
 			)
 		),
 		'persist' => array(

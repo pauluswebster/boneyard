@@ -9,12 +9,12 @@ if (!Environment::is('production')) {
 		print_r($log);
 		echo '</pre>';
 	}
-	
+
 	if ($error = Cache::read('query', 'error')) {
 		echo '<h4>Connection Query Errors</h4>';
 		echo '<pre>';
 		print_r($error);
 		echo '</pre>';
-	}	
+	}
 }
 ?>

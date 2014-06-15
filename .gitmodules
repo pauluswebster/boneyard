@@ -25,3 +25,6 @@
 [submodule "libraries/sli_bootstrap"]
 	path = libraries/sli_bootstrap
 	url = git@github.com:slicedup/sli_bootstrap.git
+[submodule "libraries/sli_jobs"]
+	path = libraries/sli_jobs
+	url = git@github.com:slicedup/sli_jobs.git

@@ -18,5 +18,6 @@
 	<br><br>
 	<footer id="footer"></footer>
 	<?php echo $this->element->render('scripts');?>
+	<?php echo $this->element->render('debug/connection');?>
 </body>
 </html>

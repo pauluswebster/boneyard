@@ -65,7 +65,7 @@ Connections::get("default")->applyFilter("_execute", function($self, $params, $c
 	$log[] = $params['sql'];
 	Cache::write('query', 'log', $log);
     try {
-    	 return $chain->next($self, $params, $chain); 
+    	 return $chain->next($self, $params, $chain);
     } catch (PDOException $e) {
     	$error = Cache::read('query', 'error') ?: array();
     	$error[] = $e->getMessage();
