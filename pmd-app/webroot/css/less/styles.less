@@ -1,0 +1,76 @@
+//theme imports
+@import "../../theme/css/less/includes/base";
+
+@import "../../theme/css/less/includes/layout";
+
+@import "../../theme/css/less/includes/boxes";
+
+@import "../../theme/css/less/includes/buttons";
+
+@import "../../theme/css/less/includes/forms";
+
+//site style overides
+body {
+	background: #320032 url(../img/site/8.jpg) top center repeat;
+}
+
+a:hover,
+a:active {
+	color:#542954;
+}
+
+#body-texture {
+	background-image: url(../../theme/img/textures/7.png)
+}
+
+#page-header, #page-header .container-inner, .rgba #page-header .container-inner {
+	background:none;
+	color:#fff;
+}
+
+.title-right a span {
+	background-image: url(../../theme/img/icons/envelope-white.png);
+}
+
+.contact-info .box-message{
+	display:none;
+}
+
+.box-message {
+	.border-radius(5px);
+}
+
+.box-message .box-content {
+	background:none;
+}
+
+.box-message p {
+	margin-bottom:0;
+}
+
+#page-content {
+	font-size:120%;
+}
+
+.invalid {
+    border-color: #C60005;
+}
+
+.clear {
+	.clearfix();
+}
+
+.recommends {
+	padding-top:15px;	
+}
+
+.recommends a {
+	display:block;
+	.align-left();
+}
+
+a.wp:hover,
+a.wp:active,
+a.wp:focus {
+	color:#99CC00;
+}

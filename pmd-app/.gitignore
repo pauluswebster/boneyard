@@ -1,0 +1,8 @@
+.buildpath
+.project
+.settings/
+app/resources/tmp/cache/
+app/resources/tmp/logs/*.php
+app/resources/tmp/tests/*.php
+environment.php
+environment.production.php

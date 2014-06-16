@@ -1,0 +1,9 @@
+[submodule "libraries/lithium"]
+	path = libraries/lithium
+	url = git://github.com/UnionOfRAD/lithium.git
+[submodule "webroot/theme"]
+	path = webroot/theme
+	url = git@github.com:websta/pmd-theme.git
+[submodule "libraries/sli_base"]
+	path = libraries/sli_base
+	url = git@github.com:slicedup/sli_base.git
