@@ -1,0 +1,20 @@
+{
+	"name": "p-m-d/naf",
+	"description": "Naf",
+	"homepage": "https://github.com/p-m-d/naf",
+	"type": "library",
+	"license": "None",
+	"require": {
+		"php": ">=5.3.0",
+		"p-m-d/sli": "dev-master"
+	},
+	"suggest": {
+		"phpunit/phpunit": "Allows automated tests to be run without system-wide install."
+	},
+	"autoload": {
+		"psr-4": {
+			"Naf\\": "src",
+			"Naf\\Test\\": "tests"
+		}
+	}
+}

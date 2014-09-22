@@ -1,0 +1,20 @@
+{
+	"name": "p-m-d/naf-app",
+	"description": "Naf Application Template",
+	"homepage": "https://github.com/p-m-d/naf-app",
+	"type": "project",
+	"license": "None",
+	"require": {
+		"php": ">=5.3.0",
+		"p-m-d/naf": "dev-master"
+	},
+	"suggest": {
+		"phpunit/phpunit": "Allows automated tests to be run without system-wide install."
+	},
+	"autoload": {
+		"psr-4": {
+			"App\\": "App",
+			"App\\Test\\": "Test"
+		}
+	}
+}

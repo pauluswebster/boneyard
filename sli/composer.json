@@ -1,0 +1,19 @@
+{
+	"name": "p-m-d/sli",
+	"description": "Sli",
+	"homepage": "https://github.com/p-m-d/sli",
+	"type": "library",
+	"license": "None",
+	"require": {
+		"php": ">=5.3.0"
+	},
+	"suggest": {
+		"phpunit/phpunit": "Allows automated tests to be run without system-wide install."
+	},
+	"autoload": {
+		"psr-4": {
+			"Sli\\": "src",
+			"Sli\\Test\\": "tests"
+		}
+	}
+}
